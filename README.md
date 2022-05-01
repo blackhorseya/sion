@@ -1,6 +1,6 @@
 # IRent app
 
-[IRent app](https://irent.seancheng.space) 此平台為本人對於 UI/UX 優化整合出來的系統，並不會儲存任何個人和機密資訊。
+[IRent app](https://irent.seancheng.space) 此平台為本人對於[IRent](https://www.easyrent.com.tw/irent/web/index.html) UI/UX 優化整合出來的系統，並不會儲存任何個人和機密資訊。
 
 - [IRent app](#irent-app)
   - [Introduction](#introduction)
