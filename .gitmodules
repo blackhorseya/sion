@@ -1,0 +1,3 @@
+[submodule "src/irent-backend"]
+	path = src/irent-backend
+	url = git@github.com:blackhorseya/irent-backend.git
