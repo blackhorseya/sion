@@ -6,3 +6,7 @@
 	path = src/irent-frontend
 	url = git@github.com:blackhorseya/irent-frontend.git
 	branch = main
+[submodule "src/irent-crawler"]
+	path = src/irent-crawler
+	url = git@github.com:blackhorseya/irent-crawler.git
+	branch = main
