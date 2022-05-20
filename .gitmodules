@@ -1,6 +1,8 @@
 [submodule "src/irent-backend"]
 	path = src/irent-backend
 	url = git@github.com:blackhorseya/irent-backend.git
+	branch = main
 [submodule "src/irent-frontend"]
 	path = src/irent-frontend
 	url = git@github.com:blackhorseya/irent-frontend.git
+	branch = main
