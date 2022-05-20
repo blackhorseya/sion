@@ -6,6 +6,7 @@
   - [Introduction](#introduction)
   - [Features](#features)
   - [Q&A](#qa)
+  - [Architecture](#architecture)
 
 ## Introduction
 
@@ -38,3 +39,16 @@
 ### 預約完，如何開始使用車輛
 
 此平台目前沒有實作開始租車流程，所以開始租車還是需要在 APP 裡執行。
+
+## Architecture
+
+### Overview
+
+```mermaid
+graph TD
+    frontend[frontend] --> backend[backend]
+    backend --> irent[irent offical api]
+    
+    crawler[crawler] --> influxdb[influxdb2]
+    grafana[grafana] --> influxdb
+```
