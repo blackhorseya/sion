@@ -1,6 +1,6 @@
 # IRent app
 
-[IRent app](https://irent.seancheng.space) 此平台為本人對於[IRent](https://www.easyrent.com.tw/irent/web/index.html) UI/UX 優化整合出來的系統，並不會儲存任何個人和機密資訊。並且做了[車輛分析](https://gfn.seancheng.space/goto/Z8Uqc_u7k?orgId=1)
+[IRent app](https://irent.seancheng.space) 此平台為本人對於[IRent](https://www.easyrent.com.tw/irent/web/index.html) UI/UX 優化整合出來的系統，並不會儲存任何個人和機密資訊。並且做了[車輛分析](https://gfn.seancheng.space/d/_lM1IlXnz/irent?orgId=1&refresh=30s&from=now-2d&to=now)
 
 - [IRent app](#irent-app)
   - [Introduction](#introduction)
