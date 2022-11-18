@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/bwmarrin/snowflake v0.3.0
 	go.uber.org/zap v1.23.0
+	google.golang.org/protobuf v1.28.1
 )
 
 require (
