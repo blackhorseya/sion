@@ -1,0 +1,9 @@
+syntax = "proto3";
+package account;
+option go_package = "github.com/blackhorseya/irent/pkg/entity/domain/account/model";
+
+message Profile {
+  string id = 1;
+  string name = 2;
+  string access_token = 3;
+}
