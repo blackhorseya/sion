@@ -1,12 +1,8 @@
 # IRent app
 
-[IRent app](https://irent.seancheng.space) 此平台為本人對於[IRent](https://www.easyrent.com.tw/irent/web/index.html) UI/UX 優化整合出來的系統，並不會儲存任何個人和機密資訊。並且做了[車輛分析](https://gfn.seancheng.space/d/_lM1IlXnz/irent?orgId=1&refresh=30s&from=now-2d&to=now)
-
-- [IRent app](#irent-app)
-  - [Introduction](#introduction)
-  - [Features](#features)
-  - [Q&A](#qa)
-  - [Architecture](#architecture)
+[IRent app](https://irent.seancheng.space) 此平台為本人對於[IRent](https://www.easyrent.com.tw/irent/web/index.html)
+UI/UX
+優化整合出來的系統，並不會儲存任何個人和機密資訊。並且做了[車輛分析](https://gfn.seancheng.space/d/_lM1IlXnz/irent?orgId=1&refresh=30s&from=now-2d&to=now)
 
 ## Introduction
 
@@ -17,24 +13,25 @@
 
 ### Guests
 
-1. 根據使用者的地理位置找到最近的 n 台車並且顯示車輛資訊。
-2. 使用 IRent 的帳號密碼登入此平台。
-3. 查看車輛分析儀表板。
-   1. 即時空車率。
-   2. 48小時空車率曲線圖。
-   3. 空車車輛以區域為群組顯示前10名列表。
+- 根據使用者的地理位置找到最近的 n 台車並且顯示車輛資訊。
+- 使用 IRent 的帳號密碼登入此平台。
+- 查看車輛分析儀表板。
+    - 即時空車率。
+    - 48小時空車率曲線圖。
+    - 空車車輛以區域為群組顯示前10名列表。
 
 ### Members
 
-1. 顯示會員未繳費用，因為有欠款不能租車。
-2. 直接在可用車輛上租車並顯示預約列表。
-3. 取消預約車輛。
+- 顯示會員未繳費用，因為有欠款不能租車。
+- 直接在可用車輛上租車並顯示預約列表。
+- 取消預約車輛。
 
 ## Q&A
 
 ### APP 一直需要重新登入
 
-因為 IRent 本身登入機制設計問題，同時只能存在一個有效token，所以造成後踢前的問題。如果有在此平台登入，需要重新登入 APP 屬於正常現象。
+因為 IRent 本身登入機制設計問題，同時只能存在一個有效token，所以造成後踢前的問題。如果有在此平台登入，需要重新登入 APP
+屬於正常現象。
 
 ### 預約完，如何開始使用車輛
 
