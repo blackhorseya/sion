@@ -1,5 +1,9 @@
 # IRent app
 
+[![Build](https://github.com/blackhorseya/irent/actions/workflows/build.yaml/badge.svg)](https://github.com/blackhorseya/irent/actions/workflows/build.yaml)
+[![codecov](https://codecov.io/gh/blackhorseya/irent/branch/main/graph/badge.svg?token=Zsv1nVmGH3)](https://codecov.io/gh/blackhorseya/irent)
+![GitHub](https://img.shields.io/github/license/blackhorseya/irent)
+
 [IRent app](https://irent.seancheng.space) 此平台為本人對於[IRent](https://www.easyrent.com.tw/irent/web/index.html)
 UI/UX
 優化整合出來的系統，並不會儲存任何個人和機密資訊。並且做了[車輛分析](https://gfn.seancheng.space/d/_lM1IlXnz/irent?orgId=1&refresh=30s&from=now-2d&to=now)
