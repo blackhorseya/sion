@@ -6,8 +6,12 @@ import (
 	"github.com/blackhorseya/irent/pkg/contextx"
 	ab "github.com/blackhorseya/irent/pkg/entity/domain/account/biz"
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
+	"github.com/google/wire"
 	"go.uber.org/zap"
 )
+
+// ProviderSet is a provider set for account biz
+var ProviderSet = wire.NewSet(NewImpl, repo.ProviderSet)
 
 type impl struct {
 	repo repo.IRepo
