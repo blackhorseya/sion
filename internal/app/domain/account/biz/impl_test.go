@@ -156,3 +156,57 @@ func (s *SuiteTester) Test_impl_Login() {
 		})
 	}
 }
+
+func (s *SuiteTester) Test_impl_GetByAccessToken() {
+	type args struct {
+		token string
+		mock  func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantInfo *am.Profile
+		wantErr  bool
+	}{
+		{
+			name:     "token is empty then error",
+			args:     args{token: ""},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "get member status then error",
+			args: args{token: "token", mock: func() {
+				s.repo.On("GetMemberStatus", mock.Anything, "token").Return(nil, errors.New("error")).Once()
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "ok",
+			args: args{token: "token", mock: func() {
+				s.repo.On("GetMemberStatus", mock.Anything, "token").Return(testdata.Profile1, nil).Once()
+			}},
+			wantInfo: testdata.Profile1,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotInfo, err := s.biz.GetByAccessToken(contextx.BackgroundWithLogger(s.logger), tt.args.token)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetByAccessToken() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
+				t.Errorf("GetByAccessToken() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
+			}
+
+			s.TearDownTest()
+		})
+	}
+}

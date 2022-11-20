@@ -48,6 +48,16 @@ func (i *impl) Login(ctx contextx.Contextx, id, password string) (info *am.Profi
 }
 
 func (i *impl) GetByAccessToken(ctx contextx.Contextx, token string) (info *am.Profile, err error) {
-	// TODO implement me
-	panic("implement me")
+	if len(token) == 0 {
+		ctx.Error(errorx.ErrMissingToken.Error())
+		return nil, errorx.ErrMissingToken
+	}
+
+	ret, err := i.repo.GetMemberStatus(ctx, token)
+	if err != nil {
+		ctx.Error(errorx.ErrGetProfileByToken.Error(), zap.Error(err), zap.String("token", token))
+		return nil, errorx.ErrGetProfileByToken
+	}
+
+	return ret, nil
 }
