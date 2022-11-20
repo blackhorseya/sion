@@ -14,13 +14,11 @@ func NewImpl() ab.IBiz {
 }
 
 func (i *impl) Readiness(ctx contextx.Contextx) error {
-	// TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func (i *impl) Liveness(ctx contextx.Contextx) error {
-	// TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func (i *impl) Login(ctx contextx.Contextx, id, password string) (info *model.Profile, err error) {
