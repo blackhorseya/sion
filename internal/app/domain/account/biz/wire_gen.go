@@ -7,14 +7,15 @@
 package biz
 
 import (
+	"github.com/blackhorseya/irent/internal/app/domain/account/biz/repo"
 	"github.com/blackhorseya/irent/pkg/entity/domain/account/biz"
 	"github.com/google/wire"
 )
 
 // Injectors from wire.go:
 
-func CreateBiz() biz.IBiz {
-	iBiz := NewImpl()
+func CreateBiz(repo2 repo.IRepo) biz.IBiz {
+	iBiz := NewImpl(repo2)
 	return iBiz
 }
 

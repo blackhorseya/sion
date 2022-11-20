@@ -1,4 +1,4 @@
-package error
+package errorx
 
 import (
 	"fmt"
