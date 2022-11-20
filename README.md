@@ -39,6 +39,16 @@ UI/UX
 
 ## Architecture
 
+### Domain Diagram
+
+```mermaid
+graph TD
+    account
+    billing
+    order
+    rental
+```
+
 ### Overview
 
 ```mermaid
