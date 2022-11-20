@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/blackhorseya/irent/pkg/contextx"
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
@@ -76,24 +77,54 @@ func (i *impl) Login(ctx contextx.Contextx, id, password string) (info *am.Profi
 	}
 	defer resp.Body.Close()
 
-	var body *loginResp
-	err = json.NewDecoder(resp.Body).Decode(&body)
+	var data *loginResp
+	err = json.NewDecoder(resp.Body).Decode(&data)
 	if err != nil {
 		return nil, err
 	}
 
-	if body.ErrorMessage != "Success" {
-		return nil, errors.New(body.ErrorMessage)
+	if strings.ToLower(data.ErrorMessage) != "success" {
+		return nil, errors.New(data.ErrorMessage)
 	}
 
 	return &am.Profile{
-		Id:          body.Data.UserData.Memidno,
-		Name:        body.Data.UserData.Memcname,
-		AccessToken: body.Data.Token.AccessToken,
+		Id:          data.Data.UserData.Memidno,
+		Name:        data.Data.UserData.Memcname,
+		AccessToken: data.Data.Token.AccessToken,
 	}, nil
 }
 
 func (i *impl) GetMemberStatus(ctx contextx.Contextx, token string) (info *am.Profile, err error) {
-	// TODO implement me
-	panic("implement me")
+	uri, err := url.Parse(i.opts.Endpoint + "/GetMemberStatus")
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Authorization", "Bearer "+token)
+
+	resp, err := i.httpclient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var data *getMemberStatusResp
+	err = json.NewDecoder(resp.Body).Decode(&data)
+	if err != nil {
+		return nil, err
+	}
+
+	if strings.ToLower(data.ErrorMessage) != "success" {
+		return nil, errors.New(data.ErrorMessage)
+	}
+
+	return &am.Profile{
+		Id:          data.Data.StatusData.Memidno,
+		Name:        data.Data.StatusData.Memname,
+		AccessToken: token,
+	}, nil
 }
