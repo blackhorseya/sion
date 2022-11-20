@@ -7,13 +7,14 @@
 package repo
 
 import (
+	"github.com/blackhorseya/irent/pkg/httpx"
 	"github.com/google/wire"
 )
 
 // Injectors from wire.go:
 
-func CreateRepo() IRepo {
-	iRepo := NewImpl()
+func CreateRepo(opts *Options, httpclient httpx.Client) IRepo {
+	iRepo := NewImpl(opts, httpclient)
 	return iRepo
 }
 
