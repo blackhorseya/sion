@@ -7,18 +7,16 @@ import (
 	"github.com/google/wire"
 )
 
-type impl struct {
+type client struct {
 }
 
-func NewImpl() httpx.Client {
-	return &impl{}
+func NewClient() httpx.Client {
+	return &client{}
 }
 
-func (i *impl) Do(req *http.Request) (resp *http.Response, err error) {
-	client := http.DefaultClient
-
-	return client.Do(req)
+func (i *client) Do(req *http.Request) (resp *http.Response, err error) {
+	return http.DefaultClient.Do(req)
 }
 
-// ProviderSet is a provider set for httpx
-var ProviderSet = wire.NewSet(NewImpl)
+// ProviderClientSet is a provider set for httpx client
+var ProviderClientSet = wire.NewSet(NewClient)
