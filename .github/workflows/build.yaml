@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  push:
+    branches-ignore:
+      - 'release-**'
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.yaml'
+      - '**/*.yml'
+      - '**/.tf'
+      - 'scripts/**'
+      - 'Makefile'
+      - 'Dockerfile'
+      - '.cz.yaml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Setup go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '^1.18'
+      - name: Setup cache
+        uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Run unit test
+        run: |
+          make test-unit
