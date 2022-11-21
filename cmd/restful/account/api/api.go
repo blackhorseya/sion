@@ -3,9 +3,11 @@ package api
 import (
 	"net/http"
 
+	_ "github.com/blackhorseya/irent/api/account/docs" // import swagger spec
 	"github.com/blackhorseya/irent/internal/pkg/errorx"
 	"github.com/blackhorseya/irent/pkg/contextx"
 	ab "github.com/blackhorseya/irent/pkg/entity/domain/account/biz"
+	_ "github.com/blackhorseya/irent/pkg/errors" // import struct
 	"github.com/blackhorseya/irent/pkg/response"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -34,7 +36,7 @@ type impl struct {
 // @Accept application/json
 // @Produce application/json
 // @Success 200 {object} response.Response
-// @Failure 500 {object} errorx.Error
+// @Failure 500 {object} errors.Error
 // @Router /readiness [get]
 func (i *impl) Readiness(c *gin.Context) {
 	ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
@@ -59,7 +61,7 @@ func (i *impl) Readiness(c *gin.Context) {
 // @Accept application/json
 // @Produce application/json
 // @Success 200 {object} response.Response
-// @Failure 500 {object} errorx.Error
+// @Failure 500 {object} errors.Error
 // @Router /liveness [get]
 func (i *impl) Liveness(c *gin.Context) {
 	ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)

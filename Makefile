@@ -71,6 +71,7 @@ gen-wire: ## generate wire code
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger spec
 	@echo "Generating swagger spec"
+	@swag init -g ./cmd/restful/account/main.go --parseInternal --parseDependency --parseDepth 1 -o ./api/account/docs
 
 .PHONY: gen-pb
 gen-pb: ## generate protobuf messages and services
