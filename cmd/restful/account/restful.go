@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/blackhorseya/irent/cmd"
+	"github.com/blackhorseya/irent/cmd/restful/account/api"
 	"github.com/blackhorseya/irent/pkg/contextx"
 	"github.com/blackhorseya/irent/pkg/cors"
 	ab "github.com/blackhorseya/irent/pkg/entity/domain/account/biz"
@@ -36,6 +37,8 @@ func NewRestful(logger *zap.Logger, router *gin.Engine, biz ab.IBiz) cmd.Restful
 }
 
 func (i *restful) InitRouting() error {
+	api.Handle(i.router.Group("/api"), i.biz)
+
 	// todo: 2022/11/21|sean|impl me
 	return nil
 }
