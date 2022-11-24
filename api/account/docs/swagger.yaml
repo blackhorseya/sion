@@ -1,6 +1,6 @@
 basePath: /api
 definitions:
-  errors.Error:
+  er.Error:
     properties:
       code:
         type: integer
@@ -52,7 +52,7 @@ paths:
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/errors.Error'
+            $ref: '#/definitions/er.Error'
       summary: Liveness
       tags:
       - Health
@@ -71,7 +71,7 @@ paths:
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/errors.Error'
+            $ref: '#/definitions/er.Error'
       summary: Readiness
       tags:
       - Health
@@ -106,11 +106,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/errors.Error'
+            $ref: '#/definitions/er.Error'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/errors.Error'
+            $ref: '#/definitions/er.Error'
       summary: Login
       tags:
       - Auth
@@ -134,11 +134,11 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/errors.Error'
+            $ref: '#/definitions/er.Error'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/errors.Error'
+            $ref: '#/definitions/er.Error'
       security:
       - ApiKeyAuth: []
       summary: Get me profile

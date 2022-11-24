@@ -6,7 +6,7 @@ import (
 	"github.com/blackhorseya/irent/internal/pkg/errorx"
 	"github.com/blackhorseya/irent/pkg/contextx"
 	_ "github.com/blackhorseya/irent/pkg/entity/domain/account/model" // import struct
-	_ "github.com/blackhorseya/irent/pkg/errors"                      // import struct
+	_ "github.com/blackhorseya/irent/pkg/er"                          // import struct
 	"github.com/blackhorseya/irent/pkg/httpheaders"
 	"github.com/blackhorseya/irent/pkg/response"
 	"github.com/gin-gonic/gin"
@@ -20,8 +20,8 @@ import (
 // @Produce application/json
 // @Security ApiKeyAuth
 // @Success 200 {object} response.Response{data=model.Profile}
-// @Failure 401 {object} errors.Error
-// @Failure 500 {object} errors.Error
+// @Failure 401 {object} er.Error
+// @Failure 500 {object} er.Error
 // @Router /v1/auth/me [get]
 func (i *impl) Me(c *gin.Context) {
 	ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)

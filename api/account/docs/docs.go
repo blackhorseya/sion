@@ -47,7 +47,7 @@ const docTemplate = `{
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/errors.Error"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -76,7 +76,7 @@ const docTemplate = `{
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/errors.Error"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -133,13 +133,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/errors.Error"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/errors.Error"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -185,13 +185,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/errors.Error"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/errors.Error"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -199,7 +199,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "errors.Error": {
+        "er.Error": {
             "type": "object",
             "properties": {
                 "code": {

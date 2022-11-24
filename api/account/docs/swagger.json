@@ -39,7 +39,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/errors.Error"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -68,7 +68,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/errors.Error"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -125,13 +125,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/errors.Error"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/errors.Error"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -177,13 +177,13 @@
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/errors.Error"
+                            "$ref": "#/definitions/er.Error"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/errors.Error"
+                            "$ref": "#/definitions/er.Error"
                         }
                     }
                 }
@@ -191,7 +191,7 @@
         }
     },
     "definitions": {
-        "errors.Error": {
+        "er.Error": {
             "type": "object",
             "properties": {
                 "code": {

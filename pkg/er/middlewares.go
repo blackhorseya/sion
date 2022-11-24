@@ -1,4 +1,4 @@
-package errors
+package er
 
 import (
 	"net/http"

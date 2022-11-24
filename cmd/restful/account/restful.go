@@ -8,7 +8,7 @@ import (
 	"github.com/blackhorseya/irent/pkg/contextx"
 	"github.com/blackhorseya/irent/pkg/cors"
 	ab "github.com/blackhorseya/irent/pkg/entity/domain/account/biz"
-	"github.com/blackhorseya/irent/pkg/errors"
+	"github.com/blackhorseya/irent/pkg/er"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -28,7 +28,7 @@ func NewRestful(logger *zap.Logger, router *gin.Engine, biz ab.IBiz) cmd.Restful
 		SkipPaths:  []string{"/metrics"},
 	}))
 	router.Use(contextx.AddContextxWitLoggerMiddleware(logger))
-	router.Use(errors.AddErrorHandlingMiddleware())
+	router.Use(er.AddErrorHandlingMiddleware())
 
 	return &restful{
 		router: router,
