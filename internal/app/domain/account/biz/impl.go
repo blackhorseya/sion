@@ -1,6 +1,9 @@
 package biz
 
 import (
+	"crypto/sha256"
+	"fmt"
+
 	"github.com/blackhorseya/irent/internal/app/domain/account/biz/repo"
 	"github.com/blackhorseya/irent/internal/pkg/errorx"
 	"github.com/blackhorseya/irent/pkg/contextx"
@@ -42,7 +45,7 @@ func (i *impl) Login(ctx contextx.Contextx, id, password string) (info *am.Profi
 		return nil, errorx.ErrMissingPassword
 	}
 
-	ret, err := i.repo.Login(ctx, id, password)
+	ret, err := i.repo.Login(ctx, id, encryptPassword(password))
 	if err != nil {
 		ctx.Error(errorx.ErrLogin.Error(), zap.Error(err))
 		return nil, errorx.ErrLogin
@@ -64,4 +67,8 @@ func (i *impl) GetByAccessToken(ctx contextx.Contextx, token string) (info *am.P
 	}
 
 	return ret, nil
+}
+
+func encryptPassword(password string) string {
+	return fmt.Sprintf("0x%x", sha256.Sum256([]byte(password)))
 }
