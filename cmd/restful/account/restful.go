@@ -39,6 +39,5 @@ func NewRestful(logger *zap.Logger, router *gin.Engine, biz ab.IBiz) cmd.Restful
 func (i *restful) InitRouting() error {
 	api.Handle(i.router.Group("api"), i.biz)
 
-	// todo: 2022/11/21|sean|impl me
 	return nil
 }

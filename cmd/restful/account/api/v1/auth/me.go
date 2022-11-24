@@ -7,6 +7,7 @@ import (
 	"github.com/blackhorseya/irent/pkg/contextx"
 	_ "github.com/blackhorseya/irent/pkg/entity/domain/account/model" // import struct
 	_ "github.com/blackhorseya/irent/pkg/errors"                      // import struct
+	"github.com/blackhorseya/irent/pkg/httpheaders"
 	"github.com/blackhorseya/irent/pkg/response"
 	"github.com/gin-gonic/gin"
 )
@@ -29,8 +30,18 @@ func (i *impl) Me(c *gin.Context) {
 		return
 	}
 
-	// todo: 2022/11/25|sean|impl me
-	ctx.Warn("impl me")
+	token, ok := c.MustGet(string(httpheaders.KeyToken)).(string)
+	if !ok {
+		ctx.Error(errorx.ErrMissingToken.Error())
+		_ = c.Error(errorx.ErrMissingToken)
+		return
+	}
 
-	c.JSON(http.StatusOK, response.OK)
+	ret, err := i.biz.GetByAccessToken(ctx, token)
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response.OK.WithData(ret))
 }
