@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	_ "github.com/blackhorseya/irent/api/account/docs" // import swagger spec
+	v1 "github.com/blackhorseya/irent/cmd/restful/account/api/v1"
 	"github.com/blackhorseya/irent/internal/pkg/errorx"
 	"github.com/blackhorseya/irent/pkg/contextx"
 	ab "github.com/blackhorseya/irent/pkg/entity/domain/account/biz"
@@ -23,6 +24,8 @@ func Handle(g *gin.RouterGroup, biz ab.IBiz) {
 
 	g.GET("readiness", ret.Readiness)
 	g.GET("liveness", ret.Liveness)
+
+	v1.Handle(g.Group("v1"), biz)
 }
 
 type impl struct {
