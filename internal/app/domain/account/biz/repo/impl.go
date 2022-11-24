@@ -49,7 +49,7 @@ func NewImpl(opts *Options, httpclient httpx.Client) IRepo {
 }
 
 func (i *impl) Login(ctx contextx.Contextx, id, password string) (info *am.Profile, err error) {
-	uri, err := url.Parse(i.opts.Endpoint + "/Login")
+	uri, err := url.Parse(i.opts.Endpoint + "/login")
 	if err != nil {
 		return nil, err
 	}

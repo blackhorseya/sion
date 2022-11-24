@@ -8,8 +8,8 @@ import (
 func Handle(g *gin.RouterGroup, biz ab.IBiz) {
 	i := &impl{biz: biz}
 
-	g.POST("Login", i.Login)
-	g.GET("Me", i.Me)
+	g.POST("login", i.Login)
+	g.GET("me", i.Me)
 }
 
 type impl struct {
