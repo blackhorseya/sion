@@ -37,7 +37,14 @@ func AddRequiredAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		c.Set(string(KeyToken), headers[1])
+		token := headers[1]
+		if len(token) == 0 {
+			_ = c.Error(errorx.ErrMissingToken)
+			c.Abort()
+			return
+		}
+
+		c.Set(string(KeyToken), token)
 
 		c.Next()
 	}
