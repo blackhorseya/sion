@@ -3,6 +3,8 @@ package auth
 import (
 	"net/http"
 
+	"github.com/blackhorseya/irent/internal/pkg/errorx"
+	"github.com/blackhorseya/irent/pkg/contextx"
 	_ "github.com/blackhorseya/irent/pkg/entity/domain/account/model" // import struct
 	_ "github.com/blackhorseya/irent/pkg/errors"                      // import struct
 	"github.com/blackhorseya/irent/pkg/response"
@@ -22,11 +24,31 @@ import (
 // @Failure 500 {object} errors.Error
 // @Router /v1/auth/login [post]
 func (i *impl) Login(c *gin.Context) {
-	// ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
-	// if !ok {
-	// 	_ = c.Error(errorx.ErrContextx)
-	// 	return
-	// }
+	ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
+	if !ok {
+		_ = c.Error(errorx.ErrContextx)
+		return
+	}
 
-	c.JSON(http.StatusOK, response.OK)
+	id := c.PostForm("id")
+	if len(id) == 0 {
+		ctx.Error(errorx.ErrMissingID.Error())
+		_ = c.Error(errorx.ErrMissingID)
+		return
+	}
+
+	password := c.PostForm("password")
+	if len(password) == 0 {
+		ctx.Error(errorx.ErrMissingPassword.Error())
+		_ = c.Error(errorx.ErrMissingPassword)
+		return
+	}
+
+	ret, err := i.biz.Login(ctx, id, password)
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response.OK.WithData(ret))
 }
