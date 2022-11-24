@@ -3,6 +3,8 @@ package auth
 import (
 	"net/http"
 
+	"github.com/blackhorseya/irent/internal/pkg/errorx"
+	"github.com/blackhorseya/irent/pkg/contextx"
 	_ "github.com/blackhorseya/irent/pkg/entity/domain/account/model" // import struct
 	_ "github.com/blackhorseya/irent/pkg/errors"                      // import struct
 	"github.com/blackhorseya/irent/pkg/response"
@@ -21,5 +23,14 @@ import (
 // @Failure 500 {object} errors.Error
 // @Router /v1/auth/me [get]
 func (i *impl) Me(c *gin.Context) {
+	ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
+	if !ok {
+		_ = c.Error(errorx.ErrContextx)
+		return
+	}
+
+	// todo: 2022/11/25|sean|impl me
+	ctx.Warn("impl me")
+
 	c.JSON(http.StatusOK, response.OK)
 }

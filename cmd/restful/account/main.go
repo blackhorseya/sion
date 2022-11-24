@@ -23,6 +23,10 @@ func init() {
 // @license.name GPL-3.0
 // @license.url https://spdx.org/licenses/GPL-3.0-only.html
 //
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+//
 // @BasePath /api
 func main() {
 	svc, err := CreateService(*path)
