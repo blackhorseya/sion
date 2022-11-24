@@ -16,14 +16,14 @@ import (
 )
 
 func Handle(g *gin.RouterGroup, biz ab.IBiz) {
-	ret := impl{biz: biz}
+	i := &impl{biz: biz}
 
 	if gin.Mode() != gin.ReleaseMode {
 		g.GET("account/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
-	g.GET("readiness", ret.Readiness)
-	g.GET("liveness", ret.Liveness)
+	g.GET("readiness", i.Readiness)
+	g.GET("liveness", i.Liveness)
 
 	v1.Handle(g.Group("v1"), biz)
 }
