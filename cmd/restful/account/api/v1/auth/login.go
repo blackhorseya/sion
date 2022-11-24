@@ -19,7 +19,7 @@ import (
 // @Produce application/json
 // @Param id formData string true "user id"
 // @Param password formData string true "user password"
-// @Success 201 {object} response.Response{data=model.Profile}
+// @Success 200 {object} response.Response{data=model.Profile}
 // @Failure 400 {object} er.Error
 // @Failure 500 {object} er.Error
 // @Router /v1/auth/login [post]
