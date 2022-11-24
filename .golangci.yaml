@@ -54,7 +54,7 @@ linters-settings:
     package-average: 10.0
 
   errcheck:
-    # Report about not checking of errors in type assertions: `a := b.(MyStruct)`.
+    # Report about not checking of er in type assertions: `a := b.(MyStruct)`.
     # Such cases aren't reported by default.
     # Default: false
     check-type-assertions: true
@@ -181,7 +181,7 @@ linters:
   enable:
     ## enabled by default
     - deadcode # Finds unused code
-    - errcheck # Errcheck is a program for checking for unchecked errors in go programs. These unchecked errors can be critical bugs in some cases
+    - errcheck # Errcheck is a program for checking for unchecked er in go programs. These unchecked er can be critical bugs in some cases
     - gosimple # Linter for Go source code that specializes in simplifying a code
     - govet # Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string
     - ineffassign # Detects when assignments to existing variables are not used
@@ -199,7 +199,7 @@ linters:
     - cyclop # checks function and package cyclomatic complexity
     - dupl # Tool for code clone detection
     - durationcheck # check for two durations multiplied together
-    - errname # Checks that sentinel errors are prefixed with the Err and error types are suffixed with the Error.
+    - errname # Checks that sentinel er are prefixed with the Err and error types are suffixed with the Error.
     - errorlint # errorlint is a linter for that can be used to find code that will cause problems with the error wrapping scheme introduced in Go 1.13.
     - execinquery # execinquery is a linter about query string checker in Query function which reads your Go src files and warning it finds
     #    - exhaustive # check exhaustiveness of enum switch statements
@@ -249,16 +249,16 @@ linters:
     #- ireturn # Accept Interfaces, Return Concrete Types
     #- prealloc # [premature optimization, but can be used in some cases] Finds slice declarations that could potentially be preallocated
     #- varnamelen # [great idea, but too many false positives] checks that the length of a variable's name matches its scope
-    #- wrapcheck # Checks that errors returned from external packages are wrapped
+    #- wrapcheck # Checks that er returned from external packages are wrapped
     ## disabled
     #- containedctx # containedctx is a linter that detects struct contained context.Context field
     #- depguard # [replaced by gomodguard] Go linter that checks if package imports are in a list of acceptable packages
     #- dogsled # Checks assignments with too many blank identifiers (e.g. x, _, _, _, := f())
-    #- errchkjson # [don't see profit + I'm against of omitting errors like in the first example https://github.com/breml/errchkjson] Checks types passed to the json encoding functions. Reports unsupported types and optionally reports occasions, where the check for the returned error can be omitted.
+    #- errchkjson # [don't see profit + I'm against of omitting er like in the first example https://github.com/breml/errchkjson] Checks types passed to the json encoding functions. Reports unsupported types and optionally reports occasions, where the check for the returned error can be omitted.
     #- forcetypeassert # [replaced by errcheck] finds forced type assertions
     #- gci # Gci controls golang package import order and makes it always deterministic.
     #- godox # Tool for detection of
-    #- goerr113 # [too strict] Golang linter to check the errors handling expressions
+    #- goerr113 # [too strict] Golang linter to check the er handling expressions
     #- gofmt # [replaced by goimports] Gofmt checks whether code was gofmt-ed. By default this tool runs with -s option to check for code simplification
     #- gofumpt # [replaced by goimports, gofumports is not available yet] Gofumpt checks whether code was gofumpt-ed.
     #- grouper # An analyzer to analyze expression groups.

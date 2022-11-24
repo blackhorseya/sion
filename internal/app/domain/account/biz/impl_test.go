@@ -123,7 +123,7 @@ func (s *SuiteTester) Test_impl_Login() {
 		{
 			name: "login then error",
 			args: args{id: "id", password: "password", mock: func() {
-				s.repo.On("Login", mock.Anything, "id", "password").Return(nil, errors.New("error")).Once()
+				s.repo.On("Login", mock.Anything, "id", encryptPassword("password")).Return(nil, errors.New("error")).Once()
 			}},
 			wantInfo: nil,
 			wantErr:  true,
@@ -131,7 +131,7 @@ func (s *SuiteTester) Test_impl_Login() {
 		{
 			name: "ok",
 			args: args{id: "id", password: "password", mock: func() {
-				s.repo.On("Login", mock.Anything, "id", "password").Return(testdata.Profile1, nil).Once()
+				s.repo.On("Login", mock.Anything, "id", encryptPassword("password")).Return(testdata.Profile1, nil).Once()
 			}},
 			wantInfo: testdata.Profile1,
 			wantErr:  false,
