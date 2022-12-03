@@ -39,8 +39,8 @@ func (s *SuiteTester) SetupTest() {
 	s.impl = &impl{biz: s.biz}
 }
 
-func (s *SuiteTester) TearDownTest() {
-	s.biz.AssertExpectations(s.T())
+func (s *SuiteTester) assertExpectation(t *testing.T) {
+	s.biz.AssertExpectations(t)
 }
 
 func TestAll(t *testing.T) {
@@ -106,7 +106,7 @@ func (s *SuiteTester) Test_impl_Login() {
 				t.Errorf("Login() code = %v, wantCode = %v", got.StatusCode, tt.wantCode)
 			}
 
-			s.TearDownTest()
+			s.assertExpectation(t)
 		})
 	}
 }
@@ -160,7 +160,7 @@ func (s *SuiteTester) Test_impl_Me() {
 				t.Errorf("Me() code = %v, wantCode = %v", got.StatusCode, tt.wantCode)
 			}
 
-			s.TearDownTest()
+			s.assertExpectation(t)
 		})
 	}
 }
