@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/blackhorseya/irent/cmd"
+	"github.com/blackhorseya/irent/cmd/restful/rental/api"
 	"github.com/blackhorseya/irent/pkg/contextx"
 	"github.com/blackhorseya/irent/pkg/cors"
 	rb "github.com/blackhorseya/irent/pkg/entity/domain/rental/biz"
@@ -24,7 +25,7 @@ func NewRestful(logger *zap.Logger, router *gin.Engine, biz rb.IBiz) cmd.Restful
 	router.Use(ginzap.GinzapWithConfig(logger, &ginzap.Config{
 		TimeFormat: time.RFC3339,
 		UTC:        true,
-		SkipPaths:  []string{"/metrics"},
+		SkipPaths:  []string{"/api/readiness", "/api/liveness", "/metrics"},
 	}))
 	router.Use(contextx.AddContextxWitLoggerMiddleware(logger))
 	router.Use(er.AddErrorHandlingMiddleware())
@@ -36,7 +37,7 @@ func NewRestful(logger *zap.Logger, router *gin.Engine, biz rb.IBiz) cmd.Restful
 }
 
 func (i *restful) InitRouting() error {
-	// todo: 2022/12/4|sean|bind router
+	api.Handle(i.router.Group("api"), i.biz)
 
 	return nil
 }

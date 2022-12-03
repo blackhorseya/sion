@@ -1,0 +1,147 @@
+basePath: /api
+definitions:
+  er.Error:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+  model.Profile:
+    properties:
+      access_token:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  response.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+info:
+  contact:
+    email: blackhorseya@gmail.com
+    name: sean.zheng
+    url: https://blog.seancheng.space
+  description: API for IRent Rental
+  license:
+    name: GPL-3.0
+    url: https://spdx.org/licenses/GPL-3.0-only.html
+  title: IRent Rental API
+  version: 0.0.1
+paths:
+  /liveness:
+    get:
+      consumes:
+      - application/json
+      description: to know when to restart an application
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      summary: Liveness
+      tags:
+      - Health
+  /readiness:
+    get:
+      consumes:
+      - application/json
+      description: Show application was ready to start accepting traffic
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      summary: Readiness
+      tags:
+      - Health
+  /v1/auth/login:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Login
+      parameters:
+      - description: user id
+        in: formData
+        name: id
+        required: true
+        type: string
+      - description: user password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Profile'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      summary: Login
+      tags:
+      - Auth
+  /v1/auth/me:
+    get:
+      consumes:
+      - application/json
+      description: Get me profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Profile'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Get me profile
+      tags:
+      - Auth
+swagger: "2.0"

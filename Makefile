@@ -72,6 +72,7 @@ gen-wire: ## generate wire code
 gen-swagger: ## generate swagger spec
 	@echo "Generating swagger spec"
 	@swag init -g ./cmd/restful/account/main.go -o ./api/account/docs
+	@swag init -g ./cmd/restful/rental/main.go -o ./api/retnal/docs
 
 .PHONY: gen-pb
 gen-pb: ## generate protobuf messages and services
