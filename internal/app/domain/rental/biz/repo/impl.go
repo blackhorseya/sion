@@ -67,6 +67,7 @@ func (i *impl) ListCars(ctx contextx.Contextx) (info []*rm.Car, err error) {
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Add("Content-Type", "application/json")
 
 	resp, err := i.httpclient.Do(req)
 	if err != nil {

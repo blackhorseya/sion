@@ -194,10 +194,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/model.Car"
-                                            }
+                                            "$ref": "#/definitions/cmd_restful_rental_api_v1_cars.listCarsResp"
                                         }
                                     }
                                 }
@@ -221,6 +218,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "cmd_restful_rental_api_v1_cars.listCarsResp": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Car"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "er.Error": {
             "type": "object",
             "properties": {
@@ -230,6 +241,20 @@ const docTemplate = `{
                 "data": {},
                 "msg": {
                     "type": "string"
+                }
+            }
+        },
+        "github_com_blackhorseya_irent_cmd_restful_rental_api_v1_cars.listCarsResp": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Car"
+                    }
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         },
