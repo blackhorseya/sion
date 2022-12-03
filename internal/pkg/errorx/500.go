@@ -17,4 +17,7 @@ var (
 
 	// ErrGetProfileByToken means Failed to get profile by token
 	ErrGetProfileByToken = er.New(http.StatusInternalServerError, 50011, "Failed to get profile by token")
+
+	// ErrListCars means Failed to list cars via api
+	ErrListCars = er.New(http.StatusInternalServerError, 50012, "Failed to list cars via api")
 )
