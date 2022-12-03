@@ -12,9 +12,9 @@ func init() {
 	flag.Parse()
 }
 
-// @title IRent Rental API
+// @title IRent API
 // @version 0.0.1
-// @description API for IRent Rental
+// @description API for IRent
 //
 // @contact.name sean.zheng
 // @contact.email blackhorseya@gmail.com
@@ -24,6 +24,10 @@ func init() {
 // @license.url https://spdx.org/licenses/GPL-3.0-only.html
 //
 // @BasePath /api
+//
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	svc, err := CreateService(*path)
 	if err != nil {

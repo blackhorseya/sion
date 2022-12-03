@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	_ "github.com/blackhorseya/irent/api/account/docs" // import swagger spec
+	_ "github.com/blackhorseya/irent/api/docs" // import swagger spec
 	v1 "github.com/blackhorseya/irent/cmd/restful/account/api/v1"
 	"github.com/blackhorseya/irent/internal/pkg/errorx"
 	"github.com/blackhorseya/irent/pkg/contextx"
@@ -19,7 +19,7 @@ func Handle(g *gin.RouterGroup, biz ab.IBiz) {
 	i := &impl{biz: biz}
 
 	if gin.Mode() != gin.ReleaseMode {
-		g.GET("account/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+		g.GET("docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
 	g.GET("readiness", i.Readiness)
@@ -32,15 +32,6 @@ type impl struct {
 	biz ab.IBiz
 }
 
-// Readiness
-// @Summary Readiness
-// @Description Show application was ready to start accepting traffic
-// @Tags Health
-// @Accept application/json
-// @Produce application/json
-// @Success 200 {object} response.Response
-// @Failure 500 {object} er.Error
-// @Router /readiness [get]
 func (i *impl) Readiness(c *gin.Context) {
 	ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
 	if !ok {
@@ -57,15 +48,6 @@ func (i *impl) Readiness(c *gin.Context) {
 	c.JSON(http.StatusOK, response.OK)
 }
 
-// Liveness
-// @Summary Liveness
-// @Description to know when to restart an application
-// @Tags Health
-// @Accept application/json
-// @Produce application/json
-// @Success 200 {object} response.Response
-// @Failure 500 {object} er.Error
-// @Router /liveness [get]
 func (i *impl) Liveness(c *gin.Context) {
 	ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
 	if !ok {

@@ -12,9 +12,9 @@ func init() {
 	flag.Parse()
 }
 
-// @title IRent Account API
+// @title IRent API
 // @version 0.0.1
-// @description API for IRent Account
+// @description API for IRent
 //
 // @contact.name sean.zheng
 // @contact.email blackhorseya@gmail.com
