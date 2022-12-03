@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// ProviderSet is a provider set for account repo
+// ProviderSet is a provider set for rental repo
 var ProviderSet = wire.NewSet(NewOptions, NewImpl)
 
 // Options declare app's configuration
