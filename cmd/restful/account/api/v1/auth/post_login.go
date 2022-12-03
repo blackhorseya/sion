@@ -5,8 +5,6 @@ import (
 
 	"github.com/blackhorseya/irent/internal/pkg/errorx"
 	"github.com/blackhorseya/irent/pkg/contextx"
-	_ "github.com/blackhorseya/irent/pkg/entity/domain/account/model" // import struct
-	_ "github.com/blackhorseya/irent/pkg/er"                          // import struct
 	"github.com/blackhorseya/irent/pkg/response"
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +12,7 @@ import (
 // Login
 // @Summary Login
 // @Description Login
-// @Tags Auth
+// @Tags Account
 // @Accept x-www-form-urlencoded
 // @Produce application/json
 // @Param id formData string true "user id"

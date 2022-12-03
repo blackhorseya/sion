@@ -15,4 +15,13 @@ var (
 
 	// ErrMissingToken means Token must be NOT empty
 	ErrMissingToken = er.New(http.StatusBadRequest, 40012, "Token must be NOT empty")
+
+	// ErrInvalidSize means [size] MUST be integer
+	ErrInvalidSize = er.New(http.StatusBadRequest, 40013, "[size] MUST be integer")
+
+	// ErrInvalidLatitude means [latitude]  MUST be float
+	ErrInvalidLatitude = er.New(http.StatusBadRequest, 40014, "[latitude]  MUST be float")
+
+	// ErrInvalidLongitude means [longitude]  MUST be float
+	ErrInvalidLongitude = er.New(http.StatusBadRequest, 40015, "[longitude]  MUST be float")
 )

@@ -15,8 +15,8 @@ type IBiz interface {
 	// Liveness probes to know when to restart a container. For example, liveness probes could catch a deadlock, where an application is running, but unable to make progress. Restarting a container in such a state can help to make the application more available despite bugs.
 	Liveness(ctx contextx.Contextx) error
 
-	// ListCar serve caller to given condition to list cars
-	ListCar(ctx contextx.Contextx, condition QueryCarCondition) (info []*rm.Car, total int, err error)
+	// ListCars serve caller to given condition to list cars
+	ListCars(ctx contextx.Contextx, condition QueryCarCondition) (info []*rm.Car, total int, err error)
 }
 
 // QueryCarCondition is a condition

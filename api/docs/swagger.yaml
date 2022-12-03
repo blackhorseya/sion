@@ -1,5 +1,14 @@
 basePath: /api
 definitions:
+  cmd_restful_rental_api_v1_cars.listCarsResp:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/model.Car'
+        type: array
+      total:
+        type: integer
+    type: object
   er.Error:
     properties:
       code:
@@ -7,6 +16,38 @@ definitions:
       data: {}
       msg:
         type: string
+    type: object
+  github_com_blackhorseya_irent_cmd_restful_rental_api_v1_cars.listCarsResp:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/model.Car'
+        type: array
+      total:
+        type: integer
+    type: object
+  model.Car:
+    properties:
+      car_of_area:
+        type: string
+      car_type:
+        type: string
+      car_type_name:
+        type: string
+      distance:
+        type: number
+      id:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      project_id:
+        type: string
+      project_name:
+        type: string
+      seat:
+        type: integer
     type: object
   model.Profile:
     properties:
@@ -30,51 +71,13 @@ info:
     email: blackhorseya@gmail.com
     name: sean.zheng
     url: https://blog.seancheng.space
-  description: API for IRent Account
+  description: API for IRent
   license:
     name: GPL-3.0
     url: https://spdx.org/licenses/GPL-3.0-only.html
-  title: IRent Account API
+  title: IRent API
   version: 0.0.1
 paths:
-  /liveness:
-    get:
-      consumes:
-      - application/json
-      description: to know when to restart an application
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/er.Error'
-      summary: Liveness
-      tags:
-      - Health
-  /readiness:
-    get:
-      consumes:
-      - application/json
-      description: Show application was ready to start accepting traffic
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/er.Error'
-      summary: Readiness
-      tags:
-      - Health
   /v1/auth/login:
     post:
       consumes:
@@ -113,7 +116,7 @@ paths:
             $ref: '#/definitions/er.Error'
       summary: Login
       tags:
-      - Auth
+      - Account
   /v1/auth/me:
     get:
       consumes:
@@ -143,7 +146,56 @@ paths:
       - ApiKeyAuth: []
       summary: Get me profile
       tags:
-      - Auth
+      - Account
+  /v1/cars:
+    get:
+      consumes:
+      - application/json
+      description: List cars
+      parameters:
+      - default: 1
+        description: page
+        in: query
+        name: page
+        type: integer
+      - default: 5
+        description: size
+        in: query
+        name: size
+        type: integer
+      - default: 0
+        description: latitude
+        in: query
+        name: latitude
+        type: number
+      - default: 0
+        description: longitude
+        in: query
+        name: longitude
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/cmd_restful_rental_api_v1_cars.listCarsResp'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      summary: List cars
+      tags:
+      - Rental
 securityDefinitions:
   ApiKeyAuth:
     in: header

@@ -14,8 +14,8 @@ type MockIBiz struct {
 	mock.Mock
 }
 
-// ListCar provides a mock function with given fields: ctx, condition
-func (_m *MockIBiz) ListCar(ctx contextx.Contextx, condition QueryCarCondition) ([]*model.Car, int, error) {
+// ListCars provides a mock function with given fields: ctx, condition
+func (_m *MockIBiz) ListCars(ctx contextx.Contextx, condition QueryCarCondition) ([]*model.Car, int, error) {
 	ret := _m.Called(ctx, condition)
 
 	var r0 []*model.Car

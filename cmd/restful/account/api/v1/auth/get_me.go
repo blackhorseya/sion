@@ -5,8 +5,6 @@ import (
 
 	"github.com/blackhorseya/irent/internal/pkg/errorx"
 	"github.com/blackhorseya/irent/pkg/contextx"
-	_ "github.com/blackhorseya/irent/pkg/entity/domain/account/model" // import struct
-	_ "github.com/blackhorseya/irent/pkg/er"                          // import struct
 	"github.com/blackhorseya/irent/pkg/httpheaders"
 	"github.com/blackhorseya/irent/pkg/response"
 	"github.com/gin-gonic/gin"
@@ -15,7 +13,7 @@ import (
 // Me
 // @Summary Get me profile
 // @Description Get me profile
-// @Tags Auth
+// @Tags Account
 // @Accept application/json
 // @Produce application/json
 // @Security ApiKeyAuth

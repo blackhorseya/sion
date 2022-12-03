@@ -24,64 +24,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/liveness": {
-            "get": {
-                "description": "to know when to restart an application",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Health"
-                ],
-                "summary": "Liveness",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/er.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/readiness": {
-            "get": {
-                "description": "Show application was ready to start accepting traffic",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Health"
-                ],
-                "summary": "Readiness",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/er.Error"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/auth/login": {
             "post": {
                 "description": "Login",
@@ -92,7 +34,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Auth"
+                    "Account"
                 ],
                 "summary": "Login",
                 "parameters": [
@@ -160,7 +102,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Auth"
+                    "Account"
                 ],
                 "summary": "Get me profile",
                 "responses": {
@@ -196,9 +138,100 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/v1/cars": {
+            "get": {
+                "description": "List cars",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rental"
+                ],
+                "summary": "List cars",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 5,
+                        "description": "size",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "default": 0,
+                        "description": "latitude",
+                        "name": "latitude",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "default": 0,
+                        "description": "longitude",
+                        "name": "longitude",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/cmd_restful_rental_api_v1_cars.listCarsResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/er.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/er.Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "cmd_restful_rental_api_v1_cars.listCarsResp": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Car"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "er.Error": {
             "type": "object",
             "properties": {
@@ -208,6 +241,55 @@ const docTemplate = `{
                 "data": {},
                 "msg": {
                     "type": "string"
+                }
+            }
+        },
+        "github_com_blackhorseya_irent_cmd_restful_rental_api_v1_cars.listCarsResp": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Car"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.Car": {
+            "type": "object",
+            "properties": {
+                "car_of_area": {
+                    "type": "string"
+                },
+                "car_type": {
+                    "type": "string"
+                },
+                "car_type_name": {
+                    "type": "string"
+                },
+                "distance": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "project_id": {
+                    "type": "string"
+                },
+                "project_name": {
+                    "type": "string"
+                },
+                "seat": {
+                    "type": "integer"
                 }
             }
         },
@@ -253,8 +335,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/api",
 	Schemes:          []string{},
-	Title:            "IRent Account API",
-	Description:      "API for IRent Account",
+	Title:            "IRent API",
+	Description:      "API for IRent",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }
