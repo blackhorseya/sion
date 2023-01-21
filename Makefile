@@ -115,7 +115,10 @@ deploy: check-SVC_NAME check-SVC_ADAPTER check-VERSION check-DEPLOY_TO ## deploy
 update-package: ## update package and commit
 	@go get -u ./...
 	@go mod tidy
-	@git add go.mod go.sum
+
+	@bazel run //:gazelle-update-repos
+
+	@git add go.mod go.sum deps.bzl
 	@git commit -m "build: update package"
 
 .PHONY: test-smoke
