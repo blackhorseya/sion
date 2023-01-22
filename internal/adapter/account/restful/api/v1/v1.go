@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"github.com/blackhorseya/irent/cmd/restful/account/api/v1/auth"
+	"github.com/blackhorseya/irent/internal/adapter/account/restful/api/v1/auth"
 	ab "github.com/blackhorseya/irent/pkg/entity/domain/account/biz"
 	"github.com/gin-gonic/gin"
 )

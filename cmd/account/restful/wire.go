@@ -4,6 +4,7 @@
 package main
 
 import (
+	"github.com/blackhorseya/irent/internal/adapter/account/restful"
 	"github.com/blackhorseya/irent/internal/app/domain/account/biz"
 	"github.com/blackhorseya/irent/internal/pkg/config"
 	"github.com/blackhorseya/irent/internal/pkg/httpx"
@@ -21,10 +22,10 @@ var providerSet = wire.NewSet(
 	httpx.ProviderServerSet,
 
 	// domain
+	restful.AccountSet,
 	biz.ProviderSet,
 
 	// main
-	NewRestful,
 	NewService,
 )
 

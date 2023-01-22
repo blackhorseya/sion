@@ -4,6 +4,7 @@
 package main
 
 import (
+	"github.com/blackhorseya/irent/internal/adapter/rental/restful"
 	"github.com/blackhorseya/irent/internal/app/domain/rental/biz"
 	"github.com/blackhorseya/irent/internal/pkg/config"
 	"github.com/blackhorseya/irent/internal/pkg/httpx"
@@ -21,11 +22,11 @@ var providerSet = wire.NewSet(
 	httpx.ProviderServerSet,
 
 	// implementation
+	restful.RentalSet,
 	biz.ProviderSet,
 
 	// main
 	NewService,
-	NewRestful,
 )
 
 func CreateService(path string) (*Service, error) {

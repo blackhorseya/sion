@@ -4,17 +4,18 @@ import (
 	"net/http"
 
 	_ "github.com/blackhorseya/irent/api/docs" // import swagger spec
-	v1 "github.com/blackhorseya/irent/cmd/restful/rental/api/v1"
+	v1 "github.com/blackhorseya/irent/internal/adapter/account/restful/api/v1"
 	"github.com/blackhorseya/irent/internal/pkg/errorx"
 	"github.com/blackhorseya/irent/pkg/contextx"
-	rb "github.com/blackhorseya/irent/pkg/entity/domain/rental/biz"
+	ab "github.com/blackhorseya/irent/pkg/entity/domain/account/biz"
+	_ "github.com/blackhorseya/irent/pkg/er" // import struct
 	"github.com/blackhorseya/irent/pkg/response"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func Handle(g *gin.RouterGroup, biz rb.IBiz) {
+func Handle(g *gin.RouterGroup, biz ab.IBiz) {
 	i := &impl{biz: biz}
 
 	if gin.Mode() != gin.ReleaseMode {
@@ -28,7 +29,7 @@ func Handle(g *gin.RouterGroup, biz rb.IBiz) {
 }
 
 type impl struct {
-	biz rb.IBiz
+	biz ab.IBiz
 }
 
 func (i *impl) Readiness(c *gin.Context) {

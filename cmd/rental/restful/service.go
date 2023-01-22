@@ -5,7 +5,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/blackhorseya/irent/cmd"
+	"github.com/blackhorseya/irent/pkg/adapters"
 	"github.com/blackhorseya/irent/pkg/httpx"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -17,7 +17,7 @@ type Service struct {
 }
 
 // NewService serve caller to create service instance
-func NewService(logger *zap.Logger, hs httpx.Server, restful cmd.Restful) (*Service, error) {
+func NewService(logger *zap.Logger, hs httpx.Server, restful adapters.Restful) (*Service, error) {
 	err := restful.InitRouting()
 	if err != nil {
 		return nil, errors.Wrap(err, "init routing error")
