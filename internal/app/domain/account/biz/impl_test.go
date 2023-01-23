@@ -28,8 +28,8 @@ func (s *SuiteTester) SetupTest() {
 	s.biz = CreateBiz(s.repo)
 }
 
-func (s *SuiteTester) TearDownTest() {
-	s.repo.AssertExpectations(s.T())
+func (s *SuiteTester) AssertExpectations(t *testing.T) {
+	s.repo.AssertExpectations(t)
 }
 
 func TestAll(t *testing.T) {
@@ -61,7 +61,7 @@ func (s *SuiteTester) Test_impl_Readiness() {
 				t.Errorf("Readiness() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			s.TearDownTest()
+			s.AssertExpectations(t)
 		})
 	}
 }
@@ -91,7 +91,7 @@ func (s *SuiteTester) Test_impl_Liveness() {
 				t.Errorf("Liveness() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			s.TearDownTest()
+			s.AssertExpectations(t)
 		})
 	}
 }
@@ -152,7 +152,7 @@ func (s *SuiteTester) Test_impl_Login() {
 				t.Errorf("Login() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
 
-			s.TearDownTest()
+			s.AssertExpectations(t)
 		})
 	}
 }
@@ -206,7 +206,7 @@ func (s *SuiteTester) Test_impl_GetByAccessToken() {
 				t.Errorf("GetByAccessToken() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
 
-			s.TearDownTest()
+			s.AssertExpectations(t)
 		})
 	}
 }

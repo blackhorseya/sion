@@ -1,0 +1,31 @@
+package biz
+
+import (
+	"testing"
+
+	"github.com/blackhorseya/irent/internal/app/domain/order/biz/repo"
+	ob "github.com/blackhorseya/irent/pkg/entity/domain/order/biz"
+	"github.com/stretchr/testify/suite"
+	"go.uber.org/zap"
+)
+
+type SuiteTester struct {
+	suite.Suite
+	logger *zap.Logger
+	repo   *repo.MockIRepo
+	biz    ob.IBiz
+}
+
+func (s *SuiteTester) SetupTest() {
+	s.logger, _ = zap.NewDevelopment()
+	s.repo = new(repo.MockIRepo)
+	s.biz = CreateBiz(s.repo)
+}
+
+func (s *SuiteTester) AssertExpectations(t *testing.T) {
+	s.repo.AssertExpectations(t)
+}
+
+func TestAll(t *testing.T) {
+	suite.Run(t, new(SuiteTester))
+}
