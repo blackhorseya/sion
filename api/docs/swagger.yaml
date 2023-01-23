@@ -1,6 +1,6 @@
 basePath: /api
 definitions:
-  cmd_restful_rental_api_v1_cars.listCarsResp:
+  cars.listCarsResp:
     properties:
       list:
         items:
@@ -16,15 +16,6 @@ definitions:
       data: {}
       msg:
         type: string
-    type: object
-  github_com_blackhorseya_irent_cmd_restful_rental_api_v1_cars.listCarsResp:
-    properties:
-      list:
-        items:
-          $ref: '#/definitions/model.Car'
-        type: array
-      total:
-        type: integer
     type: object
   model.Car:
     properties:
@@ -183,7 +174,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/cmd_restful_rental_api_v1_cars.listCarsResp'
+                  $ref: '#/definitions/cars.listCarsResp'
               type: object
         "400":
           description: Bad Request
