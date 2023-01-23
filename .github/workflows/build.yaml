@@ -5,14 +5,9 @@ on:
     branches-ignore:
       - 'release-**'
     paths-ignore:
-      - '**/*.md'
-      - '**/*.yaml'
-      - '**/*.yml'
-      - '**/.tf'
-      - 'scripts/**'
-      - 'Makefile'
-      - 'Dockerfile'
-      - '.cz.yaml'
+      - 'cmd/**'
+      - 'internal/**'
+      - 'pkg/**'
 jobs:
   test:
     runs-on: ubuntu-latest
