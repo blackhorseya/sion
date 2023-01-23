@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "api",
+    srcs = ["v1.go"],
+    importpath = "github.com/blackhorseya/irent/internal/adapter/account/restful/api/v1",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//internal/adapter/account/restful/api/v1/auth",
+        "//pkg/entity/domain/account/biz",
+        "@com_github_gin_gonic_gin//:gin",
+    ],
+)

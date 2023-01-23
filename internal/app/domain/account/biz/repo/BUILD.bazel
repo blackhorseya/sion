@@ -1,0 +1,39 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "repo",
+    srcs = [
+        "impl.go",
+        "interface.go",
+        "mock_IRepo.go",
+        "models.go",
+        "wire_gen.go",
+    ],
+    importpath = "github.com/blackhorseya/irent/internal/app/domain/account/biz/repo",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//pkg/contextx",
+        "//pkg/entity/domain/account/model",
+        "//pkg/httpx",
+        "@com_github_google_uuid//:uuid",
+        "@com_github_google_wire//:wire",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_spf13_viper//:viper",
+        "@com_github_stretchr_testify//mock",
+    ],
+)
+
+go_test(
+    name = "repo_test",
+    srcs = ["impl_test.go"],
+    embed = [":repo"],
+    deps = [
+        "//pkg/contextx",
+        "//pkg/entity/domain/account/model",
+        "//pkg/httpx",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_stretchr_testify//mock",
+        "@com_github_stretchr_testify//suite",
+        "@org_uber_go_zap//:zap",
+    ],
+)

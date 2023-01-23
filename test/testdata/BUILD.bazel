@@ -1,0 +1,9 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "testdata",
+    srcs = ["profile.go"],
+    importpath = "github.com/blackhorseya/irent/test/testdata",
+    visibility = ["//visibility:public"],
+    deps = ["//pkg/entity/domain/account/model"],
+)

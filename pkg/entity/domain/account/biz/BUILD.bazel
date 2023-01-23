@@ -1,0 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "biz",
+    srcs = [
+        "interface.go",
+        "mock_IBiz.go",
+    ],
+    importpath = "github.com/blackhorseya/irent/pkg/entity/domain/account/biz",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/contextx",
+        "//pkg/entity/domain/account/model",
+        "@com_github_stretchr_testify//mock",
+    ],
+)

@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "distance",
+    srcs = ["distance.go"],
+    importpath = "github.com/blackhorseya/irent/pkg/distance",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "distance_test",
+    srcs = ["distance_test.go"],
+    embed = [":distance"],
+)
