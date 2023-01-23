@@ -1,6 +1,6 @@
 syntax = "proto3";
-package billing;
-option go_package = "github.com/blackhorseya/irent/pkg/entity/domain/billing/model";
+package order;
+option go_package = "github.com/blackhorseya/irent/pkg/entity/domain/order/model";
 
 message ArrearsRecord {
   string order_no = 1;

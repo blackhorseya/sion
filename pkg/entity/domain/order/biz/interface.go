@@ -2,6 +2,8 @@ package biz
 
 import (
 	"github.com/blackhorseya/irent/pkg/contextx"
+	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
+	"github.com/blackhorseya/irent/pkg/entity/domain/order/model"
 )
 
 // IBiz declare order biz functions
@@ -13,4 +15,7 @@ type IBiz interface {
 
 	// Liveness probes to know when to restart a container. For example, liveness probes could catch a deadlock, where an application is running, but unable to make progress. Restarting a container in such a state can help to make the application more available despite bugs.
 	Liveness(ctx contextx.Contextx) error
+
+	// GetArrears serve caller to given user to get user's arrears information
+	GetArrears(ctx contextx.Contextx, from *am.Profile) (info *model.Arrears, err error)
 }

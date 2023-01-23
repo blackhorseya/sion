@@ -2,7 +2,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "model",
-    srcs = ["order.pb.go"],
+    srcs = [
+        "arrears.pb.go",
+        "order.pb.go",
+    ],
     importpath = "github.com/blackhorseya/irent/pkg/entity/domain/order/model",
     visibility = ["//visibility:public"],
     deps = [
