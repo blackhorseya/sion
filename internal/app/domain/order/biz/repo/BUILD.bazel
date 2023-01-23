@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "repo",
+    srcs = ["interface.go"],
+    importpath = "github.com/blackhorseya/irent/internal/app/domain/order/biz/repo",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//pkg/contextx",
+        "//pkg/entity/domain/account/model",
+        "//pkg/entity/domain/order/model",
+    ],
+)

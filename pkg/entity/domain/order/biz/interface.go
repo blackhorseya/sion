@@ -3,7 +3,7 @@ package biz
 import (
 	"github.com/blackhorseya/irent/pkg/contextx"
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
-	"github.com/blackhorseya/irent/pkg/entity/domain/order/model"
+	om "github.com/blackhorseya/irent/pkg/entity/domain/order/model"
 )
 
 // IBiz declare order biz functions
@@ -17,5 +17,5 @@ type IBiz interface {
 	Liveness(ctx contextx.Contextx) error
 
 	// GetArrears serve caller to given user to get user's arrears information
-	GetArrears(ctx contextx.Contextx, from *am.Profile) (info *model.Arrears, err error)
+	GetArrears(ctx contextx.Contextx, from *am.Profile) (info *om.Arrears, err error)
 }
