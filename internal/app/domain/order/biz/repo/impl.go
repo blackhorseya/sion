@@ -1,6 +1,13 @@
 package repo
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/url"
+	"strings"
+
 	"github.com/blackhorseya/irent/pkg/contextx"
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
 	om "github.com/blackhorseya/irent/pkg/entity/domain/order/model"
@@ -39,6 +46,48 @@ func NewImpl(opts *Options, httpclient httpx.Client) IRepo {
 }
 
 func (i *impl) FetchArrears(ctx contextx.Contextx, user *am.Profile) (records []*om.ArrearsRecord, err error) {
-	// todo: 2023/1/23|sean|impl me
-	panic("implement me")
+	uri, err := url.Parse(i.opts.Endpoint + "/ArrearsQuery")
+	if err != nil {
+		return nil, err
+	}
+
+	payload, err := json.Marshal(map[string]interface{}{
+		"IDNO": user.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri.String(), bytes.NewReader(payload))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", user.AccessToken))
+
+	resp, err := i.httpclient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var data *fetchArrearsResp
+	err = json.NewDecoder(resp.Body).Decode(&data)
+	if err != nil {
+		return nil, err
+	}
+
+	if strings.ToLower(data.ErrorMessage) != "success" {
+		return nil, errors.New(data.ErrorMessage)
+	}
+
+	var ret []*om.ArrearsRecord
+	for _, info := range data.Data.ArrearsInfos {
+		ret = append(ret, &om.ArrearsRecord{
+			OrderNo:     info.OrderNo,
+			TotalAmount: int64(info.TotalAmount),
+		})
+	}
+
+	return ret, nil
 }
