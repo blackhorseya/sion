@@ -7,6 +7,7 @@ import (
 	"github.com/blackhorseya/irent/pkg/contextx"
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
 	om "github.com/blackhorseya/irent/pkg/entity/domain/order/model"
+	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
 	"github.com/blackhorseya/irent/pkg/httpx"
 	"github.com/blackhorseya/irent/test/testdata"
 	"github.com/pkg/errors"
@@ -71,6 +72,48 @@ func (s *SuiteTester) Test_impl_FetchArrears() {
 			}
 			if !reflect.DeepEqual(gotRecords, tt.wantRecords) {
 				t.Errorf("FetchArrears() gotRecords = %v, want %v", gotRecords, tt.wantRecords)
+			}
+
+			s.AssertExpectations(t)
+		})
+	}
+}
+
+func (s *SuiteTester) Test_impl_BookCar() {
+	type args struct {
+		from   *am.Profile
+		target *rm.Car
+		mock   func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantInfo *om.Booking
+		wantErr  bool
+	}{
+		{
+			name: "http do then error",
+			args: args{from: testdata.Profile1, target: testdata.Car1, mock: func() {
+				s.httpclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotInfo, err := s.repo.BookCar(contextx.BackgroundWithLogger(s.logger), tt.args.from, tt.args.target)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("BookCar() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
+				t.Errorf("BookCar() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
 
 			s.AssertExpectations(t)

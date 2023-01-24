@@ -27,3 +27,15 @@ type fetchArrearsResp struct {
 		TradeOrderNo string `json:"TradeOrderNo"`
 	} `json:"Data"`
 }
+
+type bookResp struct {
+	Result       string `json:"Result"`
+	ErrorCode    string `json:"ErrorCode"`
+	NeedRelogin  int    `json:"NeedRelogin"`
+	NeedUpgrade  int    `json:"NeedUpgrade"`
+	ErrorMessage string `json:"ErrorMessage"`
+	Data         struct {
+		OrderNo      string `json:"OrderNo"`
+		LastPickTime string `json:"LastPickTime"`
+	} `json:"Data"`
+}
