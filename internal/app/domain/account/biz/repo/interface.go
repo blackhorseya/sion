@@ -3,6 +3,7 @@ package repo
 import (
 	"github.com/blackhorseya/irent/pkg/contextx"
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
+	"github.com/google/wire"
 )
 
 // IRepo declare account repository functions
@@ -15,3 +16,5 @@ type IRepo interface {
 	// GetMemberStatus serve caller to given access token to get profile
 	GetMemberStatus(ctx contextx.Contextx, token string) (info *am.Profile, err error)
 }
+
+var AccountSet = wire.NewSet(NewOptions, NewImpl)

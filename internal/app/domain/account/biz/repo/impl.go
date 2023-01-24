@@ -11,13 +11,9 @@ import (
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
 	"github.com/blackhorseya/irent/pkg/httpx"
 	"github.com/google/uuid"
-	"github.com/google/wire"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 )
-
-// ProviderSet is a provider set for account repo
-var ProviderSet = wire.NewSet(NewOptions, NewImpl)
 
 // Options declare app's configuration
 type Options struct {
