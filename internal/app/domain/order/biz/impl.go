@@ -7,6 +7,7 @@ import (
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
 	ob "github.com/blackhorseya/irent/pkg/entity/domain/order/biz"
 	om "github.com/blackhorseya/irent/pkg/entity/domain/order/model"
+	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
 	"github.com/google/wire"
 	"go.uber.org/zap"
 )
@@ -50,4 +51,14 @@ func (i *impl) GetArrears(ctx contextx.Contextx, from *am.Profile, target *am.Pr
 	}
 
 	return ret, nil
+}
+
+func (i *impl) BookRental(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Booking, err error) {
+	// todo: 2023/1/25|sean|impl me
+	panic("implement me")
+}
+
+func (i *impl) CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Booking) error {
+	// todo: 2023/1/25|sean|impl me
+	panic("implement me")
 }

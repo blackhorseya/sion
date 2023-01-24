@@ -4,6 +4,7 @@ import (
 	"github.com/blackhorseya/irent/pkg/contextx"
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
 	om "github.com/blackhorseya/irent/pkg/entity/domain/order/model"
+	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
 )
 
 // IBiz declare order biz functions
@@ -18,4 +19,10 @@ type IBiz interface {
 
 	// GetArrears serve caller to given user to get user's arrears information
 	GetArrears(ctx contextx.Contextx, from *am.Profile, target *am.Profile) (info *om.Arrears, err error)
+
+	// BookRental serve caller to book a rental
+	BookRental(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Booking, err error)
+
+	// CancelBooking serve caller to given user and order's id then to cancel the booking
+	CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Booking) error
 }
