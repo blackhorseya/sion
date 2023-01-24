@@ -24,7 +24,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/arrears": {
+        "/v1/arrears/{id}": {
             "get": {
                 "security": [
                     {
@@ -42,6 +42,15 @@ const docTemplate = `{
                     "Billing"
                 ],
                 "summary": "Get arrears by user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of user",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

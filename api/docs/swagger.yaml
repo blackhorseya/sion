@@ -85,11 +85,17 @@ info:
   title: IRent API
   version: 0.0.1
 paths:
-  /v1/arrears:
+  /v1/arrears/{id}:
     get:
       consumes:
       - application/json
       description: Get arrears by user
+      parameters:
+      - description: ID of user
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:

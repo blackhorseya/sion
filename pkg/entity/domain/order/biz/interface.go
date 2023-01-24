@@ -17,5 +17,5 @@ type IBiz interface {
 	Liveness(ctx contextx.Contextx) error
 
 	// GetArrears serve caller to given user to get user's arrears information
-	GetArrears(ctx contextx.Contextx, from *am.Profile) (info *om.Arrears, err error)
+	GetArrears(ctx contextx.Contextx, from *am.Profile, target *am.Profile) (info *om.Arrears, err error)
 }

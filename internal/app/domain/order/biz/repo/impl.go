@@ -45,14 +45,14 @@ func NewImpl(opts *Options, httpclient httpx.Client) IRepo {
 	}
 }
 
-func (i *impl) FetchArrears(ctx contextx.Contextx, user *am.Profile) (records []*om.ArrearsRecord, err error) {
+func (i *impl) FetchArrears(ctx contextx.Contextx, from *am.Profile, target *am.Profile) (records []*om.ArrearsRecord, err error) {
 	uri, err := url.Parse(i.opts.Endpoint + "/ArrearsQuery")
 	if err != nil {
 		return nil, err
 	}
 
 	payload, err := json.Marshal(map[string]interface{}{
-		"IDNO": user.Id,
+		"IDNO": target.Id,
 	})
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func (i *impl) FetchArrears(ctx contextx.Contextx, user *am.Profile) (records []
 		return nil, err
 	}
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", user.AccessToken))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", from.AccessToken))
 
 	resp, err := i.httpclient.Do(req)
 	if err != nil {

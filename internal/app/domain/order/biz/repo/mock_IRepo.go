@@ -16,13 +16,13 @@ type MockIRepo struct {
 	mock.Mock
 }
 
-// FetchArrears provides a mock function with given fields: ctx, user
-func (_m *MockIRepo) FetchArrears(ctx contextx.Contextx, user *model.Profile) ([]*ordermodel.ArrearsRecord, error) {
-	ret := _m.Called(ctx, user)
+// FetchArrears provides a mock function with given fields: ctx, from, target
+func (_m *MockIRepo) FetchArrears(ctx contextx.Contextx, from *model.Profile, target *model.Profile) ([]*ordermodel.ArrearsRecord, error) {
+	ret := _m.Called(ctx, from, target)
 
 	var r0 []*ordermodel.ArrearsRecord
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, *model.Profile) []*ordermodel.ArrearsRecord); ok {
-		r0 = rf(ctx, user)
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, *model.Profile, *model.Profile) []*ordermodel.ArrearsRecord); ok {
+		r0 = rf(ctx, from, target)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]*ordermodel.ArrearsRecord)
@@ -30,8 +30,8 @@ func (_m *MockIRepo) FetchArrears(ctx contextx.Contextx, user *model.Profile) ([
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(contextx.Contextx, *model.Profile) error); ok {
-		r1 = rf(ctx, user)
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, *model.Profile, *model.Profile) error); ok {
+		r1 = rf(ctx, from, target)
 	} else {
 		r1 = ret.Error(1)
 	}

@@ -31,10 +31,10 @@ func (i *impl) Liveness(ctx contextx.Contextx) error {
 	return nil
 }
 
-func (i *impl) GetArrears(ctx contextx.Contextx, from *am.Profile) (info *om.Arrears, err error) {
-	records, err := i.repo.FetchArrears(ctx, from)
+func (i *impl) GetArrears(ctx contextx.Contextx, from *am.Profile, target *am.Profile) (info *om.Arrears, err error) {
+	records, err := i.repo.FetchArrears(ctx, from, target)
 	if err != nil {
-		ctx.Error(errorx.ErrGetArrears.Error(), zap.Error(err), zap.Any("from", from))
+		ctx.Error(errorx.ErrGetArrears.Error(), zap.Error(err), zap.Any("from", from), zap.Any("target", target))
 		return nil, errorx.ErrGetArrears
 	}
 	if len(records) == 0 {

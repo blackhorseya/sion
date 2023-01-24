@@ -39,8 +39,9 @@ func TestAll(t *testing.T) {
 
 func (s *SuiteTester) Test_impl_GetArrears() {
 	type args struct {
-		from *am.Profile
-		mock func()
+		from   *am.Profile
+		target *am.Profile
+		mock   func()
 	}
 	tests := []struct {
 		name     string
@@ -50,16 +51,16 @@ func (s *SuiteTester) Test_impl_GetArrears() {
 	}{
 		{
 			name: "fetch then error",
-			args: args{from: testdata.Profile1, mock: func() {
-				s.repo.On("FetchArrears", mock.Anything, testdata.Profile1).Return(nil, errors.New("error")).Once()
+			args: args{from: testdata.Profile1, target: testdata.Profile1, mock: func() {
+				s.repo.On("FetchArrears", mock.Anything, testdata.Profile1, testdata.Profile1).Return(nil, errors.New("error")).Once()
 			}},
 			wantInfo: nil,
 			wantErr:  true,
 		},
 		{
 			name: "ok",
-			args: args{from: testdata.Profile1, mock: func() {
-				s.repo.On("FetchArrears", mock.Anything, testdata.Profile1).Return(nil, nil).Once()
+			args: args{from: testdata.Profile1, target: testdata.Profile1, mock: func() {
+				s.repo.On("FetchArrears", mock.Anything, testdata.Profile1, testdata.Profile1).Return(nil, nil).Once()
 			}},
 			wantInfo: nil,
 			wantErr:  false,
@@ -71,7 +72,7 @@ func (s *SuiteTester) Test_impl_GetArrears() {
 				tt.args.mock()
 			}
 
-			gotInfo, err := s.biz.GetArrears(contextx.BackgroundWithLogger(s.logger), tt.args.from)
+			gotInfo, err := s.biz.GetArrears(contextx.BackgroundWithLogger(s.logger), tt.args.from, tt.args.target)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetArrears() error = %v, wantErr %v", err, tt.wantErr)
 				return

@@ -39,8 +39,9 @@ func TestAll(t *testing.T) {
 
 func (s *SuiteTester) Test_impl_FetchArrears() {
 	type args struct {
-		user *am.Profile
-		mock func()
+		from   *am.Profile
+		target *am.Profile
+		mock   func()
 	}
 	tests := []struct {
 		name        string
@@ -50,7 +51,7 @@ func (s *SuiteTester) Test_impl_FetchArrears() {
 	}{
 		{
 			name: "http do return error",
-			args: args{user: testdata.Profile1, mock: func() {
+			args: args{from: testdata.Profile1, target: testdata.Profile1, mock: func() {
 				s.httpclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
 			}},
 			wantRecords: nil,
@@ -63,7 +64,7 @@ func (s *SuiteTester) Test_impl_FetchArrears() {
 				tt.args.mock()
 			}
 
-			gotRecords, err := s.repo.FetchArrears(contextx.BackgroundWithLogger(s.logger), tt.args.user)
+			gotRecords, err := s.repo.FetchArrears(contextx.BackgroundWithLogger(s.logger), tt.args.from, tt.args.target)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("FetchArrears() error = %v, wantErr %v", err, tt.wantErr)
 				return

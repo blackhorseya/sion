@@ -10,7 +10,7 @@ import (
 func Handle(g *gin.RouterGroup, biz ob.IBiz, auth ab.IBiz) {
 	i := &impl{biz: biz, auth: auth}
 
-	g.GET("", httpheaders.AddRequiredAuthMiddleware(), i.GetArrearsByUser)
+	g.GET(":id", httpheaders.AddRequiredAuthMiddleware(), i.GetArrearsById)
 }
 
 type impl struct {
