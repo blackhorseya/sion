@@ -10,13 +10,9 @@ import (
 	"github.com/blackhorseya/irent/pkg/contextx"
 	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
 	"github.com/blackhorseya/irent/pkg/httpx"
-	"github.com/google/wire"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 )
-
-// ProviderSet is a provider set for rental repo
-var ProviderSet = wire.NewSet(NewOptions, NewImpl)
 
 // Options declare app's configuration
 type Options struct {
