@@ -20,4 +20,7 @@ var (
 
 	// ErrListCars means Failed to list cars via api
 	ErrListCars = er.New(http.StatusInternalServerError, 50012, "Failed to list cars via api")
+
+	// ErrGetArrears means Failed to get arrears
+	ErrGetArrears = er.New(http.StatusInternalServerError, 50013, "Failed to get arrears")
 )

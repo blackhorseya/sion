@@ -2,10 +2,12 @@ package biz
 
 import (
 	"github.com/blackhorseya/irent/internal/app/domain/order/biz/repo"
+	"github.com/blackhorseya/irent/internal/pkg/errorx"
 	"github.com/blackhorseya/irent/pkg/contextx"
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
 	ob "github.com/blackhorseya/irent/pkg/entity/domain/order/biz"
 	om "github.com/blackhorseya/irent/pkg/entity/domain/order/model"
+	"go.uber.org/zap"
 )
 
 type impl struct {
@@ -27,6 +29,19 @@ func (i *impl) Liveness(ctx contextx.Contextx) error {
 }
 
 func (i *impl) GetArrears(ctx contextx.Contextx, from *am.Profile) (info *om.Arrears, err error) {
-	// todo: 2023/1/23|sean|impl me
-	panic("implement me")
+	records, err := i.repo.FetchArrears(ctx, from)
+	if err != nil {
+		ctx.Error(errorx.ErrGetArrears.Error(), zap.Error(err), zap.Any("from", from))
+		return nil, errorx.ErrGetArrears
+	}
+
+	ret := &om.Arrears{
+		Records:     records,
+		TotalAmount: 0,
+	}
+	for _, record := range records {
+		ret.TotalAmount += record.TotalAmount
+	}
+
+	return ret, nil
 }
