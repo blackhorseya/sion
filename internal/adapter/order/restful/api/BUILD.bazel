@@ -10,6 +10,7 @@ go_library(
         "//internal/adapter/order/restful/api/v1:api",
         "//internal/pkg/errorx",
         "//pkg/contextx",
+        "//pkg/entity/domain/account/biz",
         "//pkg/entity/domain/order/biz",
         "//pkg/response",
         "@com_github_gin_gonic_gin//:gin",

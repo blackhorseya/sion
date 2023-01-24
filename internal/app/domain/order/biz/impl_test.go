@@ -61,7 +61,7 @@ func (s *SuiteTester) Test_impl_GetArrears() {
 			args: args{from: testdata.Profile1, mock: func() {
 				s.repo.On("FetchArrears", mock.Anything, testdata.Profile1).Return(nil, nil).Once()
 			}},
-			wantInfo: &om.Arrears{},
+			wantInfo: nil,
 			wantErr:  false,
 		},
 	}

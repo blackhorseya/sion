@@ -11,6 +11,8 @@ go_library(
     visibility = ["//visibility:private"],
     deps = [
         "//internal/adapter/order/restful",
+        "//internal/app/domain/account/biz",
+        "//internal/app/domain/account/biz/repo",
         "//internal/app/domain/order/biz",
         "//internal/app/domain/order/biz/repo",
         "//internal/pkg/config",

@@ -10,6 +10,7 @@ go_library(
         "//pkg/adapters",
         "//pkg/contextx",
         "//pkg/cors",
+        "//pkg/entity/domain/account/biz",
         "//pkg/entity/domain/order/biz",
         "//pkg/er",
         "@com_github_gin_contrib_zap//:zap",

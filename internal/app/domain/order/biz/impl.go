@@ -37,6 +37,9 @@ func (i *impl) GetArrears(ctx contextx.Contextx, from *am.Profile) (info *om.Arr
 		ctx.Error(errorx.ErrGetArrears.Error(), zap.Error(err), zap.Any("from", from))
 		return nil, errorx.ErrGetArrears
 	}
+	if len(records) == 0 {
+		return nil, nil
+	}
 
 	ret := &om.Arrears{
 		Records:     records,
