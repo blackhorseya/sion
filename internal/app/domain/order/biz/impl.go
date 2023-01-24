@@ -7,8 +7,11 @@ import (
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
 	ob "github.com/blackhorseya/irent/pkg/entity/domain/order/biz"
 	om "github.com/blackhorseya/irent/pkg/entity/domain/order/model"
+	"github.com/google/wire"
 	"go.uber.org/zap"
 )
+
+var OrderSet = wire.NewSet(NewImpl)
 
 type impl struct {
 	repo repo.IRepo
