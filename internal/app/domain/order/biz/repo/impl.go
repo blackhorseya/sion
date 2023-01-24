@@ -146,6 +146,40 @@ func (i *impl) BookCar(ctx contextx.Contextx, from *am.Profile, target *rm.Car) 
 }
 
 func (i *impl) CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Booking) error {
-	// todo: 2023/1/25|sean|impl me
-	panic("implement me")
+	uri, err := url.Parse(i.opts.Endpoint + "/BookingCancel")
+	if err != nil {
+		return err
+	}
+
+	payload, err := json.Marshal(map[string]interface{}{
+		"OrderNo": target.No,
+	})
+	if err != nil {
+		return err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri.String(), bytes.NewReader(payload))
+	if err != nil {
+		return err
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", from.AccessToken))
+
+	resp, err := i.httpclient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	var data *cancelBookingResp
+	err = json.NewDecoder(resp.Body).Decode(&data)
+	if err != nil {
+		return err
+	}
+
+	if strings.ToLower(data.ErrorMessage) != "success" {
+		return errors.New(data.ErrorMessage)
+	}
+
+	return nil
 }

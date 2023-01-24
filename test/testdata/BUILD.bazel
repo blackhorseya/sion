@@ -3,6 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "testdata",
     srcs = [
+        "order.go",
         "profile.go",
         "rental.go",
     ],
@@ -10,6 +11,8 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/entity/domain/account/model",
+        "//pkg/entity/domain/order/model",
         "//pkg/entity/domain/rental/model",
+        "@org_golang_google_protobuf//types/known/timestamppb",
     ],
 )

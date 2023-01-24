@@ -39,3 +39,13 @@ type bookResp struct {
 		LastPickTime string `json:"LastPickTime"`
 	} `json:"Data"`
 }
+
+type cancelBookingResp struct {
+	Result       string `json:"Result"`
+	ErrorCode    string `json:"ErrorCode"`
+	NeedRelogin  int    `json:"NeedRelogin"`
+	NeedUpgrade  int    `json:"NeedUpgrade"`
+	ErrorMessage string `json:"ErrorMessage"`
+	Data         struct {
+	} `json:"Data"`
+}
