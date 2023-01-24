@@ -2,8 +2,7 @@ package main
 
 import (
 	"flag"
-
-	"go.uber.org/zap"
+	"log"
 )
 
 var path = flag.String("c", "./configs/account/restful/local.yaml", "set config file path")
@@ -31,16 +30,16 @@ func init() {
 func main() {
 	svc, err := CreateService(*path)
 	if err != nil {
-		zap.S().Fatal(zap.Error(err))
+		log.Fatal(err)
 	}
 
 	err = svc.Start()
 	if err != nil {
-		zap.S().Fatal(zap.Error(err))
+		log.Fatal(err)
 	}
 
 	err = svc.AwaitSignal()
 	if err != nil {
-		zap.S().Fatal(zap.Error(err))
+		log.Fatal(err)
 	}
 }
