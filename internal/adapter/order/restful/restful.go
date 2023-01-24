@@ -7,6 +7,7 @@ import (
 	"github.com/blackhorseya/irent/pkg/adapters"
 	"github.com/blackhorseya/irent/pkg/contextx"
 	"github.com/blackhorseya/irent/pkg/cors"
+	ab "github.com/blackhorseya/irent/pkg/entity/domain/account/biz"
 	ob "github.com/blackhorseya/irent/pkg/entity/domain/order/biz"
 	"github.com/blackhorseya/irent/pkg/er"
 	ginzap "github.com/gin-contrib/zap"
@@ -18,9 +19,10 @@ import (
 type restful struct {
 	router *gin.Engine
 	biz    ob.IBiz
+	auth   ab.IBiz
 }
 
-func NewRestful(logger *zap.Logger, router *gin.Engine, biz ob.IBiz) adapters.Restful {
+func NewRestful(logger *zap.Logger, router *gin.Engine, biz ob.IBiz, auth ab.IBiz) adapters.Restful {
 	router.Use(cors.AddAllowAll())
 	router.Use(ginzap.RecoveryWithZap(logger, true))
 	router.Use(ginzap.GinzapWithConfig(logger, &ginzap.Config{
@@ -34,11 +36,12 @@ func NewRestful(logger *zap.Logger, router *gin.Engine, biz ob.IBiz) adapters.Re
 	return &restful{
 		router: router,
 		biz:    biz,
+		auth:   auth,
 	}
 }
 
 func (i *restful) InitRouting() error {
-	api.Handle(i.router.Group("/api"), i.biz)
+	api.Handle(i.router.Group("/api"), i.biz, i.auth)
 
 	return nil
 }

@@ -7,6 +7,7 @@ import (
 	v1 "github.com/blackhorseya/irent/internal/adapter/order/restful/api/v1"
 	"github.com/blackhorseya/irent/internal/pkg/errorx"
 	"github.com/blackhorseya/irent/pkg/contextx"
+	ab "github.com/blackhorseya/irent/pkg/entity/domain/account/biz"
 	ob "github.com/blackhorseya/irent/pkg/entity/domain/order/biz"
 	"github.com/blackhorseya/irent/pkg/response"
 	"github.com/gin-gonic/gin"
@@ -14,7 +15,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func Handle(g *gin.RouterGroup, biz ob.IBiz) {
+func Handle(g *gin.RouterGroup, biz ob.IBiz, auth ab.IBiz) {
 	i := &impl{biz: biz}
 
 	g.GET("docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -22,7 +23,7 @@ func Handle(g *gin.RouterGroup, biz ob.IBiz) {
 	g.GET("readiness", i.Readiness)
 	g.GET("liveness", i.Liveness)
 
-	v1.Handle(g.Group("/v1"), biz)
+	v1.Handle(g.Group("/v1"), biz, auth)
 }
 
 type impl struct {

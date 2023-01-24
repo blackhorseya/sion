@@ -8,6 +8,8 @@ package main
 
 import (
 	"github.com/blackhorseya/irent/internal/adapter/order/restful"
+	biz2 "github.com/blackhorseya/irent/internal/app/domain/account/biz"
+	repo2 "github.com/blackhorseya/irent/internal/app/domain/account/biz/repo"
 	"github.com/blackhorseya/irent/internal/app/domain/order/biz"
 	"github.com/blackhorseya/irent/internal/app/domain/order/biz/repo"
 	"github.com/blackhorseya/irent/internal/pkg/config"
@@ -44,7 +46,13 @@ func CreateService(path2 string) (*Service, error) {
 	client := httpx.NewClient()
 	iRepo := repo.NewImpl(repoOptions, client)
 	iBiz := biz.NewImpl(iRepo)
-	adaptersRestful := restful.NewRestful(logger, engine, iBiz)
+	options2, err := repo2.NewOptions(viper)
+	if err != nil {
+		return nil, err
+	}
+	repoIRepo := repo2.NewImpl(options2, client)
+	bizIBiz := biz2.NewImpl(repoIRepo)
+	adaptersRestful := restful.NewRestful(logger, engine, iBiz, bizIBiz)
 	service, err := NewService(logger, server, adaptersRestful)
 	if err != nil {
 		return nil, err
@@ -54,4 +62,4 @@ func CreateService(path2 string) (*Service, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ProviderClientSet, httpx.ProviderServerSet, restful.OrderSet, biz.OrderSet, repo.OrderSet, NewService)
+var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ProviderClientSet, httpx.ProviderServerSet, restful.OrderSet, biz.OrderSet, repo.OrderSet, biz2.AccountSet, repo2.AccountSet, NewService)
