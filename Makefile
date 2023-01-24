@@ -93,8 +93,8 @@ gen-pb: ## generate protobuf messages and services
 gen-mocks: ## generate mocks code via mockery
 	@go generate -tags=wireinject -x ./...
 
-.PHONY: gen-bazel
-gen-bazel: ## run gazelle using bazel
+.PHONY: gen-build
+gen-build: ## run gazelle using bazel
 	@bazel run //:gazelle
 
 .PHONY: package-all
