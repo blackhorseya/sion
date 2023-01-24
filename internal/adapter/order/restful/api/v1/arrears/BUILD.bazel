@@ -1,0 +1,17 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "arrears",
+    srcs = [
+        "arrears.go",
+        "get_arrears.go",
+    ],
+    importpath = "github.com/blackhorseya/irent/internal/adapter/order/restful/api/v1/arrears",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//pkg/entity/domain/order/biz",
+        "//pkg/httpheaders",
+        "//pkg/response",
+        "@com_github_gin_gonic_gin//:gin",
+    ],
+)

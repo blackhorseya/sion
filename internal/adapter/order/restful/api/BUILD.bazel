@@ -7,6 +7,7 @@ go_library(
     visibility = ["//:__subpackages__"],
     deps = [
         "//api/docs",
+        "//internal/adapter/order/restful/api/v1:api",
         "//internal/pkg/errorx",
         "//pkg/contextx",
         "//pkg/entity/domain/order/biz",

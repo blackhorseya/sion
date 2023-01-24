@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	_ "github.com/blackhorseya/irent/api/docs" // import swagger spec
+	v1 "github.com/blackhorseya/irent/internal/adapter/order/restful/api/v1"
 	"github.com/blackhorseya/irent/internal/pkg/errorx"
 	"github.com/blackhorseya/irent/pkg/contextx"
 	ob "github.com/blackhorseya/irent/pkg/entity/domain/order/biz"
@@ -16,14 +17,12 @@ import (
 func Handle(g *gin.RouterGroup, biz ob.IBiz) {
 	i := &impl{biz: biz}
 
-	if gin.Mode() != gin.ReleaseMode {
-		g.GET("docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	}
+	g.GET("docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	g.GET("readiness", i.Readiness)
 	g.GET("liveness", i.Liveness)
 
-	// todo: 2023/1/24|sean|bind v1 router
+	v1.Handle(g.Group("/v1"), biz)
 }
 
 type impl struct {
