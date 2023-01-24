@@ -31,8 +31,8 @@ func (s *SuiteTester) SetupTest() {
 	s.repo = CreateRepo(opts, s.httpclient)
 }
 
-func (s *SuiteTester) TearDownTest() {
-	s.httpclient.AssertExpectations(s.T())
+func (s *SuiteTester) AssertExpectations(t *testing.T) {
+	s.httpclient.AssertExpectations(t)
 }
 
 func TestAll(t *testing.T) {
@@ -109,7 +109,7 @@ func (s *SuiteTester) Test_impl_Login() {
 				t.Errorf("Login() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
 
-			s.TearDownTest()
+			s.AssertExpectations(t)
 		})
 	}
 }
@@ -179,7 +179,7 @@ func (s *SuiteTester) Test_impl_GetMemberStatus() {
 				t.Errorf("GetMemberStatus() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
 
-			s.TearDownTest()
+			s.AssertExpectations(t)
 		})
 	}
 }

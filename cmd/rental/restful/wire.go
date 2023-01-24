@@ -6,6 +6,7 @@ package main
 import (
 	"github.com/blackhorseya/irent/internal/adapter/rental/restful"
 	"github.com/blackhorseya/irent/internal/app/domain/rental/biz"
+	"github.com/blackhorseya/irent/internal/app/domain/rental/biz/repo"
 	"github.com/blackhorseya/irent/internal/pkg/config"
 	"github.com/blackhorseya/irent/internal/pkg/httpx"
 	"github.com/blackhorseya/irent/internal/pkg/log"
@@ -23,7 +24,8 @@ var providerSet = wire.NewSet(
 
 	// implementation
 	restful.RentalSet,
-	biz.ProviderSet,
+	biz.RentalSet,
+	repo.RentalSet,
 
 	// main
 	NewService,

@@ -13,8 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// ProviderSet is a provider set for rental biz
-var ProviderSet = wire.NewSet(NewImpl, repo.ProviderSet)
+var RentalSet = wire.NewSet(NewImpl)
 
 type impl struct {
 	repo repo.IRepo

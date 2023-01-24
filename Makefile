@@ -70,7 +70,7 @@ gen-wire: ## generate wire code
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger spec
-	@swag init -q --dir ./cmd/account/restful,./cmd/rental/restful,./ -o ./api/docs
+	@swag init -q --dir ./cmd/account/restful,./cmd/rental/restful,./cmd/order/restful,./ -o ./api/docs
 	## Generated swagger spec
 
 .PHONY: gen-pb
@@ -93,8 +93,8 @@ gen-pb: ## generate protobuf messages and services
 gen-mocks: ## generate mocks code via mockery
 	@go generate -tags=wireinject -x ./...
 
-.PHONY: gen-bazel
-gen-bazel: ## run gazelle using bazel
+.PHONY: gen-build
+gen-build: ## run gazelle using bazel
 	@bazel run //:gazelle
 
 .PHONY: package-all

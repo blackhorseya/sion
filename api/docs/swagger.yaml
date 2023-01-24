@@ -17,6 +17,22 @@ definitions:
       msg:
         type: string
     type: object
+  model.Arrears:
+    properties:
+      records:
+        items:
+          $ref: '#/definitions/model.ArrearsRecord'
+        type: array
+      total_amount:
+        type: integer
+    type: object
+  model.ArrearsRecord:
+    properties:
+      order_no:
+        type: string
+      total_amount:
+        type: integer
+    type: object
   model.Car:
     properties:
       car_of_area:
@@ -69,6 +85,38 @@ info:
   title: IRent API
   version: 0.0.1
 paths:
+  /v1/arrears/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get arrears by user
+      parameters:
+      - description: ID of user
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Arrears'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Get arrears by user
+      tags:
+      - Billing
   /v1/auth/login:
     post:
       consumes:

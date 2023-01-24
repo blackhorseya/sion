@@ -3,12 +3,14 @@ package repo
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
 
 	"github.com/blackhorseya/irent/pkg/contextx"
-	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
+	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
+	om "github.com/blackhorseya/irent/pkg/entity/domain/order/model"
 	"github.com/blackhorseya/irent/pkg/httpx"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
@@ -43,27 +45,25 @@ func NewImpl(opts *Options, httpclient httpx.Client) IRepo {
 	}
 }
 
-func (i *impl) ListCars(ctx contextx.Contextx) (info []*rm.Car, err error) {
-	uri, err := url.Parse(i.opts.Endpoint + "/AnyRent")
+func (i *impl) FetchArrears(ctx contextx.Contextx, from *am.Profile, target *am.Profile) (records []*om.ArrearsRecord, err error) {
+	uri, err := url.Parse(i.opts.Endpoint + "/ArrearsQuery")
 	if err != nil {
 		return nil, err
 	}
 
 	payload, err := json.Marshal(map[string]interface{}{
-		"Radius":    0,
-		"Latitude":  0,
-		"Longitude": 0,
-		"ShowAll":   1,
+		"IDNO": target.Id,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodPost, uri.String(), bytes.NewReader(payload))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri.String(), bytes.NewReader(payload))
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", from.AccessToken))
 
 	resp, err := i.httpclient.Do(req)
 	if err != nil {
@@ -71,30 +71,22 @@ func (i *impl) ListCars(ctx contextx.Contextx) (info []*rm.Car, err error) {
 	}
 	defer resp.Body.Close()
 
-	var got *anyRentResponse
-	err = json.NewDecoder(resp.Body).Decode(&got)
+	var data *fetchArrearsResp
+	err = json.NewDecoder(resp.Body).Decode(&data)
 	if err != nil {
 		return nil, err
 	}
 
-	if got.ErrorMessage != "Success" {
-		return nil, errors.New(got.ErrorMessage)
+	if strings.ToLower(data.ErrorMessage) != "success" {
+		return nil, errors.New(data.ErrorMessage)
 	}
 
-	ret := make([]*rm.Car, len(got.Data.AnyRentObj))
-	for idx, obj := range got.Data.AnyRentObj {
-		ret[idx] = &rm.Car{
-			Id:          strings.ReplaceAll(obj.CarNo, " ", ""),
-			CarType:     obj.CarType,
-			CarTypeName: obj.CarTypeName,
-			CarOfArea:   obj.CarOfArea,
-			ProjectName: obj.ProjectName,
-			ProjectId:   obj.ProjID,
-			Latitude:    obj.Latitude,
-			Longitude:   obj.Longitude,
-			Seat:        obj.Seat,
-			Distance:    0,
-		}
+	var ret []*om.ArrearsRecord
+	for _, info := range data.Data.ArrearsInfos {
+		ret = append(ret, &om.ArrearsRecord{
+			OrderNo:     info.OrderNo,
+			TotalAmount: int64(info.TotalAmount),
+		})
 	}
 
 	return ret, nil
