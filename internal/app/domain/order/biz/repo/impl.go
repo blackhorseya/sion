@@ -11,6 +11,7 @@ import (
 	"github.com/blackhorseya/irent/pkg/contextx"
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
 	om "github.com/blackhorseya/irent/pkg/entity/domain/order/model"
+	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
 	"github.com/blackhorseya/irent/pkg/httpx"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
@@ -90,4 +91,14 @@ func (i *impl) FetchArrears(ctx contextx.Contextx, from *am.Profile, target *am.
 	}
 
 	return ret, nil
+}
+
+func (i *impl) BookCar(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Booking, err error) {
+	// todo: 2023/1/25|sean|impl me
+	panic("implement me")
+}
+
+func (i *impl) CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Booking) error {
+	// todo: 2023/1/25|sean|impl me
+	panic("implement me")
 }
