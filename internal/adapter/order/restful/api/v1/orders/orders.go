@@ -9,6 +9,7 @@ import (
 func Handle(g *gin.RouterGroup, biz ob.IBiz, auth ab.IBiz) {
 	i := &impl{biz: biz, auth: auth}
 
+	g.GET("", i.ListLease)
 	g.POST("", i.BookCar)
 	g.DELETE(":id", i.CancelLeaseByID)
 }

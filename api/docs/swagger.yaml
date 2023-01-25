@@ -256,6 +256,37 @@ paths:
       tags:
       - Rental
   /v1/orders:
+    get:
+      consumes:
+      - application/json
+      description: List all lease
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Lease'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: List all lease
+      tags:
+      - Orders
     post:
       consumes:
       - application/json
