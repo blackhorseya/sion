@@ -1,14 +1,5 @@
 basePath: /api
 definitions:
-  bookings.bookCarRequest:
-    properties:
-      circularly:
-        type: boolean
-      id:
-        type: string
-      project_id:
-        type: string
-    type: object
   cars.listCarsResp:
     properties:
       list:
@@ -42,11 +33,6 @@ definitions:
       total_amount:
         type: integer
     type: object
-  model.Booking:
-    properties:
-      "no":
-        type: string
-    type: object
   model.Car:
     properties:
       car_of_area:
@@ -70,6 +56,17 @@ definitions:
       seat:
         type: integer
     type: object
+  model.Lease:
+    properties:
+      car_id:
+        type: string
+      car_latitude:
+        type: number
+      car_longitude:
+        type: number
+      "no":
+        type: string
+    type: object
   model.Profile:
     properties:
       access_token:
@@ -77,6 +74,15 @@ definitions:
       id:
         type: string
       name:
+        type: string
+    type: object
+  orders.bookCarRequest:
+    properties:
+      circularly:
+        type: boolean
+      id:
+        type: string
+      project_id:
         type: string
     type: object
   response.Response:
@@ -200,79 +206,6 @@ paths:
       summary: Get me profile
       tags:
       - Account
-  /v1/bookings:
-    post:
-      consumes:
-      - application/json
-      description: Book a car
-      parameters:
-      - description: information of car
-        in: body
-        name: car
-        required: true
-        schema:
-          $ref: '#/definitions/bookings.bookCarRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.Booking'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/er.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/er.Error'
-      security:
-      - ApiKeyAuth: []
-      summary: Book a car
-      tags:
-      - Bookings
-  /v1/bookings/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Cancel a booking by id
-      parameters:
-      - description: ID of booking
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/er.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/er.Error'
-      security:
-      - ApiKeyAuth: []
-      summary: Cancel a booking by id
-      tags:
-      - Bookings
   /v1/cars:
     get:
       consumes:
@@ -322,6 +255,79 @@ paths:
       summary: List cars
       tags:
       - Rental
+  /v1/orders:
+    post:
+      consumes:
+      - application/json
+      description: Book a car
+      parameters:
+      - description: information of car
+        in: body
+        name: car
+        required: true
+        schema:
+          $ref: '#/definitions/orders.bookCarRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Lease'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Book a car
+      tags:
+      - Orders
+  /v1/orders/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Cancel a booking by id
+      parameters:
+      - description: ID of booking
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Cancel a booking by id
+      tags:
+      - Orders
 securityDefinitions:
   ApiKeyAuth:
     in: header

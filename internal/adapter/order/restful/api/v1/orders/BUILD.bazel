@@ -22,3 +22,26 @@ go_library(
         "@org_uber_go_zap//:zap",
     ],
 )
+
+go_library(
+    name = "orders",
+    srcs = [
+        "delete_lease_by_id.go",
+        "orders.go",
+        "post_lease.go",
+    ],
+    importpath = "github.com/blackhorseya/irent/internal/adapter/order/restful/api/v1/orders",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//internal/pkg/errorx",
+        "//pkg/contextx",
+        "//pkg/entity/domain/account/biz",
+        "//pkg/entity/domain/order/biz",
+        "//pkg/entity/domain/order/model",
+        "//pkg/entity/domain/rental/model",
+        "//pkg/httpheaders",
+        "//pkg/response",
+        "@com_github_gin_gonic_gin//:gin",
+        "@org_uber_go_zap//:zap",
+    ],
+)

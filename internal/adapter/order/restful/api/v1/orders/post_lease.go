@@ -1,4 +1,4 @@
-package bookings
+package orders
 
 import (
 	"net/http"
@@ -21,15 +21,15 @@ type bookCarRequest struct {
 // BookCar
 // @Summary Book a car
 // @Description Book a car
-// @Tags Bookings
+// @Tags Orders
 // @Accept application/json
 // @Produce application/json
 // @Param car body bookCarRequest true "information of car"
 // @Security ApiKeyAuth
-// @Success 200 {object} response.Response{data=model.Booking}
+// @Success 200 {object} response.Response{data=model.Lease}
 // @Failure 400 {object} er.Error
 // @Failure 500 {object} er.Error
-// @Router /v1/bookings [post]
+// @Router /v1/orders [post]
 func (i *impl) BookCar(c *gin.Context) {
 	ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
 	if !ok {

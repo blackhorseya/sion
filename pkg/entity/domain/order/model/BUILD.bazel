@@ -5,7 +5,6 @@ go_library(
     srcs = [
         "arrears.pb.go",
         "lease.pb.go",
-        "order.pb.go",
     ],
     importpath = "github.com/blackhorseya/irent/pkg/entity/domain/order/model",
     visibility = ["//visibility:public"],

@@ -16,10 +16,10 @@ type IRepo interface {
 	FetchArrears(ctx contextx.Contextx, from *am.Profile, target *am.Profile) (records []*om.ArrearsRecord, err error)
 
 	// BookCar serve caller to given user and car to book
-	BookCar(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Booking, err error)
+	BookCar(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Lease, err error)
 
 	// CancelBooking serve caller to given booking to cancel
-	CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Booking) error
+	CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Lease) error
 }
 
 var OrderSet = wire.NewSet(NewImpl, NewOptions)

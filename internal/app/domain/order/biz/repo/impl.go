@@ -19,6 +19,8 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
+const _msg_success = "success"
+
 // Options declare app's configuration
 type Options struct {
 	Endpoint   string `json:"endpoint" yaml:"endpoint"`
@@ -80,7 +82,7 @@ func (i *impl) FetchArrears(ctx contextx.Contextx, from *am.Profile, target *am.
 		return nil, err
 	}
 
-	if strings.ToLower(data.ErrorMessage) != "success" {
+	if strings.ToLower(data.ErrorMessage) != _msg_success {
 		return nil, errors.New(data.ErrorMessage)
 	}
 
@@ -95,7 +97,7 @@ func (i *impl) FetchArrears(ctx contextx.Contextx, from *am.Profile, target *am.
 	return ret, nil
 }
 
-func (i *impl) BookCar(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Booking, err error) {
+func (i *impl) BookCar(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Lease, err error) {
 	uri, err := url.Parse(i.opts.Endpoint + "/Booking")
 	if err != nil {
 		return nil, err
@@ -130,7 +132,7 @@ func (i *impl) BookCar(ctx contextx.Contextx, from *am.Profile, target *rm.Car) 
 		return nil, err
 	}
 
-	if strings.ToLower(data.ErrorMessage) != "success" {
+	if strings.ToLower(data.ErrorMessage) != _msg_success {
 		return nil, errors.New(data.ErrorMessage)
 	}
 
@@ -139,13 +141,18 @@ func (i *impl) BookCar(ctx contextx.Contextx, from *am.Profile, target *rm.Car) 
 		return nil, err
 	}
 
-	return &om.Booking{
-		No:         data.Data.OrderNo,
-		LastPickAt: timestamppb.New(t),
+	return &om.Lease{
+		No:           data.Data.OrderNo,
+		CarId:        target.Id,
+		CarLatitude:  target.Latitude,
+		CarLongitude: target.Longitude,
+		StartAt:      nil,
+		EndAt:        nil,
+		LastPickAt:   timestamppb.New(t),
 	}, nil
 }
 
-func (i *impl) CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Booking) error {
+func (i *impl) CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Lease) error {
 	uri, err := url.Parse(i.opts.Endpoint + "/BookingCancel")
 	if err != nil {
 		return err
@@ -177,7 +184,7 @@ func (i *impl) CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om
 		return err
 	}
 
-	if strings.ToLower(data.ErrorMessage) != "success" {
+	if strings.ToLower(data.ErrorMessage) != _msg_success {
 		return errors.New(data.ErrorMessage)
 	}
 

@@ -194,130 +194,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/bookings": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Book a car",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Bookings"
-                ],
-                "summary": "Book a car",
-                "parameters": [
-                    {
-                        "description": "information of car",
-                        "name": "car",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/bookings.bookCarRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Booking"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/er.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/er.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/bookings/{id}": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Cancel a booking by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Bookings"
-                ],
-                "summary": "Cancel a booking by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID of booking",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/er.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/er.Error"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/cars": {
             "get": {
                 "description": "List cars",
@@ -394,23 +270,133 @@ const docTemplate = `{
                     }
                 }
             }
-        }
-    },
-    "definitions": {
-        "bookings.bookCarRequest": {
-            "type": "object",
-            "properties": {
-                "circularly": {
-                    "type": "boolean"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "project_id": {
-                    "type": "string"
+        },
+        "/v1/orders": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Book a car",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Book a car",
+                "parameters": [
+                    {
+                        "description": "information of car",
+                        "name": "car",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/orders.bookCarRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Lease"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/er.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/er.Error"
+                        }
+                    }
                 }
             }
         },
+        "/v1/orders/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Cancel a booking by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Cancel a booking by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of booking",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/er.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/er.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
         "cars.listCarsResp": {
             "type": "object",
             "properties": {
@@ -462,14 +448,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Booking": {
-            "type": "object",
-            "properties": {
-                "no": {
-                    "type": "string"
-                }
-            }
-        },
         "model.Car": {
             "type": "object",
             "properties": {
@@ -505,6 +483,23 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Lease": {
+            "type": "object",
+            "properties": {
+                "car_id": {
+                    "type": "string"
+                },
+                "car_latitude": {
+                    "type": "number"
+                },
+                "car_longitude": {
+                    "type": "number"
+                },
+                "no": {
+                    "type": "string"
+                }
+            }
+        },
         "model.Profile": {
             "type": "object",
             "properties": {
@@ -515,6 +510,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "orders.bookCarRequest": {
+            "type": "object",
+            "properties": {
+                "circularly": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "project_id": {
                     "type": "string"
                 }
             }

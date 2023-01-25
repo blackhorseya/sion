@@ -88,7 +88,7 @@ func (s *SuiteTester) Test_impl_BookCar() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *om.Booking
+		wantInfo *om.Lease
 		wantErr  bool
 	}{
 		{
@@ -99,7 +99,6 @@ func (s *SuiteTester) Test_impl_BookCar() {
 			wantInfo: nil,
 			wantErr:  true,
 		},
-		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		s.T().Run(tt.name, func(t *testing.T) {
@@ -124,7 +123,7 @@ func (s *SuiteTester) Test_impl_BookCar() {
 func (s *SuiteTester) Test_impl_CancelBooking() {
 	type args struct {
 		from   *am.Profile
-		target *om.Booking
+		target *om.Lease
 		mock   func()
 	}
 	tests := []struct {
@@ -134,7 +133,7 @@ func (s *SuiteTester) Test_impl_CancelBooking() {
 	}{
 		{
 			name: "http do then error",
-			args: args{from: testdata.Profile1, target: testdata.Booking1, mock: func() {
+			args: args{from: testdata.Profile1, target: testdata.Lease1, mock: func() {
 				s.httpclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
 			}},
 			wantErr: true,

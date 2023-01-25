@@ -21,8 +21,8 @@ type IBiz interface {
 	GetArrears(ctx contextx.Contextx, from *am.Profile, target *am.Profile) (info *om.Arrears, err error)
 
 	// BookRental serve caller to book a rental
-	BookRental(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Booking, err error)
+	BookRental(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Lease, err error)
 
 	// CancelBooking serve caller to given user and order's id then to cancel the booking
-	CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Booking) error
+	CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Lease) error
 }

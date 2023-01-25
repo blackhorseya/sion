@@ -27,13 +27,16 @@ type Lease struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	No           string                 `protobuf:"bytes,1,opt,name=no,proto3" json:"no,omitempty"`
-	CarId        string                 `protobuf:"bytes,2,opt,name=car_id,json=carId,proto3" json:"car_id,omitempty"`
-	CarLatitude  float64                `protobuf:"fixed64,3,opt,name=car_latitude,json=carLatitude,proto3" json:"car_latitude,omitempty"`
-	CarLongitude float64                `protobuf:"fixed64,4,opt,name=car_longitude,json=carLongitude,proto3" json:"car_longitude,omitempty"`
-	StartAt      *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=start_at,json=startAt,proto3" json:"start_at,omitempty"`
-	EndAt        *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=end_at,json=endAt,proto3" json:"end_at,omitempty"`
-	LastPickAt   *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=last_pick_at,json=lastPickAt,proto3" json:"last_pick_at,omitempty"`
+	No           string  `protobuf:"bytes,1,opt,name=no,proto3" json:"no,omitempty"`
+	CarId        string  `protobuf:"bytes,2,opt,name=car_id,json=carId,proto3" json:"car_id,omitempty"`
+	CarLatitude  float64 `protobuf:"fixed64,3,opt,name=car_latitude,json=carLatitude,proto3" json:"car_latitude,omitempty"`
+	CarLongitude float64 `protobuf:"fixed64,4,opt,name=car_longitude,json=carLongitude,proto3" json:"car_longitude,omitempty"`
+	// @gotags: json:"-"
+	StartAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=start_at,json=startAt,proto3" json:"-"`
+	// @gotags: json:"-"
+	EndAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=end_at,json=endAt,proto3" json:"-"`
+	// @gotags: json:"-"
+	StopPickAt *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=stop_pick_at,json=stopPickAt,proto3" json:"-"`
 }
 
 func (x *Lease) Reset() {
@@ -110,9 +113,9 @@ func (x *Lease) GetEndAt() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *Lease) GetLastPickAt() *timestamppb.Timestamp {
+func (x *Lease) GetStopPickAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.LastPickAt
+		return x.StopPickAt
 	}
 	return nil
 }
@@ -138,10 +141,10 @@ var file_pb_domain_order_lease_proto_rawDesc = []byte{
 	0x61, 0x72, 0x74, 0x41, 0x74, 0x12, 0x31, 0x0a, 0x06, 0x65, 0x6e, 0x64, 0x5f, 0x61, 0x74, 0x18,
 	0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
 	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d,
-	0x70, 0x52, 0x05, 0x65, 0x6e, 0x64, 0x41, 0x74, 0x12, 0x3c, 0x0a, 0x0c, 0x6c, 0x61, 0x73, 0x74,
+	0x70, 0x52, 0x05, 0x65, 0x6e, 0x64, 0x41, 0x74, 0x12, 0x3c, 0x0a, 0x0c, 0x73, 0x74, 0x6f, 0x70,
 	0x5f, 0x70, 0x69, 0x63, 0x6b, 0x5f, 0x61, 0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a,
 	0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
-	0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x0a, 0x6c, 0x61, 0x73, 0x74,
+	0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x0a, 0x73, 0x74, 0x6f, 0x70,
 	0x50, 0x69, 0x63, 0x6b, 0x41, 0x74, 0x42, 0x3d, 0x5a, 0x3b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
 	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x62, 0x6c, 0x61, 0x63, 0x6b, 0x68, 0x6f, 0x72, 0x73, 0x65, 0x79,
 	0x61, 0x2f, 0x69, 0x72, 0x65, 0x6e, 0x74, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x65, 0x6e, 0x74, 0x69,
@@ -169,7 +172,7 @@ var file_pb_domain_order_lease_proto_goTypes = []interface{}{
 var file_pb_domain_order_lease_proto_depIdxs = []int32{
 	1, // 0: order.Lease.start_at:type_name -> google.protobuf.Timestamp
 	1, // 1: order.Lease.end_at:type_name -> google.protobuf.Timestamp
-	1, // 2: order.Lease.last_pick_at:type_name -> google.protobuf.Timestamp
+	1, // 2: order.Lease.stop_pick_at:type_name -> google.protobuf.Timestamp
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
