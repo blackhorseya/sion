@@ -9,7 +9,10 @@ message Lease {
   string car_id = 2;
   double car_latitude = 3;
   double car_longitude = 4;
+  // @gotags: json:"-"
   google.protobuf.Timestamp start_at = 5;
+  // @gotags: json:"-"
   google.protobuf.Timestamp end_at = 6;
+  // @gotags: json:"-"
   google.protobuf.Timestamp last_pick_at = 7;
 }

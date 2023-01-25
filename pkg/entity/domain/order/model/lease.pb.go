@@ -27,13 +27,16 @@ type Lease struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	No           string                 `protobuf:"bytes,1,opt,name=no,proto3" json:"no,omitempty"`
-	CarId        string                 `protobuf:"bytes,2,opt,name=car_id,json=carId,proto3" json:"car_id,omitempty"`
-	CarLatitude  float64                `protobuf:"fixed64,3,opt,name=car_latitude,json=carLatitude,proto3" json:"car_latitude,omitempty"`
-	CarLongitude float64                `protobuf:"fixed64,4,opt,name=car_longitude,json=carLongitude,proto3" json:"car_longitude,omitempty"`
-	StartAt      *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=start_at,json=startAt,proto3" json:"start_at,omitempty"`
-	EndAt        *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=end_at,json=endAt,proto3" json:"end_at,omitempty"`
-	LastPickAt   *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=last_pick_at,json=lastPickAt,proto3" json:"last_pick_at,omitempty"`
+	No           string  `protobuf:"bytes,1,opt,name=no,proto3" json:"no,omitempty"`
+	CarId        string  `protobuf:"bytes,2,opt,name=car_id,json=carId,proto3" json:"car_id,omitempty"`
+	CarLatitude  float64 `protobuf:"fixed64,3,opt,name=car_latitude,json=carLatitude,proto3" json:"car_latitude,omitempty"`
+	CarLongitude float64 `protobuf:"fixed64,4,opt,name=car_longitude,json=carLongitude,proto3" json:"car_longitude,omitempty"`
+	// @gotags: json:"-"
+	StartAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=start_at,json=startAt,proto3" json:"-"`
+	// @gotags: json:"-"
+	EndAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=end_at,json=endAt,proto3" json:"-"`
+	// @gotags: json:"-"
+	LastPickAt *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=last_pick_at,json=lastPickAt,proto3" json:"-"`
 }
 
 func (x *Lease) Reset() {

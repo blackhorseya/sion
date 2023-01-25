@@ -1,4 +1,4 @@
-package bookings
+package orders
 
 import (
 	ab "github.com/blackhorseya/irent/pkg/entity/domain/account/biz"
@@ -10,7 +10,7 @@ func Handle(g *gin.RouterGroup, biz ob.IBiz, auth ab.IBiz) {
 	i := &impl{biz: biz, auth: auth}
 
 	g.POST("", i.BookCar)
-	g.DELETE(":id", i.CancelBookingByID)
+	g.DELETE(":id", i.CancelLeaseByID)
 }
 
 type impl struct {

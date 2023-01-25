@@ -19,15 +19,15 @@ type MockIBiz struct {
 }
 
 // BookRental provides a mock function with given fields: ctx, from, target
-func (_m *MockIBiz) BookRental(ctx contextx.Contextx, from *model.Profile, target *rentalmodel.Car) (*ordermodel.Booking, error) {
+func (_m *MockIBiz) BookRental(ctx contextx.Contextx, from *model.Profile, target *rentalmodel.Car) (*ordermodel.Lease, error) {
 	ret := _m.Called(ctx, from, target)
 
-	var r0 *ordermodel.Booking
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, *model.Profile, *rentalmodel.Car) *ordermodel.Booking); ok {
+	var r0 *ordermodel.Lease
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, *model.Profile, *rentalmodel.Car) *ordermodel.Lease); ok {
 		r0 = rf(ctx, from, target)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*ordermodel.Booking)
+			r0 = ret.Get(0).(*ordermodel.Lease)
 		}
 	}
 
@@ -42,11 +42,11 @@ func (_m *MockIBiz) BookRental(ctx contextx.Contextx, from *model.Profile, targe
 }
 
 // CancelBooking provides a mock function with given fields: ctx, from, target
-func (_m *MockIBiz) CancelBooking(ctx contextx.Contextx, from *model.Profile, target *ordermodel.Booking) error {
+func (_m *MockIBiz) CancelBooking(ctx contextx.Contextx, from *model.Profile, target *ordermodel.Lease) error {
 	ret := _m.Called(ctx, from, target)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(contextx.Contextx, *model.Profile, *ordermodel.Booking) error); ok {
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, *model.Profile, *ordermodel.Lease) error); ok {
 		r0 = rf(ctx, from, target)
 	} else {
 		r0 = ret.Error(0)

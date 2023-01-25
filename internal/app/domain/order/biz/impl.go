@@ -63,7 +63,7 @@ func (i *impl) GetArrears(ctx contextx.Contextx, from *am.Profile, target *am.Pr
 	return ret, nil
 }
 
-func (i *impl) BookRental(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Booking, err error) {
+func (i *impl) BookRental(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Lease, err error) {
 	if len(from.AccessToken) == 0 {
 		ctx.Error(errorx.ErrMissingToken.Error(), zap.Any("from", from))
 		return nil, errorx.ErrMissingToken
@@ -83,7 +83,7 @@ func (i *impl) BookRental(ctx contextx.Contextx, from *am.Profile, target *rm.Ca
 	return ret, nil
 }
 
-func (i *impl) CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Booking) error {
+func (i *impl) CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Lease) error {
 	if len(from.AccessToken) == 0 {
 		ctx.Error(errorx.ErrMissingToken.Error(), zap.Any("from", from))
 		return errorx.ErrMissingToken

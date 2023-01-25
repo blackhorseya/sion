@@ -1,13 +1,13 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
-    name = "bookings",
+    name = "orders",
     srcs = [
-        "bookings.go",
-        "delete_booking_by_id.go",
-        "post_booking.go",
+        "delete_lease_by_id.go",
+        "orders.go",
+        "post_lease.go",
     ],
-    importpath = "github.com/blackhorseya/irent/internal/adapter/order/restful/api/v1/bookings",
+    importpath = "github.com/blackhorseya/irent/internal/adapter/order/restful/api/v1/orders",
     visibility = ["//:__subpackages__"],
     deps = [
         "//internal/pkg/errorx",

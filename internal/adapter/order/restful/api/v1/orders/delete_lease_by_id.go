@@ -1,4 +1,4 @@
-package bookings
+package orders
 
 import (
 	"net/http"
@@ -12,14 +12,14 @@ import (
 	"go.uber.org/zap"
 )
 
-type cancelBookingByIDRequest struct {
+type cancelLeaseByIDRequest struct {
 	ID string `uri:"id" binding:"required"`
 }
 
-// CancelBookingByID
+// CancelLeaseByID
 // @Summary Cancel a booking by id
 // @Description Cancel a booking by id
-// @Tags Bookings
+// @Tags Orders
 // @Accept application/json
 // @Produce application/json
 // @Param id path string true "ID of booking"
@@ -27,8 +27,8 @@ type cancelBookingByIDRequest struct {
 // @Success 200 {object} response.Response{data=string}
 // @Failure 400 {object} er.Error
 // @Failure 500 {object} er.Error
-// @Router /v1/bookings/{id} [delete]
-func (i *impl) CancelBookingByID(c *gin.Context) {
+// @Router /v1/orders/{id} [delete]
+func (i *impl) CancelLeaseByID(c *gin.Context) {
 	ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
 	if !ok {
 		_ = c.Error(errorx.ErrContextx)
@@ -42,14 +42,14 @@ func (i *impl) CancelBookingByID(c *gin.Context) {
 		return
 	}
 
-	var req cancelBookingByIDRequest
+	var req cancelLeaseByIDRequest
 	err := c.ShouldBindUri(&req)
 	if err != nil {
 		ctx.Error(errorx.ErrMissingID.Error(), zap.Error(err))
 		_ = c.Error(errorx.ErrMissingID)
 		return
 	}
-	target := &om.Booking{No: req.ID}
+	target := &om.Lease{No: req.ID}
 
 	from, err := i.auth.GetByAccessToken(ctx, token)
 	if err != nil {

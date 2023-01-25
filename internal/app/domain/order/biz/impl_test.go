@@ -108,7 +108,7 @@ func (s *SuiteTester) Test_impl_BookRental() {
 	tests := []struct {
 		name     string
 		args     args
-		wantInfo *om.Booking
+		wantInfo *om.Lease
 		wantErr  bool
 	}{
 		{
@@ -163,7 +163,7 @@ func (s *SuiteTester) Test_impl_BookRental() {
 func (s *SuiteTester) Test_impl_CancelBooking() {
 	type args struct {
 		from   *am.Profile
-		target *om.Booking
+		target *om.Lease
 		mock   func()
 	}
 	tests := []struct {
@@ -173,25 +173,25 @@ func (s *SuiteTester) Test_impl_CancelBooking() {
 	}{
 		{
 			name:    "check from then error",
-			args:    args{from: &am.Profile{AccessToken: ""}, target: testdata.Booking1},
+			args:    args{from: &am.Profile{AccessToken: ""}, target: testdata.Lease1},
 			wantErr: true,
 		},
 		{
 			name:    "check target then error",
-			args:    args{from: testdata.Profile1, target: &om.Booking{No: ""}},
+			args:    args{from: testdata.Profile1, target: &om.Lease{No: ""}},
 			wantErr: true,
 		},
 		{
 			name: "cancel then error",
-			args: args{from: testdata.Profile1, target: testdata.Booking1, mock: func() {
-				s.repo.On("CancelBooking", mock.Anything, testdata.Profile1, testdata.Booking1).Return(errors.New("error")).Once()
+			args: args{from: testdata.Profile1, target: testdata.Lease1, mock: func() {
+				s.repo.On("CancelBooking", mock.Anything, testdata.Profile1, testdata.Lease1).Return(errors.New("error")).Once()
 			}},
 			wantErr: true,
 		},
 		{
 			name: "ok",
-			args: args{from: testdata.Profile1, target: testdata.Booking1, mock: func() {
-				s.repo.On("CancelBooking", mock.Anything, testdata.Profile1, testdata.Booking1).Return(nil).Once()
+			args: args{from: testdata.Profile1, target: testdata.Lease1, mock: func() {
+				s.repo.On("CancelBooking", mock.Anything, testdata.Profile1, testdata.Lease1).Return(nil).Once()
 			}},
 			wantErr: false,
 		},
