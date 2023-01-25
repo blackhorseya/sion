@@ -550,8 +550,24 @@ const docTemplate = `{
                 },
                 "no": {
                     "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/model.LeaseStatus"
                 }
             }
+        },
+        "model.LeaseStatus": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2
+            ],
+            "x-enum-varnames": [
+                "LeaseStatus_LEASE_STATUS_UNSPECIFIED",
+                "LeaseStatus_LEASE_STATUS_ACTIVE",
+                "LeaseStatus_LEASE_STATUS_EXPIRED"
+            ]
         },
         "model.Profile": {
             "type": "object",

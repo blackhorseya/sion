@@ -66,7 +66,19 @@ definitions:
         type: number
       "no":
         type: string
+      status:
+        $ref: '#/definitions/model.LeaseStatus'
     type: object
+  model.LeaseStatus:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - LeaseStatus_LEASE_STATUS_UNSPECIFIED
+    - LeaseStatus_LEASE_STATUS_ACTIVE
+    - LeaseStatus_LEASE_STATUS_EXPIRED
   model.Profile:
     properties:
       access_token:

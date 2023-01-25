@@ -4,6 +4,7 @@ go_library(
     name = "orders",
     srcs = [
         "delete_lease_by_id.go",
+        "get_lease.go",
         "orders.go",
         "post_lease.go",
     ],
