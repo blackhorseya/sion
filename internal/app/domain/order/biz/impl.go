@@ -34,10 +34,12 @@ func (i *impl) Liveness(ctx contextx.Contextx) error {
 
 func (i *impl) GetArrears(ctx contextx.Contextx, from *am.Profile, target *am.Profile) (info *om.Arrears, err error) {
 	if len(from.AccessToken) == 0 {
+		ctx.Error(errorx.ErrMissingToken.Error(), zap.Any("from", from))
 		return nil, errorx.ErrMissingToken
 	}
 
 	if len(target.Id) == 0 {
+		ctx.Error(errorx.ErrMissingID.Error(), zap.Any("target", target))
 		return nil, errorx.ErrMissingID
 	}
 
@@ -63,10 +65,12 @@ func (i *impl) GetArrears(ctx contextx.Contextx, from *am.Profile, target *am.Pr
 
 func (i *impl) BookRental(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Booking, err error) {
 	if len(from.AccessToken) == 0 {
+		ctx.Error(errorx.ErrMissingToken.Error(), zap.Any("from", from))
 		return nil, errorx.ErrMissingToken
 	}
 
 	if len(target.Id) == 0 || len(target.ProjectId) == 0 {
+		ctx.Error(errorx.ErrInvalidRental.Error(), zap.Any("target", target))
 		return nil, errorx.ErrInvalidRental
 	}
 
@@ -80,6 +84,21 @@ func (i *impl) BookRental(ctx contextx.Contextx, from *am.Profile, target *rm.Ca
 }
 
 func (i *impl) CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Booking) error {
-	// todo: 2023/1/25|sean|impl me
-	panic("implement me")
+	if len(from.AccessToken) == 0 {
+		ctx.Error(errorx.ErrMissingToken.Error(), zap.Any("from", from))
+		return errorx.ErrMissingToken
+	}
+
+	if len(target.No) == 0 {
+		ctx.Error(errorx.ErrInvalidBooking.Error(), zap.Any("target", target))
+		return errorx.ErrInvalidBooking
+	}
+
+	err := i.repo.CancelBooking(ctx, from, target)
+	if err != nil {
+		ctx.Error(errorx.ErrCancelBooking.Error(), zap.Error(err), zap.Any("from", from), zap.Any("target", target))
+		return errorx.ErrCancelBooking.ReplaceMsg(err.Error())
+	}
+
+	return nil
 }

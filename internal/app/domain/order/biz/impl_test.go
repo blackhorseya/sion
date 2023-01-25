@@ -159,3 +159,54 @@ func (s *SuiteTester) Test_impl_BookRental() {
 		})
 	}
 }
+
+func (s *SuiteTester) Test_impl_CancelBooking() {
+	type args struct {
+		from   *am.Profile
+		target *om.Booking
+		mock   func()
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name:    "check from then error",
+			args:    args{from: &am.Profile{AccessToken: ""}, target: testdata.Booking1},
+			wantErr: true,
+		},
+		{
+			name:    "check target then error",
+			args:    args{from: testdata.Profile1, target: &om.Booking{No: ""}},
+			wantErr: true,
+		},
+		{
+			name: "cancel then error",
+			args: args{from: testdata.Profile1, target: testdata.Booking1, mock: func() {
+				s.repo.On("CancelBooking", mock.Anything, testdata.Profile1, testdata.Booking1).Return(errors.New("error")).Once()
+			}},
+			wantErr: true,
+		},
+		{
+			name: "ok",
+			args: args{from: testdata.Profile1, target: testdata.Booking1, mock: func() {
+				s.repo.On("CancelBooking", mock.Anything, testdata.Profile1, testdata.Booking1).Return(nil).Once()
+			}},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			if err := s.biz.CancelBooking(contextx.BackgroundWithLogger(s.logger), tt.args.from, tt.args.target); (err != nil) != tt.wantErr {
+				t.Errorf("CancelBooking() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			s.AssertExpectations(t)
+		})
+	}
+}
