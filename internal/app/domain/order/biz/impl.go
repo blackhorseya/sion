@@ -33,6 +33,14 @@ func (i *impl) Liveness(ctx contextx.Contextx) error {
 }
 
 func (i *impl) GetArrears(ctx contextx.Contextx, from *am.Profile, target *am.Profile) (info *om.Arrears, err error) {
+	if len(from.AccessToken) == 0 {
+		return nil, errorx.ErrMissingToken
+	}
+
+	if len(target.Id) == 0 {
+		return nil, errorx.ErrMissingID
+	}
+
 	records, err := i.repo.FetchArrears(ctx, from, target)
 	if err != nil {
 		ctx.Error(errorx.ErrGetArrears.Error(), zap.Error(err), zap.Any("from", from), zap.Any("target", target))
@@ -54,6 +62,14 @@ func (i *impl) GetArrears(ctx contextx.Contextx, from *am.Profile, target *am.Pr
 }
 
 func (i *impl) BookRental(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Booking, err error) {
+	if len(from.AccessToken) == 0 {
+		return nil, errorx.ErrMissingToken
+	}
+
+	if len(target.Id) == 0 || len(target.ProjectId) == 0 {
+		return nil, errorx.ErrInvalidRental
+	}
+
 	ret, err := i.repo.BookCar(ctx, from, target)
 	if err != nil {
 		ctx.Error(errorx.ErrBookRental.Error(), zap.Error(err), zap.Any("from", from), zap.Any("target", target))

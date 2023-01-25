@@ -51,6 +51,18 @@ func (s *SuiteTester) Test_impl_GetArrears() {
 		wantErr  bool
 	}{
 		{
+			name:     "check token of from then error",
+			args:     args{from: &am.Profile{AccessToken: ""}, target: testdata.Profile1},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name:     "check id of target then error",
+			args:     args{from: testdata.Profile1, target: &am.Profile{Id: ""}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
 			name: "fetch then error",
 			args: args{from: testdata.Profile1, target: testdata.Profile1, mock: func() {
 				s.repo.On("FetchArrears", mock.Anything, testdata.Profile1, testdata.Profile1).Return(nil, errors.New("error")).Once()
@@ -99,6 +111,18 @@ func (s *SuiteTester) Test_impl_BookRental() {
 		wantInfo *om.Booking
 		wantErr  bool
 	}{
+		{
+			name:     "check token of from then error",
+			args:     args{from: &am.Profile{AccessToken: ""}, target: testdata.Car1},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name:     "check target then error",
+			args:     args{from: testdata.Profile1, target: &rm.Car{Id: "", ProjectId: ""}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
 		{
 			name: "book then error",
 			args: args{from: testdata.Profile1, target: testdata.Car1, mock: func() {
