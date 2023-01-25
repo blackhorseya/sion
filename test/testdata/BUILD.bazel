@@ -2,8 +2,17 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "testdata",
-    srcs = ["profile.go"],
+    srcs = [
+        "order.go",
+        "profile.go",
+        "rental.go",
+    ],
     importpath = "github.com/blackhorseya/irent/test/testdata",
     visibility = ["//visibility:public"],
-    deps = ["//pkg/entity/domain/account/model"],
+    deps = [
+        "//pkg/entity/domain/account/model",
+        "//pkg/entity/domain/order/model",
+        "//pkg/entity/domain/rental/model",
+        "@org_golang_google_protobuf//types/known/timestamppb",
+    ],
 )

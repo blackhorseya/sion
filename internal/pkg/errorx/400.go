@@ -24,4 +24,10 @@ var (
 
 	// ErrInvalidLongitude means [longitude]  MUST be float
 	ErrInvalidLongitude = er.New(http.StatusBadRequest, 40015, "[longitude]  MUST be float")
+
+	// ErrInvalidRental means The rental request is invalid
+	ErrInvalidRental = er.New(http.StatusBadRequest, 40016, "The rental request is invalid")
+
+	// ErrInvalidBooking means The booking request is invalid
+	ErrInvalidBooking = er.New(http.StatusBadRequest, 40017, "The booking request is invalid")
 )

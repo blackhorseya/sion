@@ -11,9 +11,12 @@ import (
 	"github.com/blackhorseya/irent/pkg/contextx"
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
 	om "github.com/blackhorseya/irent/pkg/entity/domain/order/model"
+	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
 	"github.com/blackhorseya/irent/pkg/httpx"
+	"github.com/blackhorseya/irent/pkg/timex"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // Options declare app's configuration
@@ -90,4 +93,93 @@ func (i *impl) FetchArrears(ctx contextx.Contextx, from *am.Profile, target *am.
 	}
 
 	return ret, nil
+}
+
+func (i *impl) BookCar(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Booking, err error) {
+	uri, err := url.Parse(i.opts.Endpoint + "/Booking")
+	if err != nil {
+		return nil, err
+	}
+
+	payload, err := json.Marshal(map[string]interface{}{
+		"ProjID": target.ProjectId,
+		"EDate":  "",
+		"SDate":  "",
+		"CarNo":  target.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri.String(), bytes.NewReader(payload))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", from.AccessToken))
+
+	resp, err := i.httpclient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var data *bookResp
+	err = json.NewDecoder(resp.Body).Decode(&data)
+	if err != nil {
+		return nil, err
+	}
+
+	if strings.ToLower(data.ErrorMessage) != "success" {
+		return nil, errors.New(data.ErrorMessage)
+	}
+
+	t, err := timex.ParseYYYYMMddHHmmss(data.Data.LastPickTime)
+	if err != nil {
+		return nil, err
+	}
+
+	return &om.Booking{
+		No:         data.Data.OrderNo,
+		LastPickAt: timestamppb.New(t),
+	}, nil
+}
+
+func (i *impl) CancelBooking(ctx contextx.Contextx, from *am.Profile, target *om.Booking) error {
+	uri, err := url.Parse(i.opts.Endpoint + "/BookingCancel")
+	if err != nil {
+		return err
+	}
+
+	payload, err := json.Marshal(map[string]interface{}{
+		"OrderNo": target.No,
+	})
+	if err != nil {
+		return err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri.String(), bytes.NewReader(payload))
+	if err != nil {
+		return err
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", from.AccessToken))
+
+	resp, err := i.httpclient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	var data *cancelBookingResp
+	err = json.NewDecoder(resp.Body).Decode(&data)
+	if err != nil {
+		return err
+	}
+
+	if strings.ToLower(data.ErrorMessage) != "success" {
+		return errors.New(data.ErrorMessage)
+	}
+
+	return nil
 }

@@ -7,8 +7,10 @@ go_library(
     visibility = ["//:__subpackages__"],
     deps = [
         "//internal/adapter/order/restful/api/v1/arrears",
+        "//internal/adapter/order/restful/api/v1/bookings",
         "//pkg/entity/domain/account/biz",
         "//pkg/entity/domain/order/biz",
+        "//pkg/httpheaders",
         "@com_github_gin_gonic_gin//:gin",
     ],
 )

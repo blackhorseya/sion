@@ -12,6 +12,7 @@ go_library(
         "//pkg/contextx",
         "//pkg/entity/domain/account/model",
         "//pkg/entity/domain/order/model",
+        "//pkg/entity/domain/rental/model",
         "@com_github_stretchr_testify//mock",
     ],
 )
