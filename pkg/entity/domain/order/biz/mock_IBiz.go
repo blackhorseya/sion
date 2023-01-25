@@ -41,8 +41,8 @@ func (_m *MockIBiz) BookRental(ctx contextx.Contextx, from *model.Profile, targe
 	return r0, r1
 }
 
-// CancelBooking provides a mock function with given fields: ctx, from, target
-func (_m *MockIBiz) CancelBooking(ctx contextx.Contextx, from *model.Profile, target *ordermodel.Lease) error {
+// CancelLease provides a mock function with given fields: ctx, from, target
+func (_m *MockIBiz) CancelLease(ctx contextx.Contextx, from *model.Profile, target *ordermodel.Lease) error {
 	ret := _m.Called(ctx, from, target)
 
 	var r0 error
@@ -71,6 +71,29 @@ func (_m *MockIBiz) GetArrears(ctx contextx.Contextx, from *model.Profile, targe
 	var r1 error
 	if rf, ok := ret.Get(1).(func(contextx.Contextx, *model.Profile, *model.Profile) error); ok {
 		r1 = rf(ctx, from, target)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// ListLease provides a mock function with given fields: ctx, from
+func (_m *MockIBiz) ListLease(ctx contextx.Contextx, from *model.Profile) ([]*ordermodel.Lease, error) {
+	ret := _m.Called(ctx, from)
+
+	var r0 []*ordermodel.Lease
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, *model.Profile) []*ordermodel.Lease); ok {
+		r0 = rf(ctx, from)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*ordermodel.Lease)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, *model.Profile) error); ok {
+		r1 = rf(ctx, from)
 	} else {
 		r1 = ret.Error(1)
 	}

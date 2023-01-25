@@ -160,7 +160,7 @@ func (s *SuiteTester) Test_impl_BookRental() {
 	}
 }
 
-func (s *SuiteTester) Test_impl_CancelBooking() {
+func (s *SuiteTester) Test_impl_CancelLease() {
 	type args struct {
 		from   *am.Profile
 		target *om.Lease
@@ -202,8 +202,8 @@ func (s *SuiteTester) Test_impl_CancelBooking() {
 				tt.args.mock()
 			}
 
-			if err := s.biz.CancelBooking(contextx.BackgroundWithLogger(s.logger), tt.args.from, tt.args.target); (err != nil) != tt.wantErr {
-				t.Errorf("CancelBooking() error = %v, wantErr %v", err, tt.wantErr)
+			if err := s.biz.CancelLease(contextx.BackgroundWithLogger(s.logger), tt.args.from, tt.args.target); (err != nil) != tt.wantErr {
+				t.Errorf("CancelLease() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
 			s.AssertExpectations(t)

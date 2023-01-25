@@ -57,7 +57,7 @@ func (i *impl) CancelLeaseByID(c *gin.Context) {
 		return
 	}
 
-	err = i.biz.CancelBooking(ctx, from, target)
+	err = i.biz.CancelLease(ctx, from, target)
 	if err != nil {
 		_ = c.Error(err)
 		return
