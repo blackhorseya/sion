@@ -9,6 +9,7 @@ import (
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
 	ob "github.com/blackhorseya/irent/pkg/entity/domain/order/biz"
 	om "github.com/blackhorseya/irent/pkg/entity/domain/order/model"
+	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
 	"github.com/blackhorseya/irent/test/testdata"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/mock"
@@ -79,6 +80,55 @@ func (s *SuiteTester) Test_impl_GetArrears() {
 			}
 			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
 				t.Errorf("GetArrears() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
+			}
+
+			s.AssertExpectations(t)
+		})
+	}
+}
+
+func (s *SuiteTester) Test_impl_BookRental() {
+	type args struct {
+		from   *am.Profile
+		target *rm.Car
+		mock   func()
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantInfo *om.Booking
+		wantErr  bool
+	}{
+		{
+			name: "book then error",
+			args: args{from: testdata.Profile1, target: testdata.Car1, mock: func() {
+				s.repo.On("BookCar", mock.Anything, testdata.Profile1, testdata.Car1).Return(nil, errors.New("error")).Once()
+			}},
+			wantInfo: nil,
+			wantErr:  true,
+		},
+		{
+			name: "ok",
+			args: args{from: testdata.Profile1, target: testdata.Car1, mock: func() {
+				s.repo.On("BookCar", mock.Anything, testdata.Profile1, testdata.Car1).Return(nil, nil).Once()
+			}},
+			wantInfo: nil,
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotInfo, err := s.biz.BookRental(contextx.BackgroundWithLogger(s.logger), tt.args.from, tt.args.target)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("BookRental() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
+				t.Errorf("BookRental() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
 
 			s.AssertExpectations(t)

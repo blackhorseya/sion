@@ -31,6 +31,7 @@ go_test(
         "//pkg/entity/domain/account/model",
         "//pkg/entity/domain/order/biz",
         "//pkg/entity/domain/order/model",
+        "//pkg/entity/domain/rental/model",
         "//test/testdata",
         "@com_github_pkg_errors//:errors",
         "@com_github_stretchr_testify//mock",

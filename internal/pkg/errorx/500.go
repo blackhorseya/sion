@@ -23,4 +23,7 @@ var (
 
 	// ErrGetArrears means Failed to get arrears
 	ErrGetArrears = er.New(http.StatusInternalServerError, 50013, "Failed to get arrears")
+
+	// ErrBookRental means Failed to book rental
+	ErrBookRental = er.New(http.StatusInternalServerError, 50014, "Failed to book rental")
 )
