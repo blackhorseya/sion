@@ -9,12 +9,13 @@ package repo
 import (
 	"github.com/blackhorseya/irent/pkg/httpx"
 	"github.com/google/wire"
+	"github.com/jmoiron/sqlx"
 )
 
 // Injectors from wire.go:
 
-func CreateRepo(opts *Options, httpclient httpx.Client) IRepo {
-	iRepo := NewImpl(opts, httpclient)
+func CreateRepo(opts *Options, httpclient httpx.Client, rw *sqlx.DB) IRepo {
+	iRepo := NewImpl(opts, httpclient, rw)
 	return iRepo
 }
 

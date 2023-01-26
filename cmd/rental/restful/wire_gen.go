@@ -13,6 +13,7 @@ import (
 	"github.com/blackhorseya/irent/internal/pkg/config"
 	"github.com/blackhorseya/irent/internal/pkg/httpx"
 	"github.com/blackhorseya/irent/internal/pkg/log"
+	"github.com/blackhorseya/irent/internal/pkg/storage/mariadb"
 	"github.com/google/wire"
 )
 
@@ -42,7 +43,15 @@ func CreateService(path2 string) (*Service, error) {
 		return nil, err
 	}
 	client := httpx.NewClient()
-	iRepo := repo.NewImpl(repoOptions, client)
+	mariadbOptions, err := mariadb.NewOptions(viper, logger)
+	if err != nil {
+		return nil, err
+	}
+	db, err := mariadb.NewMariadb(mariadbOptions, logger)
+	if err != nil {
+		return nil, err
+	}
+	iRepo := repo.NewImpl(repoOptions, client, db)
 	iBiz := biz.NewImpl(iRepo)
 	adaptersRestful := restful.NewRestful(logger, engine, iBiz)
 	service, err := NewService(logger, server, adaptersRestful)
@@ -54,4 +63,4 @@ func CreateService(path2 string) (*Service, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ProviderClientSet, httpx.ProviderServerSet, restful.RentalSet, biz.RentalSet, repo.RentalSet, NewService)
+var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ProviderClientSet, httpx.ProviderServerSet, mariadb.ProviderSet, restful.RentalSet, biz.RentalSet, repo.RentalSet, NewService)

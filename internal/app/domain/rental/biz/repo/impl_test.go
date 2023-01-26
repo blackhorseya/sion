@@ -4,9 +4,11 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/blackhorseya/irent/pkg/contextx"
 	"github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
 	"github.com/blackhorseya/irent/pkg/httpx"
+	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -17,6 +19,7 @@ type SuiteTester struct {
 	suite.Suite
 	logger     *zap.Logger
 	httpclient *httpx.MockClient
+	rw         sqlmock.Sqlmock
 	repo       IRepo
 }
 
@@ -24,10 +27,16 @@ func (s *SuiteTester) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
 	s.httpclient = new(httpx.MockClient)
 	opts := &Options{Endpoint: "http://localhost", AppVersion: "1.0.0"}
-	s.repo = CreateRepo(opts, s.httpclient)
+	db, rw, _ := sqlmock.New(sqlmock.MonitorPingsOption(true))
+	s.rw = rw
+	s.repo = CreateRepo(opts, s.httpclient, sqlx.NewDb(db, "mysql"))
 }
 
 func (s *SuiteTester) assertExpectation(t *testing.T) {
+	if err := s.rw.ExpectationsWereMet(); err != nil {
+		t.Errorf("there were unfulfilled expectations: %s", err)
+	}
+
 	s.httpclient.AssertExpectations(t)
 }
 
@@ -53,7 +62,6 @@ func (s *SuiteTester) Test_impl_ListCars() {
 			wantInfo: nil,
 			wantErr:  true,
 		},
-		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		s.T().Run(tt.name, func(t *testing.T) {

@@ -15,6 +15,12 @@ type IRepo interface {
 
 	// FetchAvailableCars serve caller to fetch available cars via official api
 	FetchAvailableCars(ctx contextx.Contextx) (cars []*rm.Car, err error)
+
+	// UpsertStatusCar serve caller to given status to insert or update the car
+	UpsertStatusCar(ctx contextx.Contextx, target *rm.Car, status rm.CarStatus) error
+
+	// ResetAllCars serve caller to reset status of all cars to inuse
+	ResetAllCars(ctx contextx.Contextx) error
 }
 
 var RentalSet = wire.NewSet(NewOptions, NewImpl)

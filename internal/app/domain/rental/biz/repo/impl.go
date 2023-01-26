@@ -10,6 +10,7 @@ import (
 	"github.com/blackhorseya/irent/pkg/contextx"
 	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
 	"github.com/blackhorseya/irent/pkg/httpx"
+	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 )
@@ -34,12 +35,14 @@ func NewOptions(v *viper.Viper) (*Options, error) {
 type impl struct {
 	opts       *Options
 	httpclient httpx.Client
+	rw         *sqlx.DB
 }
 
-func NewImpl(opts *Options, httpclient httpx.Client) IRepo {
+func NewImpl(opts *Options, httpclient httpx.Client, rw *sqlx.DB) IRepo {
 	return &impl{
 		opts:       opts,
 		httpclient: httpclient,
+		rw:         rw,
 	}
 }
 
@@ -59,7 +62,7 @@ func (i *impl) ListCars(ctx contextx.Contextx) (info []*rm.Car, err error) {
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodPost, uri.String(), bytes.NewReader(payload))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri.String(), bytes.NewReader(payload))
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +120,7 @@ func (i *impl) FetchAvailableCars(ctx contextx.Contextx) (cars []*rm.Car, err er
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodPost, uri.String(), bytes.NewReader(payload))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri.String(), bytes.NewReader(payload))
 	if err != nil {
 		return nil, err
 	}
@@ -157,4 +160,14 @@ func (i *impl) FetchAvailableCars(ctx contextx.Contextx) (cars []*rm.Car, err er
 	}
 
 	return ret, nil
+}
+
+func (i *impl) UpsertStatusCar(ctx contextx.Contextx, target *rm.Car, status rm.CarStatus) error {
+	// todo: 2023/1/26|sean|impl me
+	panic("implement me")
+}
+
+func (i *impl) ResetAllCars(ctx contextx.Contextx) error {
+	// todo: 2023/1/26|sean|impl me
+	panic("implement me")
 }
