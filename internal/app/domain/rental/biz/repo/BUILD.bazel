@@ -3,6 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 go_library(
     name = "repo",
     srcs = [
+        "dto.go",
         "impl.go",
         "interface.go",
         "mock_IRepo.go",
