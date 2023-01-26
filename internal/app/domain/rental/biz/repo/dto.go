@@ -19,3 +19,35 @@ type car struct {
 	CreatedAt   time.Time    `db:"created_at"`
 	UpdatedAt   time.Time    `db:"updated_at"`
 }
+
+func newCar(val *rm.Car) *car {
+	return &car{
+		ID:          val.Id,
+		Area:        val.CarOfArea,
+		ProjectID:   val.ProjectId,
+		ProjectName: val.ProjectName,
+		Seat:        val.Seat,
+		TypeName:    val.CarTypeName,
+		latitude:    val.Latitude,
+		longitude:   val.Longitude,
+		Status:      val.Status,
+		CreatedAt:   time.Time{},
+		UpdatedAt:   time.Time{},
+	}
+}
+
+func (c *car) ToEntity() *rm.Car {
+	return &rm.Car{
+		Id:          c.ID,
+		CarType:     "",
+		CarTypeName: c.TypeName,
+		CarOfArea:   c.Area,
+		ProjectName: c.ProjectName,
+		ProjectId:   c.ProjectID,
+		Latitude:    c.latitude,
+		Longitude:   c.longitude,
+		Seat:        c.Seat,
+		Distance:    0,
+		Status:      c.Status,
+	}
+}

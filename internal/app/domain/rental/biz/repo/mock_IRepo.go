@@ -60,6 +60,34 @@ func (_m *MockIRepo) ListCars(ctx contextx.Contextx) ([]*model.Car, error) {
 	return r0, r1
 }
 
+// ResetAllCars provides a mock function with given fields: ctx
+func (_m *MockIRepo) ResetAllCars(ctx contextx.Contextx) error {
+	ret := _m.Called(ctx)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(contextx.Contextx) error); ok {
+		r0 = rf(ctx)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// UpsertStatusCar provides a mock function with given fields: ctx, target
+func (_m *MockIRepo) UpsertStatusCar(ctx contextx.Contextx, target *model.Car) error {
+	ret := _m.Called(ctx, target)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, *model.Car) error); ok {
+		r0 = rf(ctx, target)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 type mockConstructorTestingTNewMockIRepo interface {
 	mock.TestingT
 	Cleanup(func())

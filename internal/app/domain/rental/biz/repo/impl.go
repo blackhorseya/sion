@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/blackhorseya/irent/pkg/contextx"
 	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
@@ -162,9 +163,21 @@ func (i *impl) FetchAvailableCars(ctx contextx.Contextx) (cars []*rm.Car, err er
 	return ret, nil
 }
 
-func (i *impl) UpsertStatusCar(ctx contextx.Contextx, target *rm.Car, status rm.CarStatus) error {
-	// todo: 2023/1/26|sean|impl me
-	panic("implement me")
+func (i *impl) UpsertStatusCar(ctx contextx.Contextx, target *rm.Car) error {
+	timeout, cancelFunc := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancelFunc()
+
+	stmt := `insert into cars (id, area, project_id, project_name, seat, type_name, latitude, longitude, status)
+values (:id, :area, :project_id, :project_name, :seat, :type_name, :latitude, :longitude, :status)
+on duplicate key update status = :status`
+
+	arg := newCar(target)
+	_, err := i.rw.NamedExecContext(timeout, stmt, arg)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (i *impl) ResetAllCars(ctx contextx.Contextx) error {

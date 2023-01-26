@@ -17,7 +17,7 @@ type IRepo interface {
 	FetchAvailableCars(ctx contextx.Contextx) (cars []*rm.Car, err error)
 
 	// UpsertStatusCar serve caller to given status to insert or update the car
-	UpsertStatusCar(ctx contextx.Contextx, target *rm.Car, status rm.CarStatus) error
+	UpsertStatusCar(ctx contextx.Contextx, target *rm.Car) error
 
 	// ResetAllCars serve caller to reset status of all cars to inuse
 	ResetAllCars(ctx contextx.Contextx) error
