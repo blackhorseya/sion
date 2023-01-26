@@ -94,6 +94,7 @@ func (i *impl) ListCars(ctx contextx.Contextx) (info []*rm.Car, err error) {
 			Longitude:   obj.Longitude,
 			Seat:        obj.Seat,
 			Distance:    0,
+			Status:      rm.CarStatus_CAR_STATUS_AVAILABLE,
 		}
 	}
 

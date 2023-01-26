@@ -2,6 +2,12 @@ syntax = "proto3";
 package rental;
 option go_package = "github.com/blackhorseya/irent/pkg/entity/domain/rental/model";
 
+enum CarStatus {
+  CAR_STATUS_UNSPECIFIED = 0;
+  CAR_STATUS_AVAILABLE = 1;
+  CAR_STATUS_INUSE = 2;
+}
+
 message Car {
   string id = 1;
   string car_type = 2;
@@ -13,4 +19,5 @@ message Car {
   double longitude = 8;
   int64 seat = 9;
   double distance = 10;
+  CarStatus status = 11;
 }
