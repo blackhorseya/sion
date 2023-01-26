@@ -3,6 +3,9 @@ package orders
 import (
 	"net/http"
 
+	"github.com/blackhorseya/irent/internal/pkg/errorx"
+	"github.com/blackhorseya/irent/pkg/contextx"
+	"github.com/blackhorseya/irent/pkg/httpheaders"
 	"github.com/blackhorseya/irent/pkg/response"
 	"github.com/gin-gonic/gin"
 )
@@ -19,6 +22,30 @@ import (
 // @Failure 500 {object} er.Error
 // @Router /v1/orders [get]
 func (i *impl) ListLease(c *gin.Context) {
-	// todo: 2023/1/25|sean|impl me
-	c.JSON(http.StatusOK, response.OK)
+	ctx, ok := c.MustGet(string(contextx.KeyCtx)).(contextx.Contextx)
+	if !ok {
+		_ = c.Error(errorx.ErrContextx)
+		return
+	}
+
+	token, ok := c.MustGet(string(httpheaders.KeyToken)).(string)
+	if !ok {
+		ctx.Error(errorx.ErrMissingToken.Error())
+		_ = c.Error(errorx.ErrMissingToken)
+		return
+	}
+
+	from, err := i.auth.GetByAccessToken(ctx, token)
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	ret, err := i.biz.ListLease(ctx, from)
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response.OK.WithData(ret))
 }
