@@ -210,3 +210,57 @@ func (s *SuiteTester) Test_impl_CancelLease() {
 		})
 	}
 }
+
+func (s *SuiteTester) Test_impl_ListLease() {
+	type args struct {
+		from *am.Profile
+		mock func()
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantOrders []*om.Lease
+		wantErr    bool
+	}{
+		{
+			name:       "check from then error",
+			args:       args{from: &am.Profile{AccessToken: ""}},
+			wantOrders: nil,
+			wantErr:    true,
+		},
+		{
+			name: "query bookings then error",
+			args: args{from: testdata.Profile1, mock: func() {
+				s.repo.On("QueryBookings", mock.Anything, testdata.Profile1).Return(nil, errors.New("error")).Once()
+			}},
+			wantOrders: nil,
+			wantErr:    true,
+		},
+		{
+			name: "ok",
+			args: args{from: testdata.Profile1, mock: func() {
+				s.repo.On("QueryBookings", mock.Anything, testdata.Profile1).Return(nil, nil).Once()
+			}},
+			wantOrders: nil,
+			wantErr:    false,
+		},
+	}
+	for _, tt := range tests {
+		s.T().Run(tt.name, func(t *testing.T) {
+			if tt.args.mock != nil {
+				tt.args.mock()
+			}
+
+			gotOrders, err := s.biz.ListLease(contextx.BackgroundWithLogger(s.logger), tt.args.from)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ListLease() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotOrders, tt.wantOrders) {
+				t.Errorf("ListLease() gotOrders = %v, want %v", gotOrders, tt.wantOrders)
+			}
+
+			s.AssertExpectations(t)
+		})
+	}
+}

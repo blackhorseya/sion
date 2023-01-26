@@ -64,8 +64,18 @@ func (i *impl) GetArrears(ctx contextx.Contextx, from *am.Profile, target *am.Pr
 }
 
 func (i *impl) ListLease(ctx contextx.Contextx, from *am.Profile) (orders []*om.Lease, err error) {
-	// todo: 2023/1/25|sean|impl me
-	panic("implement me")
+	if len(from.AccessToken) == 0 {
+		ctx.Error(errorx.ErrMissingToken.Error(), zap.Any("from", from))
+		return nil, errorx.ErrMissingToken
+	}
+
+	ret, err := i.repo.QueryBookings(ctx, from)
+	if err != nil {
+		ctx.Error(errorx.ErrGetLease.Error(), zap.Error(err), zap.Any("from", from))
+		return nil, errorx.ErrGetLease.ReplaceMsg(err.Error())
+	}
+
+	return ret, nil
 }
 
 func (i *impl) BookRental(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Lease, err error) {

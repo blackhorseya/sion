@@ -29,4 +29,7 @@ var (
 
 	// ErrCancelBooking means Failed to cancel booking
 	ErrCancelBooking = er.New(http.StatusInternalServerError, 50015, "Failed to cancel booking")
+
+	// ErrGetLease means Failed to get lease
+	ErrGetLease = er.New(http.StatusInternalServerError, 50016, "Failed to get lease")
 )
