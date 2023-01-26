@@ -53,3 +53,8 @@ func (i *impl) ListCars(ctx contextx.Contextx, condition rb.QueryCarCondition) (
 
 	return ret[:condition.TopNum], len(ret), nil
 }
+
+func (i *impl) UpdateInfoCars(ctx contextx.Contextx) (cars []*rm.Car, err error) {
+	// todo: 2023/1/26|sean|impl me
+	panic("implement me")
+}

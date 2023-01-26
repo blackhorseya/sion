@@ -72,6 +72,29 @@ func (_m *MockIBiz) Readiness(ctx contextx.Contextx) error {
 	return r0
 }
 
+// UpdateInfoCars provides a mock function with given fields: ctx
+func (_m *MockIBiz) UpdateInfoCars(ctx contextx.Contextx) ([]*model.Car, error) {
+	ret := _m.Called(ctx)
+
+	var r0 []*model.Car
+	if rf, ok := ret.Get(0).(func(contextx.Contextx) []*model.Car); ok {
+		r0 = rf(ctx)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*model.Car)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(contextx.Contextx) error); ok {
+		r1 = rf(ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type mockConstructorTestingTNewMockIBiz interface {
 	mock.TestingT
 	Cleanup(func())

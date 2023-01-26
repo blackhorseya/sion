@@ -17,6 +17,9 @@ type IBiz interface {
 
 	// ListCars serve caller to given condition to list cars
 	ListCars(ctx contextx.Contextx, condition QueryCarCondition) (info []*rm.Car, total int, err error)
+
+	// UpdateInfoCars serve caller to update information of all cars
+	UpdateInfoCars(ctx contextx.Contextx) (cars []*rm.Car, err error)
 }
 
 // QueryCarCondition is a condition
