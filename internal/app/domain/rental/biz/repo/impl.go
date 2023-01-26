@@ -180,7 +180,16 @@ on duplicate key update status = :status`
 	return nil
 }
 
-func (i *impl) ResetAllCars(ctx contextx.Contextx) error {
-	// todo: 2023/1/26|sean|impl me
-	panic("implement me")
+func (i *impl) UpdateStatusAllCars(ctx contextx.Contextx, status rm.CarStatus) error {
+	timeout, cancelFunc := contextx.WithTimeout(ctx, 5*time.Second)
+	defer cancelFunc()
+
+	stmt := `update cars set status=?`
+
+	_, err := i.rw.ExecContext(timeout, stmt, int32(status))
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

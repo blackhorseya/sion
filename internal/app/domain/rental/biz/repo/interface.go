@@ -19,8 +19,8 @@ type IRepo interface {
 	// UpsertStatusCar serve caller to given status to insert or update the car
 	UpsertStatusCar(ctx contextx.Contextx, target *rm.Car) error
 
-	// ResetAllCars serve caller to reset status of all cars to inuse
-	ResetAllCars(ctx contextx.Contextx) error
+	// UpdateStatusAllCars serve caller to reset status of all cars to inuse
+	UpdateStatusAllCars(ctx contextx.Contextx, status rm.CarStatus) error
 }
 
 var RentalSet = wire.NewSet(NewOptions, NewImpl)

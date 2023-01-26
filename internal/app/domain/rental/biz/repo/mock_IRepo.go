@@ -60,13 +60,13 @@ func (_m *MockIRepo) ListCars(ctx contextx.Contextx) ([]*model.Car, error) {
 	return r0, r1
 }
 
-// ResetAllCars provides a mock function with given fields: ctx
-func (_m *MockIRepo) ResetAllCars(ctx contextx.Contextx) error {
-	ret := _m.Called(ctx)
+// UpdateStatusAllCars provides a mock function with given fields: ctx, status
+func (_m *MockIRepo) UpdateStatusAllCars(ctx contextx.Contextx, status model.CarStatus) error {
+	ret := _m.Called(ctx, status)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(contextx.Contextx) error); ok {
-		r0 = rf(ctx)
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, model.CarStatus) error); ok {
+		r0 = rf(ctx, status)
 	} else {
 		r0 = ret.Error(0)
 	}
