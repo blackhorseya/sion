@@ -114,6 +114,14 @@ def go_dependencies():
         version = "v1.1.9",
     )
     go_repository(
+        name = "com_github_data_dog_go_sqlmock",
+        build_file_proto_mode = "disable_global",
+        importpath = "github.com/DATA-DOG/go-sqlmock",
+        sum = "h1:Shsta01QNfFxHCfpW6YH2STWB0MudeXXEWMr20OEh60=",
+        version = "v1.5.0",
+    )
+
+    go_repository(
         name = "com_github_davecgh_go_spew",
         build_file_proto_mode = "disable_global",
         importpath = "github.com/davecgh/go-spew",
@@ -838,8 +846,8 @@ def go_dependencies():
         name = "com_github_swaggo_swag",
         build_file_proto_mode = "disable_global",
         importpath = "github.com/swaggo/swag",
-        sum = "h1:kHtaBe/Ob9AZzAANfcn5c6RyCke9gG9QpH0jky0I/sA=",
-        version = "v1.8.9",
+        sum = "h1:eExW4bFa52WOjqRzRD58bgWsWfdFJso50lpbeTcmTfo=",
+        version = "v1.8.10",
     )
     go_repository(
         name = "com_github_ugorji_go",
