@@ -131,3 +131,14 @@ update-package: ## update package and commit
 .PHONY: test-smoke
 test-smoke: ## execute smoke testing
 	@k6 run test/k6/requests/*
+
+N = 1
+DB_URI='mysql://root:changeme@tcp(localhost:3306)/$(PROJECT_NAME)_$(SVC_NAME)?charset=utf8mb4&parseTime=True&loc=Local'
+
+.PHONY: migrate-up
+migrate-up: check-SVC_NAME ## run migration up
+	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migration/$(SVC_NAME) up
+
+.PHONY: migrate-down
+migrate-down: check-SVC_NAME check-N ## run migration down
+	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migration/$(SVC_NAME) down $(N)
