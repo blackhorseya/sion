@@ -1,0 +1,7 @@
+app:
+  endpoint: https://irentcar-app.azurefd.net/api
+  appVersion: "5.8.1"
+
+log:
+  encoding: console
+  level: debug
