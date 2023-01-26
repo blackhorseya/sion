@@ -15,6 +15,9 @@ type IRepo interface {
 	// FetchArrears serve caller to fetch arrears via api
 	FetchArrears(ctx contextx.Contextx, from *am.Profile, target *am.Profile) (records []*om.ArrearsRecord, err error)
 
+	// QueryBookings serve caller to query all bookings
+	QueryBookings(ctx contextx.Contextx, from *am.Profile) (orders []*om.Lease, err error)
+
 	// BookCar serve caller to given user and car to book
 	BookCar(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Lease, err error)
 

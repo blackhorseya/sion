@@ -97,6 +97,52 @@ func (i *impl) FetchArrears(ctx contextx.Contextx, from *am.Profile, target *am.
 	return ret, nil
 }
 
+func (i *impl) QueryBookings(ctx contextx.Contextx, from *am.Profile) (orders []*om.Lease, err error) {
+	uri, err := url.Parse(i.opts.Endpoint + "/BookingQuery")
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", from.AccessToken))
+
+	resp, err := i.httpclient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var data *queryBookingsResp
+	err = json.NewDecoder(resp.Body).Decode(&data)
+	if err != nil {
+		return nil, err
+	}
+
+	if strings.ToLower(data.ErrorMessage) != _msg_success {
+		return nil, errors.New(data.ErrorMessage)
+	}
+
+	var ret []*om.Lease
+	for _, order := range data.Data.OrderObj {
+		ret = append(ret, &om.Lease{
+			No:           order.OrderNo,
+			CarId:        strings.ReplaceAll(order.CarNo, " ", ""),
+			CarLatitude:  order.CarLatitude,
+			CarLongitude: order.CarLongitude,
+			Status:       om.LeaseStatus_LEASE_STATUS_ACTIVE,
+			StartAt:      timestamppb.New(timex.ParseString2Time(order.StartTime)),
+			EndAt:        timestamppb.New(timex.ParseString2Time(order.StopTime)),
+			LastPickAt:   timestamppb.New(timex.ParseString2Time(order.StopPickTime)),
+		})
+	}
+
+	return ret, nil
+}
+
 func (i *impl) BookCar(ctx contextx.Contextx, from *am.Profile, target *rm.Car) (info *om.Lease, err error) {
 	uri, err := url.Parse(i.opts.Endpoint + "/Booking")
 	if err != nil {

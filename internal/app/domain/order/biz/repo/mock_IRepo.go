@@ -78,6 +78,29 @@ func (_m *MockIRepo) FetchArrears(ctx contextx.Contextx, from *model.Profile, ta
 	return r0, r1
 }
 
+// QueryBookings provides a mock function with given fields: ctx, from
+func (_m *MockIRepo) QueryBookings(ctx contextx.Contextx, from *model.Profile) ([]*ordermodel.Lease, error) {
+	ret := _m.Called(ctx, from)
+
+	var r0 []*ordermodel.Lease
+	if rf, ok := ret.Get(0).(func(contextx.Contextx, *model.Profile) []*ordermodel.Lease); ok {
+		r0 = rf(ctx, from)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*ordermodel.Lease)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(contextx.Contextx, *model.Profile) error); ok {
+		r1 = rf(ctx, from)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type mockConstructorTestingTNewMockIRepo interface {
 	mock.TestingT
 	Cleanup(func())
