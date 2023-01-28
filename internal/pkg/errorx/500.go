@@ -32,4 +32,7 @@ var (
 
 	// ErrGetLease means Failed to get lease
 	ErrGetLease = er.New(http.StatusInternalServerError, 50016, "Failed to get lease")
+
+	// ErrUpdateCar means Failed to update car
+	ErrUpdateCar = er.New(http.StatusInternalServerError, 50017, "Failed to update car")
 )

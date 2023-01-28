@@ -55,6 +55,26 @@ func (i *impl) ListCars(ctx contextx.Contextx, condition rb.QueryCarCondition) (
 }
 
 func (i *impl) UpdateInfoCars(ctx contextx.Contextx) (cars []*rm.Car, err error) {
-	// todo: 2023/1/26|sean|impl me
-	panic("implement me")
+	ret, err := i.repo.FetchAvailableCars(ctx)
+	if err != nil {
+		ctx.Error(errorx.ErrListCars.Error(), zap.Error(err))
+		return nil, errorx.ErrListCars.ReplaceMsg(err.Error())
+	}
+
+	err = i.repo.UpdateStatusAllCars(ctx, rm.CarStatus_CAR_STATUS_INUSE)
+	if err != nil {
+		ctx.Error(errorx.ErrUpdateCar.Error(), zap.Error(err))
+		return nil, errorx.ErrUpdateCar
+	}
+
+	for _, car := range ret {
+		car.Status = rm.CarStatus_CAR_STATUS_AVAILABLE
+		err = i.repo.UpsertStatusCar(ctx, car)
+		if err != nil {
+			ctx.Warn(errorx.ErrUpdateCar.Error(), zap.Error(err), zap.Any("car", car))
+			continue
+		}
+	}
+
+	return ret, nil
 }
