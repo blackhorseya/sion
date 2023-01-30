@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/blackhorseya/irent/pkg/adapters"
+	"github.com/blackhorseya/irent/pkg/contextx"
 	rb "github.com/blackhorseya/irent/pkg/entity/domain/rental/biz"
 	"github.com/google/wire"
 	"github.com/pkg/errors"
@@ -107,9 +108,15 @@ func (i *impl) addTask() {
 }
 
 func (i *impl) do() error {
-	i.logger.Debug("executing task")
+	ctx := contextx.BackgroundWithLogger(i.logger)
+	defer ctx.Elapsed("[do]")()
 
-	// todo: 2023/1/30|sean|impl me
+	ctx.Debug("executing task...")
+
+	_, err := i.biz.UpdateInfoCars(ctx)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

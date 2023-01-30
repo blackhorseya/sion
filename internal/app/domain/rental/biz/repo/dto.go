@@ -13,8 +13,8 @@ type car struct {
 	ProjectName string       `db:"project_name"`
 	Seat        int64        `db:"seat"`
 	TypeName    string       `db:"type_name"`
-	latitude    float64      `db:"latitude"`
-	longitude   float64      `db:"longitude"`
+	Latitude    float64      `db:"latitude"`
+	Longitude   float64      `db:"longitude"`
 	Status      rm.CarStatus `db:"status"`
 	CreatedAt   time.Time    `db:"created_at"`
 	UpdatedAt   time.Time    `db:"updated_at"`
@@ -28,8 +28,8 @@ func newCar(val *rm.Car) *car {
 		ProjectName: val.ProjectName,
 		Seat:        val.Seat,
 		TypeName:    val.CarTypeName,
-		latitude:    val.Latitude,
-		longitude:   val.Longitude,
+		Latitude:    val.Latitude,
+		Longitude:   val.Longitude,
 		Status:      val.Status,
 		CreatedAt:   time.Time{},
 		UpdatedAt:   time.Time{},
@@ -44,8 +44,8 @@ func (c *car) ToEntity() *rm.Car {
 		CarOfArea:   c.Area,
 		ProjectName: c.ProjectName,
 		ProjectId:   c.ProjectID,
-		Latitude:    c.latitude,
-		Longitude:   c.longitude,
+		Latitude:    c.Latitude,
+		Longitude:   c.Longitude,
 		Seat:        c.Seat,
 		Distance:    0,
 		Status:      c.Status,

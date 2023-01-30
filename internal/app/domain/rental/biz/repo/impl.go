@@ -106,6 +106,8 @@ func (i *impl) ListCars(ctx contextx.Contextx) (info []*rm.Car, err error) {
 }
 
 func (i *impl) FetchAvailableCars(ctx contextx.Contextx) (cars []*rm.Car, err error) {
+	defer ctx.Elapsed("[FetchAvailableCars]")()
+
 	uri, err := url.Parse(i.opts.Endpoint + "/AnyRent")
 	if err != nil {
 		return nil, err
@@ -181,6 +183,8 @@ on duplicate key update status = :status`
 }
 
 func (i *impl) UpdateStatusAllCars(ctx contextx.Contextx, status rm.CarStatus) error {
+	defer ctx.Elapsed("[UpdateStatusAllCars]")()
+
 	timeout, cancelFunc := contextx.WithTimeout(ctx, 5*time.Second)
 	defer cancelFunc()
 
