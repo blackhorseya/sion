@@ -8,9 +8,12 @@ package main
 
 import (
 	"github.com/blackhorseya/irent/internal/adapter/rental/cronjob"
+	"github.com/blackhorseya/irent/internal/app/domain/rental/biz"
+	"github.com/blackhorseya/irent/internal/app/domain/rental/biz/repo"
 	"github.com/blackhorseya/irent/internal/pkg/config"
 	"github.com/blackhorseya/irent/internal/pkg/httpx"
 	"github.com/blackhorseya/irent/internal/pkg/log"
+	"github.com/blackhorseya/irent/internal/pkg/storage/mariadb"
 	"github.com/google/wire"
 )
 
@@ -33,7 +36,22 @@ func CreateService(path2 string) (*Service, error) {
 	if err != nil {
 		return nil, err
 	}
-	adaptersCronjob := cronjob.NewImpl(cronjobOptions, logger)
+	repoOptions, err := repo.NewOptions(viper)
+	if err != nil {
+		return nil, err
+	}
+	client := httpx.NewClient()
+	mariadbOptions, err := mariadb.NewOptions(viper, logger)
+	if err != nil {
+		return nil, err
+	}
+	db, err := mariadb.NewMariadb(mariadbOptions, logger)
+	if err != nil {
+		return nil, err
+	}
+	iRepo := repo.NewImpl(repoOptions, client, db)
+	iBiz := biz.NewImpl(iRepo)
+	adaptersCronjob := cronjob.NewImpl(cronjobOptions, logger, iBiz)
 	service, err := NewService(logger, adaptersCronjob)
 	if err != nil {
 		return nil, err
@@ -43,4 +61,4 @@ func CreateService(path2 string) (*Service, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ProviderClientSet, cronjob.RentalSet, NewService)
+var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ClientSet, mariadb.ProviderSet, cronjob.RentalSet, biz.RentalSet, repo.RentalSet, NewService)

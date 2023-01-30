@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/blackhorseya/irent/pkg/adapters"
+	rb "github.com/blackhorseya/irent/pkg/entity/domain/rental/biz"
 	"github.com/google/wire"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
@@ -34,14 +35,17 @@ type impl struct {
 	opts   *Options
 	logger *zap.Logger
 
+	biz rb.IBiz
+
 	taskC chan time.Time
 	done  chan struct{}
 }
 
-func NewImpl(opts *Options, logger *zap.Logger) adapters.Cronjob {
+func NewImpl(opts *Options, logger *zap.Logger, biz rb.IBiz) adapters.Cronjob {
 	return &impl{
 		opts:   opts,
 		logger: logger,
+		biz:    biz,
 		taskC:  make(chan time.Time, 1),
 		done:   make(chan struct{}),
 	}

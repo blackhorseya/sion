@@ -62,4 +62,4 @@ func CreateService(path2 string) (*Service, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ProviderClientSet, httpx.ProviderServerSet, restful.OrderSet, biz.OrderSet, repo.OrderSet, biz2.AccountSet, repo2.AccountSet, NewService)
+var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ClientSet, httpx.ProviderServerSet, restful.OrderSet, biz.OrderSet, repo.OrderSet, biz2.AccountSet, repo2.AccountSet, NewService)

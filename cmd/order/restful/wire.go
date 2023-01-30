@@ -19,7 +19,7 @@ var providerSet = wire.NewSet(
 	// infra
 	config.ProviderSet,
 	log.ProviderSet,
-	httpx.ProviderClientSet,
+	httpx.ClientSet,
 
 	// server
 	httpx.ProviderServerSet,
