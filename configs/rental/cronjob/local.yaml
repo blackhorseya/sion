@@ -1,3 +1,7 @@
+cronjob:
+  enabled: true
+  interval: 5s
+
 app:
   endpoint: https://irentcar-app.azurefd.net/api
   appVersion: "5.8.1"

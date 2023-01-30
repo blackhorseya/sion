@@ -10,6 +10,7 @@ go_library(
     importpath = "github.com/blackhorseya/irent/cmd/rental/cronjob",
     visibility = ["//visibility:private"],
     deps = [
+        "//internal/adapter/rental/cronjob",
         "//internal/pkg/config",
         "//internal/pkg/httpx",
         "//internal/pkg/log",

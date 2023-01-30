@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "cronjob",
+    srcs = ["cronjob.go"],
+    importpath = "github.com/blackhorseya/irent/internal/adapter/rental/cronjob",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//pkg/adapters",
+        "@com_github_google_wire//:wire",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_spf13_viper//:viper",
+        "@org_uber_go_zap//:zap",
+    ],
+)

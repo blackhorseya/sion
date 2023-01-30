@@ -16,10 +16,10 @@ type Service struct {
 }
 
 // NewService serve caller to create service instance
-func NewService(logger *zap.Logger) (*Service, error) {
+func NewService(logger *zap.Logger, cronjob adapters.Cronjob) (*Service, error) {
 	svc := &Service{
 		logger:  logger.With(zap.String("type", "service")),
-		cronjob: nil,
+		cronjob: cronjob,
 	}
 
 	return svc, nil

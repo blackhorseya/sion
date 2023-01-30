@@ -7,6 +7,7 @@
 package main
 
 import (
+	"github.com/blackhorseya/irent/internal/adapter/rental/cronjob"
 	"github.com/blackhorseya/irent/internal/pkg/config"
 	"github.com/blackhorseya/irent/internal/pkg/httpx"
 	"github.com/blackhorseya/irent/internal/pkg/log"
@@ -28,7 +29,12 @@ func CreateService(path2 string) (*Service, error) {
 	if err != nil {
 		return nil, err
 	}
-	service, err := NewService(logger)
+	cronjobOptions, err := cronjob.NewOptions(viper, logger)
+	if err != nil {
+		return nil, err
+	}
+	adaptersCronjob := cronjob.NewImpl(cronjobOptions, logger)
+	service, err := NewService(logger, adaptersCronjob)
 	if err != nil {
 		return nil, err
 	}
@@ -37,4 +43,4 @@ func CreateService(path2 string) (*Service, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ProviderClientSet, NewService)
+var providerSet = wire.NewSet(config.ProviderSet, log.ProviderSet, httpx.ProviderClientSet, cronjob.RentalSet, NewService)

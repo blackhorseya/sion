@@ -4,6 +4,7 @@
 package main
 
 import (
+	"github.com/blackhorseya/irent/internal/adapter/rental/cronjob"
 	"github.com/blackhorseya/irent/internal/pkg/config"
 	"github.com/blackhorseya/irent/internal/pkg/httpx"
 	"github.com/blackhorseya/irent/internal/pkg/log"
@@ -19,6 +20,7 @@ var providerSet = wire.NewSet(
 	// server
 
 	// implementation
+	cronjob.RentalSet,
 
 	// main
 	NewService,
