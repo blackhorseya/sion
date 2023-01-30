@@ -83,19 +83,29 @@ func (i *impl) worker() {
 		select {
 		case <-i.done:
 			return
-		case t := <-ticker.C:
-			i.addTask(t)
+		case <-ticker.C:
+			i.addTask()
 		case <-i.taskC:
-			// todo: 2023/1/30|sean|impl me
-			i.logger.Debug("executing task")
+			err := i.do()
+			if err != nil {
+				i.logger.Error("execute task got error", zap.Error(err))
+			}
 		}
 	}
 }
 
-func (i *impl) addTask(t time.Time) {
+func (i *impl) addTask() {
 	select {
-	case i.taskC <- t:
+	case i.taskC <- time.Now():
 	case <-time.After(50 * time.Millisecond):
 		return
 	}
+}
+
+func (i *impl) do() error {
+	i.logger.Debug("executing task")
+
+	// todo: 2023/1/30|sean|impl me
+
+	return nil
 }
