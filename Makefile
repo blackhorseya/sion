@@ -38,6 +38,22 @@ test-unit: ## execute unit test
 test-e2e: ## execute e2e test
 	@cd ./test/e2e && npx playwright test ./tests
 
+.PHONY: gazelle-repos
+gazelle-repos: ## update gazelle repos
+	@bazel run //:gazelle -- update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies -prune
+
+.PHONY: gazelle
+gazelle: gazelle-repos ## run gazelle with bazel
+	@bazel run //:gazelle
+
+.PHONY: build-go
+build-go: gazelle ## build go binary
+	@bazel build //...
+
+.PHONY: test-go
+test-go: gazelle ## test go binary
+	@bazel test //...
+
 .PHONY: build-image
 build-image: check-SVC_NAME check-SVC_ADAPTER check-VERSION check-GITHUB_TOKEN ## build docker image with APP_NAME and VERSION
 	@docker build -t $(REGISTRY)/$(APP_NAME):$(VERSION) \
@@ -123,7 +139,7 @@ update-package: ## update package and commit
 	@go get -u ./...
 	@go mod tidy
 
-	@bazel run //:gazelle-update-repos
+	@bazel run //:gazelle -- update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies -prune
 
 	@git add go.mod go.sum deps.bzl
 	@git commit -m "build: update package"
