@@ -1,9 +1,9 @@
 PROJECT_NAME=irent
-SVC_NAME=
-SVC_ADAPTER=
+SVC_NAME := app
+SVC_ADAPTER := restful
 APP_NAME=$(PROJECT_NAME)-$(SVC_NAME)-$(SVC_ADAPTER)
 MAIN_FOLDER='./cmd/$(SVC_ADAPTER)/$(SVC_NAME)'
-VERSION=latest
+VERSION := $(shell git describe --tags --always)
 DEPLOY_TO=uat
 NS=$(DEPLOY_TO)-$(PROJECT_NAME)
 REGISTRY=
@@ -158,3 +158,12 @@ migrate-up: check-SVC_NAME ## run migration up
 .PHONY: migrate-down
 migrate-down: check-SVC_NAME check-N ## run migration down
 	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migration/$(SVC_NAME) down $(N)
+
+## deployments
+INCREMENT := PATCH
+
+.PHONY: release
+release: ## release this application
+	@cz bump --changelog --yes -s --increment=$(INCREMENT)
+	@git push && git push --tags
+	@echo "Version: $(VERSION) to $(DEPLOY_TO)"
