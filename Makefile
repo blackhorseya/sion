@@ -7,7 +7,9 @@ VERSION := $(shell git describe --tags --always)
 DEPLOY_TO=uat
 NS=$(DEPLOY_TO)-$(PROJECT_NAME)
 REGISTRY=
-HELM_REPO_NAME=
+
+## env for helm
+HELM_REPO_NAME := sean-side
 
 target_list_of_package = package-$(PROJECT_NAME)
 target_list_of_push_chart = push-chart-$(PROJECT_NAME)
@@ -113,21 +115,6 @@ gen-mocks: ## generate mocks code via mockery
 gen-build: ## run gazelle using bazel
 	@bazel run //:gazelle
 
-.PHONY: package-all
-package-all: $(target_list_of_package) ## package all helm charts
-
-.PHONY: $(target_list_of_package)
-$(target_list_of_package): ## package helm chart of application
-	@helm package ./app/helm/$(subst package-,,$@) -d ./charts
-
-.PHONY: push-chart-all
-push-chart-all: $(target_list_of_push_chart) ## push all helm charts
-
-.PHONY: $(target_list_of_push_chart)
-$(target_list_of_push_chart): ## push helm chart of application
-	@helm s3 push --force ./charts/$(subst push-chart-,,$@)-* $(HELM_REPO_NAME)
-	@echo Successfully pushed $(subst push-chart-,,$@) chart
-
 .PHONY: deploy
 deploy: check-SVC_NAME check-SVC_ADAPTER check-VERSION check-DEPLOY_TO ## deploy the application via helm 3
 	@helm -n $(NS) upgrade --install $(DEPLOY_TO)-$(APP_NAME) \
@@ -158,6 +145,25 @@ migrate-up: check-SVC_NAME ## run migration up
 .PHONY: migrate-down
 migrate-down: check-SVC_NAME check-N ## run migration down
 	@migrate -database $(DB_URI) -path $(shell pwd)/scripts/migration/$(SVC_NAME) down $(N)
+
+## helm
+.PHONY: lint-helm
+lint-helm: ## lint helm chart
+	@helm lint deployments/charts/*
+
+.PHONY: add-helm-repo
+add-helm-repo: ## add helm repo
+	@helm repo add --no-update $(HELM_REPO_NAME) gs://sean-helm-charts/charts
+	@helm repo update $(HELM_REPO_NAME)
+
+.PHONY: package-helm
+package-helm: ## package helm chart
+	@helm package deployments/charts/* --destination deployments/charts
+
+.PHONY: push-helm
+push-helm: ## push helm chart
+	@helm gcs push --force ./deployments/charts/*.tgz $(HELM_REPO_NAME)
+	@helm repo update $(HELM_REPO_NAME)
 
 ## deployments
 INCREMENT := PATCH
