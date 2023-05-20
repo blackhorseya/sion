@@ -10,3 +10,11 @@ resource "cloudflare_record" "prod" {
   value   = var.ip
   proxied = true
 }
+
+resource "cloudflare_record" "uat" {
+  name    = "uat-irent"
+  type    = "A"
+  zone_id = cloudflare_zone.this.id
+  value   = var.ip
+  proxied = true
+}
