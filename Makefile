@@ -80,7 +80,7 @@ push-image: check-SVC_NAME check-SVC_ADAPTER check-VERSION ## push image to regi
 	@docker push $(REGISTRY)/$(APP_NAME):$(VERSION)
 
 .PHONY: gen
-gen: gen-pb gen-wire gen-mocks gen-swagger ## generate all generate commands
+gen: gen-pb gen-wire gen-go gen-swagger ## generate all generate commands
 
 .PHONY: gen-go
 gen-go: ## generate go code
@@ -110,10 +110,6 @@ gen-pb: ## generate protobuf messages and services
 	## Starting inject tags
 	@protoc-go-inject-tag -input="./pkg/entity/domain/*/model/*.pb.go"
 	@echo Successfully injected tags
-
-.PHONY: gen-mocks
-gen-mocks: ## generate mocks code via mockery
-	@go generate -tags=wireinject -x ./...
 
 .PHONY: gen-build
 gen-build: ## run gazelle using bazel
