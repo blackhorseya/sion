@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "irent.fullname" . }}-app-restful
+  labels:
+    app: {{ include "irent.name" . }}-app-restful
+    {{- include "irent.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "irent.name" . }}-app-restful
+      {{- include "irent.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "irent.name" . }}-app-restful
+        {{- include "irent.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "irent.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.restful.app.image.repository }}:{{ .Values.restful.app.image.tag | default .Values.version }}"
+          imagePullPolicy: {{ .Values.restful.app.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.restful.app.service.port }}
+              protocol: TCP
+          {{- if .Values.restful.app.startupProbe.enabled }}
+          startupProbe: {{- omit .Values.restful.app.startupProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /api/health
+              port: http
+          {{- end }}
+          {{- if .Values.restful.app.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.restful.app.livenessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /api/health
+              port: http
+          {{- end }}
+          {{- if .Values.restful.app.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.restful.app.readinessProbe "enabled" | toYaml | nindent 12 }}
+            httpGet:
+              path: /api/health
+              port: http
+          {{- end }}
+          resources:
+            {{- toYaml .Values.restful.app.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "irent.fullname" . }}-app-restful
+  labels:
+    app: {{ include "irent.name" . }}-app-restful
+    {{- include "irent.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.restful.app.service.type }}
+  ports:
+    - port: {{ .Values.restful.app.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ include "irent.name" . }}-app-restful
+    {{- include "irent.selectorLabels" . | nindent 4 }}
