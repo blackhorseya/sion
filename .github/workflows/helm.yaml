@@ -58,7 +58,7 @@ jobs:
           project_id: sean-side
 
       - name: Helm add plugin
-        run: helm plugin install https://github.com/hayorov/helm-gcs.git
+        run: helm plugin install https://github.com/hayorov/helm-gcs.git --version=0.4.0
 
       - name: Helm repo add
         run: make add-helm-repo
