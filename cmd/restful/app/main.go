@@ -21,5 +21,5 @@ import (
 // @in header
 // @name Authorization
 func main() {
-	fmt.Println("I'm a restful api")
+	fmt.Println("I'm a restful api for app")
 }

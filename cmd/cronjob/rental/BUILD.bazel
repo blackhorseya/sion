@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "rental_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/blackhorseya/irent/cmd/cronjob/rental",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "rental",
+    embed = [":rental_lib"],
+    visibility = ["//visibility:public"],
+)
