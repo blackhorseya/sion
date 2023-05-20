@@ -1,18 +1,12 @@
-PROJECT_NAME=irent
-SVC_NAME := app
-SVC_ADAPTER := restful
-APP_NAME=$(PROJECT_NAME)-$(SVC_NAME)-$(SVC_ADAPTER)
-MAIN_FOLDER='./cmd/$(SVC_ADAPTER)/$(SVC_NAME)'
+## env for project
+PROJECT_NAME := irent
 VERSION := $(shell git describe --tags --always)
-DEPLOY_TO=uat
-NS=$(DEPLOY_TO)-$(PROJECT_NAME)
-REGISTRY=
 
 ## env for helm
 HELM_REPO_NAME := sean-side
-
-target_list_of_package = package-$(PROJECT_NAME)
-target_list_of_push_chart = push-chart-$(PROJECT_NAME)
+RELEASE_NAME := $(DEPLOY_TO)-$(PROJECT_NAME)
+NS := $(PROJECT_NAME)
+DEPLOY_TO := uat
 
 .PHONY: check-%
 check-%: ## check environment variable is exists
@@ -146,6 +140,16 @@ package-helm: ## package helm chart
 push-helm: ## push helm chart
 	@helm gcs push --force ./deployments/charts/*.tgz $(HELM_REPO_NAME)
 	@helm repo update $(HELM_REPO_NAME)
+
+.PHONY: upgrade-helm
+upgrade-helm: ## upgrade helm chart
+	@echo "Upgrading $(RELEASE_NAME) to $(VERSION)"
+	@echo "Using config: ./deployments/configs/$(DEPLOY_TO)/values.yaml"
+	@helm upgrade $(RELEASE_NAME) $(HELM_REPO_NAME)/$(PROJECT_NAME) \
+	--install --namespace $(NS) \
+	--history-max 3 \
+	--values ./deployments/configs/$(DEPLOY_TO)/values.yaml \
+	--set version=$(VERSION)
 
 ## deployments
 INCREMENT := PATCH
