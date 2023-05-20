@@ -92,7 +92,7 @@ gen-wire: ## generate wire code
 
 .PHONY: gen-swagger
 gen-swagger: ## generate swagger spec
-	@swag init -q --dir ./cmd/account/restful,./cmd/rental/restful,./cmd/order/restful,./ -o ./api/docs
+	@swag init -q --dir ./cmd/restful/app,./ -o ./api/docs
 	## Generated swagger spec
 
 .PHONY: gen-pb

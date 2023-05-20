@@ -1,14 +1,5 @@
 basePath: /api
 definitions:
-  cars.listCarsResp:
-    properties:
-      list:
-        items:
-          $ref: '#/definitions/model.Car'
-        type: array
-      total:
-        type: integer
-    type: object
   er.Error:
     properties:
       code:
@@ -55,7 +46,19 @@ definitions:
         type: string
       seat:
         type: integer
+      status:
+        $ref: '#/definitions/model.CarStatus'
     type: object
+  model.CarStatus:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - CarStatus_CAR_STATUS_UNSPECIFIED
+    - CarStatus_CAR_STATUS_AVAILABLE
+    - CarStatus_CAR_STATUS_INUSE
   model.Lease:
     properties:
       car_id:
@@ -115,15 +118,114 @@ info:
     name: GPL-3.0
     url: https://spdx.org/licenses/GPL-3.0-only.html
   title: IRent API
-  version: 0.0.1
+  version: 0.1.00
 paths:
-  /v1/arrears/{id}:
+  /accounts/{id}/orders:
+    post:
+      consumes:
+      - application/json
+      description: book the car
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: book car request
+        in: body
+        name: car
+        required: true
+        schema:
+          $ref: '#/definitions/orders.bookCarRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Lease'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/er.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Book the car
+      tags:
+      - Orders
+  /accounts/{id}/orders/{order_id}:
+    delete:
+      consumes:
+      - application/json
+      description: cancel the order by id
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: order id
+        in: path
+        name: order_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/er.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Cancel the order by id
+      tags:
+      - Orders
+  /v1/accounts/{id}/arrears:
     get:
       consumes:
       - application/json
-      description: Get arrears by user
+      description: Get arrears list
       parameters:
-      - description: ID of user
+      - description: user id
         in: path
         name: id
         required: true
@@ -140,19 +242,90 @@ paths:
                 data:
                   $ref: '#/definitions/model.Arrears'
               type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/er.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/er.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/er.Error'
       security:
       - ApiKeyAuth: []
-      summary: Get arrears by user
+      summary: Get arrears list
       tags:
       - Billing
+  /v1/accounts/{id}/orders:
+    get:
+      consumes:
+      - application/json
+      description: List orders
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: 1
+        description: page number
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 10
+        description: page size
+        in: query
+        maximum: 100
+        minimum: 1
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Lease'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/er.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/er.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/er.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/er.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: List orders
+      tags:
+      - Orders
   /v1/auth/login:
     post:
       consumes:
-      - application/x-www-form-urlencoded
+      - application/json
       description: Login
       parameters:
       - description: user id
@@ -187,7 +360,7 @@ paths:
             $ref: '#/definitions/er.Error'
       summary: Login
       tags:
-      - Account
+      - Auth
   /v1/auth/me:
     get:
       consumes:
@@ -209,6 +382,10 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/er.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/er.Error'
         "500":
           description: Internal Server Error
           schema:
@@ -217,7 +394,7 @@ paths:
       - ApiKeyAuth: []
       summary: Get me profile
       tags:
-      - Account
+      - Auth
   /v1/cars:
     get:
       consumes:
@@ -227,11 +404,14 @@ paths:
       - default: 1
         description: page
         in: query
+        minimum: 1
         name: page
         type: integer
-      - default: 5
+      - default: 10
         description: size
         in: query
+        maximum: 100
+        minimum: 1
         name: size
         type: integer
       - default: 0
@@ -249,12 +429,18 @@ paths:
       responses:
         "200":
           description: OK
+          headers:
+            x-total-count:
+              description: total count
+              type: int
           schema:
             allOf:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/cars.listCarsResp'
+                  items:
+                    $ref: '#/definitions/model.Car'
+                  type: array
               type: object
         "400":
           description: Bad Request
@@ -266,111 +452,7 @@ paths:
             $ref: '#/definitions/er.Error'
       summary: List cars
       tags:
-      - Rental
-  /v1/orders:
-    get:
-      consumes:
-      - application/json
-      description: List all lease
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/model.Lease'
-                  type: array
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/er.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/er.Error'
-      security:
-      - ApiKeyAuth: []
-      summary: List all lease
-      tags:
-      - Orders
-    post:
-      consumes:
-      - application/json
-      description: Book a car
-      parameters:
-      - description: information of car
-        in: body
-        name: car
-        required: true
-        schema:
-          $ref: '#/definitions/orders.bookCarRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.Lease'
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/er.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/er.Error'
-      security:
-      - ApiKeyAuth: []
-      summary: Book a car
-      tags:
-      - Orders
-  /v1/orders/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Cancel a booking by id
-      parameters:
-      - description: ID of booking
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  type: string
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/er.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/er.Error'
-      security:
-      - ApiKeyAuth: []
-      summary: Cancel a booking by id
-      tags:
-      - Orders
+      - Cars
 securityDefinitions:
   ApiKeyAuth:
     in: header

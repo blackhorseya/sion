@@ -1,0 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "auth",
+    srcs = [
+        "api.go",
+        "get_me.go",
+        "post_login.go",
+    ],
+    importpath = "github.com/blackhorseya/irent/internal/adapter/restful/v1/auth",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//pkg/response",
+        "@com_github_gin_gonic_gin//:gin",
+    ],
+)
