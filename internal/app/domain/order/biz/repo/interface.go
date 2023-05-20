@@ -1,3 +1,5 @@
+//go:generate mockgen -destination=./mock_${GOFILE} -package=repo -source=${GOFILE}
+
 package repo
 
 import (
@@ -9,8 +11,6 @@ import (
 )
 
 // IRepo declare account repository functions
-//
-//go:generate mockery --all --inpackage
 type IRepo interface {
 	// FetchArrears serve caller to fetch arrears via api
 	FetchArrears(ctx contextx.Contextx, from *am.Profile, target *am.Profile) (records []*om.ArrearsRecord, err error)

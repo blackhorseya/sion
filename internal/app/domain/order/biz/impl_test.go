@@ -11,8 +11,8 @@ import (
 	om "github.com/blackhorseya/irent/pkg/entity/domain/order/model"
 	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
 	"github.com/blackhorseya/irent/test/testdata"
+	"github.com/golang/mock/gomock"
 	"github.com/pkg/errors"
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
 )
@@ -20,18 +20,20 @@ import (
 type SuiteTester struct {
 	suite.Suite
 	logger *zap.Logger
+	ctrl   *gomock.Controller
 	repo   *repo.MockIRepo
 	biz    ob.IBiz
 }
 
 func (s *SuiteTester) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
-	s.repo = new(repo.MockIRepo)
+	s.ctrl = gomock.NewController(s.T())
+	s.repo = repo.NewMockIRepo(s.ctrl)
 	s.biz = CreateBiz(s.repo)
 }
 
-func (s *SuiteTester) AssertExpectations(t *testing.T) {
-	s.repo.AssertExpectations(t)
+func (s *SuiteTester) TearDownTest() {
+	s.ctrl.Finish()
 }
 
 func TestAll(t *testing.T) {
@@ -65,7 +67,7 @@ func (s *SuiteTester) Test_impl_GetArrears() {
 		{
 			name: "fetch then error",
 			args: args{from: testdata.Profile1, target: testdata.Profile1, mock: func() {
-				s.repo.On("FetchArrears", mock.Anything, testdata.Profile1, testdata.Profile1).Return(nil, errors.New("error")).Once()
+				s.repo.EXPECT().FetchArrears(gomock.Any(), testdata.Profile1, testdata.Profile1).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantInfo: nil,
 			wantErr:  true,
@@ -73,7 +75,7 @@ func (s *SuiteTester) Test_impl_GetArrears() {
 		{
 			name: "ok",
 			args: args{from: testdata.Profile1, target: testdata.Profile1, mock: func() {
-				s.repo.On("FetchArrears", mock.Anything, testdata.Profile1, testdata.Profile1).Return(nil, nil).Once()
+				s.repo.EXPECT().FetchArrears(gomock.Any(), testdata.Profile1, testdata.Profile1).Return(nil, nil).Times(1)
 			}},
 			wantInfo: nil,
 			wantErr:  false,
@@ -93,8 +95,6 @@ func (s *SuiteTester) Test_impl_GetArrears() {
 			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
 				t.Errorf("GetArrears() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
-
-			s.AssertExpectations(t)
 		})
 	}
 }
@@ -126,7 +126,7 @@ func (s *SuiteTester) Test_impl_BookRental() {
 		{
 			name: "book then error",
 			args: args{from: testdata.Profile1, target: testdata.Car1, mock: func() {
-				s.repo.On("BookCar", mock.Anything, testdata.Profile1, testdata.Car1).Return(nil, errors.New("error")).Once()
+				s.repo.EXPECT().BookCar(gomock.Any(), testdata.Profile1, testdata.Car1).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantInfo: nil,
 			wantErr:  true,
@@ -134,7 +134,7 @@ func (s *SuiteTester) Test_impl_BookRental() {
 		{
 			name: "ok",
 			args: args{from: testdata.Profile1, target: testdata.Car1, mock: func() {
-				s.repo.On("BookCar", mock.Anything, testdata.Profile1, testdata.Car1).Return(nil, nil).Once()
+				s.repo.EXPECT().BookCar(gomock.Any(), testdata.Profile1, testdata.Car1).Return(nil, nil).Times(1)
 			}},
 			wantInfo: nil,
 			wantErr:  false,
@@ -154,8 +154,6 @@ func (s *SuiteTester) Test_impl_BookRental() {
 			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
 				t.Errorf("BookRental() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
-
-			s.AssertExpectations(t)
 		})
 	}
 }
@@ -184,14 +182,14 @@ func (s *SuiteTester) Test_impl_CancelLease() {
 		{
 			name: "cancel then error",
 			args: args{from: testdata.Profile1, target: testdata.Lease1, mock: func() {
-				s.repo.On("CancelBooking", mock.Anything, testdata.Profile1, testdata.Lease1).Return(errors.New("error")).Once()
+				s.repo.EXPECT().CancelBooking(gomock.Any(), testdata.Profile1, testdata.Lease1).Return(errors.New("error")).Times(1)
 			}},
 			wantErr: true,
 		},
 		{
 			name: "ok",
 			args: args{from: testdata.Profile1, target: testdata.Lease1, mock: func() {
-				s.repo.On("CancelBooking", mock.Anything, testdata.Profile1, testdata.Lease1).Return(nil).Once()
+				s.repo.EXPECT().CancelBooking(gomock.Any(), testdata.Profile1, testdata.Lease1).Return(nil).Times(1)
 			}},
 			wantErr: false,
 		},
@@ -205,8 +203,6 @@ func (s *SuiteTester) Test_impl_CancelLease() {
 			if err := s.biz.CancelLease(contextx.BackgroundWithLogger(s.logger), tt.args.from, tt.args.target); (err != nil) != tt.wantErr {
 				t.Errorf("CancelLease() error = %v, wantErr %v", err, tt.wantErr)
 			}
-
-			s.AssertExpectations(t)
 		})
 	}
 }
@@ -231,7 +227,7 @@ func (s *SuiteTester) Test_impl_ListLease() {
 		{
 			name: "query bookings then error",
 			args: args{from: testdata.Profile1, mock: func() {
-				s.repo.On("QueryBookings", mock.Anything, testdata.Profile1).Return(nil, errors.New("error")).Once()
+				s.repo.EXPECT().QueryBookings(gomock.Any(), testdata.Profile1).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantOrders: nil,
 			wantErr:    true,
@@ -239,7 +235,7 @@ func (s *SuiteTester) Test_impl_ListLease() {
 		{
 			name: "ok",
 			args: args{from: testdata.Profile1, mock: func() {
-				s.repo.On("QueryBookings", mock.Anything, testdata.Profile1).Return(nil, nil).Once()
+				s.repo.EXPECT().QueryBookings(gomock.Any(), testdata.Profile1).Return(nil, nil).Times(1)
 			}},
 			wantOrders: nil,
 			wantErr:    false,
@@ -259,8 +255,6 @@ func (s *SuiteTester) Test_impl_ListLease() {
 			if !reflect.DeepEqual(gotOrders, tt.wantOrders) {
 				t.Errorf("ListLease() gotOrders = %v, want %v", gotOrders, tt.wantOrders)
 			}
-
-			s.AssertExpectations(t)
 		})
 	}
 }

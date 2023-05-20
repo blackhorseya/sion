@@ -1,3 +1,5 @@
+//go:generate mockgen -destination=./mock_${GOFILE} -package=repo -source=${GOFILE}
+
 package repo
 
 import (
@@ -7,8 +9,6 @@ import (
 )
 
 // IRepo declare account repository functions
-//
-//go:generate mockery --all --inpackage
 type IRepo interface {
 	// Login serve caller to log in the system
 	Login(ctx contextx.Contextx, id, password string) (info *am.Profile, err error)

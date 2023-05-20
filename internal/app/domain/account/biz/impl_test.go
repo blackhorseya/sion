@@ -9,8 +9,8 @@ import (
 	ab "github.com/blackhorseya/irent/pkg/entity/domain/account/biz"
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
 	"github.com/blackhorseya/irent/test/testdata"
+	"github.com/golang/mock/gomock"
 	"github.com/pkg/errors"
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
 )
@@ -18,82 +18,24 @@ import (
 type SuiteTester struct {
 	suite.Suite
 	logger *zap.Logger
+	ctrl   *gomock.Controller
 	repo   *repo.MockIRepo
 	biz    ab.IBiz
 }
 
 func (s *SuiteTester) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
-	s.repo = new(repo.MockIRepo)
+	s.ctrl = gomock.NewController(s.T())
+	s.repo = repo.NewMockIRepo(s.ctrl)
 	s.biz = CreateBiz(s.repo)
 }
 
-func (s *SuiteTester) AssertExpectations(t *testing.T) {
-	s.repo.AssertExpectations(t)
+func (s *SuiteTester) TearDownTest() {
+	s.ctrl.Finish()
 }
 
 func TestAll(t *testing.T) {
 	suite.Run(t, new(SuiteTester))
-}
-
-func (s *SuiteTester) Test_impl_Readiness() {
-	type args struct {
-		mock func()
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		{
-			name:    "ok",
-			args:    args{},
-			wantErr: false,
-		},
-	}
-	for _, tt := range tests {
-		s.T().Run(tt.name, func(t *testing.T) {
-			if tt.args.mock != nil {
-				tt.args.mock()
-			}
-
-			if err := s.biz.Readiness(contextx.BackgroundWithLogger(s.logger)); (err != nil) != tt.wantErr {
-				t.Errorf("Readiness() error = %v, wantErr %v", err, tt.wantErr)
-			}
-
-			s.AssertExpectations(t)
-		})
-	}
-}
-
-func (s *SuiteTester) Test_impl_Liveness() {
-	type args struct {
-		mock func()
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		{
-			name:    "ok",
-			args:    args{},
-			wantErr: false,
-		},
-	}
-	for _, tt := range tests {
-		s.T().Run(tt.name, func(t *testing.T) {
-			if tt.args.mock != nil {
-				tt.args.mock()
-			}
-
-			if err := s.biz.Liveness(contextx.BackgroundWithLogger(s.logger)); (err != nil) != tt.wantErr {
-				t.Errorf("Liveness() error = %v, wantErr %v", err, tt.wantErr)
-			}
-
-			s.AssertExpectations(t)
-		})
-	}
 }
 
 func (s *SuiteTester) Test_impl_Login() {
@@ -123,7 +65,7 @@ func (s *SuiteTester) Test_impl_Login() {
 		{
 			name: "login then error",
 			args: args{id: "id", password: "password", mock: func() {
-				s.repo.On("Login", mock.Anything, "id", encryptPassword("password")).Return(nil, errors.New("error")).Once()
+				s.repo.EXPECT().Login(gomock.Any(), "id", encryptPassword("password")).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantInfo: nil,
 			wantErr:  true,
@@ -131,7 +73,7 @@ func (s *SuiteTester) Test_impl_Login() {
 		{
 			name: "ok",
 			args: args{id: "id", password: "password", mock: func() {
-				s.repo.On("Login", mock.Anything, "id", encryptPassword("password")).Return(testdata.Profile1, nil).Once()
+				s.repo.EXPECT().Login(gomock.Any(), "id", encryptPassword("password")).Return(testdata.Profile1, nil).Times(1)
 			}},
 			wantInfo: testdata.Profile1,
 			wantErr:  false,
@@ -151,8 +93,6 @@ func (s *SuiteTester) Test_impl_Login() {
 			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
 				t.Errorf("Login() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
-
-			s.AssertExpectations(t)
 		})
 	}
 }
@@ -177,7 +117,7 @@ func (s *SuiteTester) Test_impl_GetByAccessToken() {
 		{
 			name: "get member status then error",
 			args: args{token: "token", mock: func() {
-				s.repo.On("GetMemberStatus", mock.Anything, "token").Return(nil, errors.New("error")).Once()
+				s.repo.EXPECT().GetMemberStatus(gomock.Any(), "token").Return(nil, errors.New("error")).Times(1)
 			}},
 			wantInfo: nil,
 			wantErr:  true,
@@ -185,7 +125,7 @@ func (s *SuiteTester) Test_impl_GetByAccessToken() {
 		{
 			name: "ok",
 			args: args{token: "token", mock: func() {
-				s.repo.On("GetMemberStatus", mock.Anything, "token").Return(testdata.Profile1, nil).Once()
+				s.repo.EXPECT().GetMemberStatus(gomock.Any(), "token").Return(testdata.Profile1, nil).Times(1)
 			}},
 			wantInfo: testdata.Profile1,
 			wantErr:  false,
@@ -205,8 +145,6 @@ func (s *SuiteTester) Test_impl_GetByAccessToken() {
 			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
 				t.Errorf("GetByAccessToken() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
-
-			s.AssertExpectations(t)
 		})
 	}
 }

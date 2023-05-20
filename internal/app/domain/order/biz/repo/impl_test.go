@@ -10,8 +10,8 @@ import (
 	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
 	"github.com/blackhorseya/irent/pkg/httpx"
 	"github.com/blackhorseya/irent/test/testdata"
+	"github.com/golang/mock/gomock"
 	"github.com/pkg/errors"
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
 )
@@ -19,19 +19,21 @@ import (
 type SuiteTester struct {
 	suite.Suite
 	logger     *zap.Logger
+	ctrl       *gomock.Controller
 	httpclient *httpx.MockClient
 	repo       IRepo
 }
 
 func (s *SuiteTester) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
-	s.httpclient = new(httpx.MockClient)
+	s.ctrl = gomock.NewController(s.T())
+	s.httpclient = httpx.NewMockClient(s.ctrl)
 	opts := &Options{Endpoint: "http://localhost", AppVersion: "1.0.0"}
 	s.repo = CreateRepo(opts, s.httpclient)
 }
 
-func (s *SuiteTester) AssertExpectations(t *testing.T) {
-	s.httpclient.AssertExpectations(t)
+func (s *SuiteTester) TearDownTest() {
+	s.ctrl.Finish()
 }
 
 func TestAll(t *testing.T) {
@@ -53,7 +55,7 @@ func (s *SuiteTester) Test_impl_FetchArrears() {
 		{
 			name: "http do return error",
 			args: args{from: testdata.Profile1, target: testdata.Profile1, mock: func() {
-				s.httpclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
+				s.httpclient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantRecords: nil,
 			wantErr:     true,
@@ -73,8 +75,6 @@ func (s *SuiteTester) Test_impl_FetchArrears() {
 			if !reflect.DeepEqual(gotRecords, tt.wantRecords) {
 				t.Errorf("FetchArrears() gotRecords = %v, want %v", gotRecords, tt.wantRecords)
 			}
-
-			s.AssertExpectations(t)
 		})
 	}
 }
@@ -94,7 +94,7 @@ func (s *SuiteTester) Test_impl_BookCar() {
 		{
 			name: "http do then error",
 			args: args{from: testdata.Profile1, target: testdata.Car1, mock: func() {
-				s.httpclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
+				s.httpclient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantInfo: nil,
 			wantErr:  true,
@@ -114,8 +114,6 @@ func (s *SuiteTester) Test_impl_BookCar() {
 			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
 				t.Errorf("BookCar() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
-
-			s.AssertExpectations(t)
 		})
 	}
 }
@@ -134,7 +132,7 @@ func (s *SuiteTester) Test_impl_CancelBooking() {
 		{
 			name: "http do then error",
 			args: args{from: testdata.Profile1, target: testdata.Lease1, mock: func() {
-				s.httpclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
+				s.httpclient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantErr: true,
 		},
@@ -148,8 +146,6 @@ func (s *SuiteTester) Test_impl_CancelBooking() {
 			if err := s.repo.CancelBooking(contextx.BackgroundWithLogger(s.logger), tt.args.from, tt.args.target); (err != nil) != tt.wantErr {
 				t.Errorf("CancelBooking() error = %v, wantErr %v", err, tt.wantErr)
 			}
-
-			s.AssertExpectations(t)
 		})
 	}
 }

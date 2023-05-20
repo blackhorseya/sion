@@ -9,8 +9,8 @@ import (
 	rb "github.com/blackhorseya/irent/pkg/entity/domain/rental/biz"
 	rm "github.com/blackhorseya/irent/pkg/entity/domain/rental/model"
 	"github.com/blackhorseya/irent/test/testdata"
+	"github.com/golang/mock/gomock"
 	"github.com/pkg/errors"
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
 )
@@ -18,18 +18,20 @@ import (
 type SuiteTester struct {
 	suite.Suite
 	logger *zap.Logger
+	ctrl   *gomock.Controller
 	repo   *repo.MockIRepo
 	biz    rb.IBiz
 }
 
 func (s *SuiteTester) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
-	s.repo = new(repo.MockIRepo)
+	s.ctrl = gomock.NewController(s.T())
+	s.repo = repo.NewMockIRepo(s.ctrl)
 	s.biz = CreateBiz(s.repo)
 }
 
-func (s *SuiteTester) assertExpectation(t *testing.T) {
-	s.repo.AssertExpectations(t)
+func (s *SuiteTester) TearDownTest() {
+	s.ctrl.Finish()
 }
 
 func TestAll(t *testing.T) {
@@ -51,7 +53,7 @@ func (s *SuiteTester) Test_impl_ListCars() {
 		{
 			name: "invalid top num then error",
 			args: args{condition: rb.QueryCarCondition{TopNum: 10}, mock: func() {
-				s.repo.On("ListCars", mock.Anything).Return(nil, errors.New("error")).Once()
+				s.repo.EXPECT().ListCars(gomock.Any()).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantInfo:  nil,
 			wantTotal: 0,
@@ -60,7 +62,7 @@ func (s *SuiteTester) Test_impl_ListCars() {
 		{
 			name: "not found any cars then nil",
 			args: args{condition: rb.QueryCarCondition{TopNum: 10}, mock: func() {
-				s.repo.On("ListCars", mock.Anything).Return(nil, nil).Once()
+				s.repo.EXPECT().ListCars(gomock.Any()).Return(nil, nil).Times(1)
 			}},
 			wantInfo:  nil,
 			wantTotal: 0,
@@ -84,8 +86,6 @@ func (s *SuiteTester) Test_impl_ListCars() {
 			if gotTotal != tt.wantTotal {
 				t.Errorf("ListCars() gotTotal = %v, want %v", gotTotal, tt.wantTotal)
 			}
-
-			s.assertExpectation(t)
 		})
 	}
 }
@@ -103,7 +103,7 @@ func (s *SuiteTester) Test_impl_UpdateInfoCars() {
 		{
 			name: "fetch all cars then error",
 			args: args{mock: func() {
-				s.repo.On("FetchAvailableCars", mock.Anything).Return(nil, errors.New("error")).Once()
+				s.repo.EXPECT().FetchAvailableCars(gomock.Any()).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantCars: nil,
 			wantErr:  true,
@@ -111,9 +111,9 @@ func (s *SuiteTester) Test_impl_UpdateInfoCars() {
 		{
 			name: "update status all cars then error",
 			args: args{mock: func() {
-				s.repo.On("FetchAvailableCars", mock.Anything).Return(nil, nil).Once()
+				s.repo.EXPECT().FetchAvailableCars(gomock.Any()).Return(nil, nil).Times(1)
 
-				s.repo.On("UpdateStatusAllCars", mock.Anything, rm.CarStatus_CAR_STATUS_INUSE).Return(errors.New("error")).Once()
+				s.repo.EXPECT().UpdateStatusAllCars(gomock.Any(), rm.CarStatus_CAR_STATUS_INUSE).Return(errors.New("error")).Times(1)
 			}},
 			wantCars: nil,
 			wantErr:  true,
@@ -121,11 +121,11 @@ func (s *SuiteTester) Test_impl_UpdateInfoCars() {
 		{
 			name: "for loop each car to upsert then ok",
 			args: args{mock: func() {
-				s.repo.On("FetchAvailableCars", mock.Anything).Return([]*rm.Car{testdata.Car1}, nil).Once()
+				s.repo.EXPECT().FetchAvailableCars(gomock.Any()).Return([]*rm.Car{testdata.Car1}, nil).Times(1)
 
-				s.repo.On("UpdateStatusAllCars", mock.Anything, rm.CarStatus_CAR_STATUS_INUSE).Return(nil).Once()
+				s.repo.EXPECT().UpdateStatusAllCars(gomock.Any(), rm.CarStatus_CAR_STATUS_INUSE).Return(nil).Times(1)
 
-				s.repo.On("UpsertStatusCar", mock.Anything, testdata.Car1).Return(errors.New("error")).Once()
+				s.repo.EXPECT().UpsertStatusCar(gomock.Any(), testdata.Car1).Return(errors.New("error")).Times(1)
 			}},
 			wantCars: []*rm.Car{testdata.Car1},
 			wantErr:  false,
@@ -145,8 +145,6 @@ func (s *SuiteTester) Test_impl_UpdateInfoCars() {
 			if !reflect.DeepEqual(gotCars, tt.wantCars) {
 				t.Errorf("UpdateInfoCars() gotCars = %v, want %v", gotCars, tt.wantCars)
 			}
-
-			s.assertExpectation(t)
 		})
 	}
 }

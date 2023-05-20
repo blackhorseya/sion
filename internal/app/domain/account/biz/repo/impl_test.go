@@ -11,8 +11,8 @@ import (
 	"github.com/blackhorseya/irent/pkg/contextx"
 	am "github.com/blackhorseya/irent/pkg/entity/domain/account/model"
 	"github.com/blackhorseya/irent/pkg/httpx"
+	"github.com/golang/mock/gomock"
 	"github.com/pkg/errors"
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
 )
@@ -20,19 +20,21 @@ import (
 type SuiteTester struct {
 	suite.Suite
 	logger     *zap.Logger
+	ctrl       *gomock.Controller
 	httpclient *httpx.MockClient
 	repo       IRepo
 }
 
 func (s *SuiteTester) SetupTest() {
 	s.logger, _ = zap.NewDevelopment()
-	s.httpclient = new(httpx.MockClient)
+	s.ctrl = gomock.NewController(s.T())
+	s.httpclient = httpx.NewMockClient(s.ctrl)
 	opts := &Options{Endpoint: "http://localhost", AppVersion: "1.0.0"}
 	s.repo = CreateRepo(opts, s.httpclient)
 }
 
-func (s *SuiteTester) AssertExpectations(t *testing.T) {
-	s.httpclient.AssertExpectations(t)
+func (s *SuiteTester) TearDownTest() {
+	s.ctrl.Finish()
 }
 
 func TestAll(t *testing.T) {
@@ -54,7 +56,7 @@ func (s *SuiteTester) Test_impl_Login() {
 		{
 			name: "do request then error",
 			args: args{id: "id", password: "password", mock: func() {
-				s.httpclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
+				s.httpclient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantInfo: nil,
 			wantErr:  true,
@@ -66,10 +68,10 @@ func (s *SuiteTester) Test_impl_Login() {
 					ErrorMessage: "error",
 				})
 				body := io.NopCloser(bytes.NewReader(payload))
-				s.httpclient.On("Do", mock.Anything).Return(&http.Response{
+				s.httpclient.EXPECT().Do(gomock.Any()).Return(&http.Response{
 					StatusCode: http.StatusOK,
 					Body:       body,
-				}, nil).Once()
+				}, nil).Times(1)
 			}},
 			wantInfo: nil,
 			wantErr:  true,
@@ -85,10 +87,10 @@ func (s *SuiteTester) Test_impl_Login() {
 					ErrorMessage: "Success",
 				})
 				body := io.NopCloser(bytes.NewReader(payload))
-				s.httpclient.On("Do", mock.Anything).Return(&http.Response{
+				s.httpclient.EXPECT().Do(gomock.Any()).Return(&http.Response{
 					StatusCode: http.StatusOK,
 					Body:       body,
-				}, nil).Once()
+				}, nil).Times(1)
 			}},
 			wantInfo: &am.Profile{},
 			wantErr:  false,
@@ -108,8 +110,6 @@ func (s *SuiteTester) Test_impl_Login() {
 			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
 				t.Errorf("Login() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
-
-			s.AssertExpectations(t)
 		})
 	}
 }
@@ -128,7 +128,7 @@ func (s *SuiteTester) Test_impl_GetMemberStatus() {
 		{
 			name: "do request then error",
 			args: args{token: "token", mock: func() {
-				s.httpclient.On("Do", mock.Anything).Return(nil, errors.New("error")).Once()
+				s.httpclient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("error")).Times(1)
 			}},
 			wantInfo: nil,
 			wantErr:  true,
@@ -140,10 +140,10 @@ func (s *SuiteTester) Test_impl_GetMemberStatus() {
 					ErrorMessage: "error",
 				})
 				body := io.NopCloser(bytes.NewReader(payload))
-				s.httpclient.On("Do", mock.Anything).Return(&http.Response{
+				s.httpclient.EXPECT().Do(gomock.Any()).Return(&http.Response{
 					StatusCode: http.StatusOK,
 					Body:       body,
-				}, nil).Once()
+				}, nil).Times(1)
 			}},
 			wantInfo: nil,
 			wantErr:  true,
@@ -155,10 +155,10 @@ func (s *SuiteTester) Test_impl_GetMemberStatus() {
 					ErrorMessage: "Success",
 				})
 				body := io.NopCloser(bytes.NewReader(payload))
-				s.httpclient.On("Do", mock.Anything).Return(&http.Response{
+				s.httpclient.EXPECT().Do(gomock.Any()).Return(&http.Response{
 					StatusCode: http.StatusOK,
 					Body:       body,
-				}, nil).Once()
+				}, nil).Times(1)
 			}},
 			wantInfo: &am.Profile{AccessToken: "token"},
 			wantErr:  false,
@@ -178,8 +178,6 @@ func (s *SuiteTester) Test_impl_GetMemberStatus() {
 			if !reflect.DeepEqual(gotInfo, tt.wantInfo) {
 				t.Errorf("GetMemberStatus() gotInfo = %v, want %v", gotInfo, tt.wantInfo)
 			}
-
-			s.AssertExpectations(t)
 		})
 	}
 }
