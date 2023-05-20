@@ -34,6 +34,8 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.restful.app.image.repository }}:{{ .Values.restful.app.image.tag | default .Values.version }}"
           imagePullPolicy: {{ .Values.restful.app.image.pullPolicy }}
+          args:
+            - "-c=/workspace/config.yaml"
           ports:
             - name: http
               containerPort: {{ .Values.restful.app.service.port }}
@@ -58,6 +60,10 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.restful.app.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /workspace/config.yaml
+              subPath: config.yaml
+              name: config
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -70,3 +76,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "irent.fullname" . }}-app-restful

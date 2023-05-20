@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "irent.fullname" . }}-app-restful
+  labels:
+    app: {{ include "irent.name" . }}-rental-cronjob
+    {{- include "irent.labels" . | nindent 4}}
+data:
+  config.yaml: |-
+{{- if .Values.restful.app.config }}
+{{ tpl .Values.restful.app.config . | indent 4 }}
+{{- end }}

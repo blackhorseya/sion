@@ -33,8 +33,14 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.cronjob.rental.image.repository }}:{{ .Values.cronjob.rental.image.tag | default .Values.version }}"
           imagePullPolicy: {{ .Values.cronjob.rental.image.pullPolicy }}
+          args:
+            - "-c=/workspace/config.yaml"
           resources:
             {{- toYaml .Values.cronjob.rental.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /workspace/config.yaml
+              subPath: config.yaml
+              name: config
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -47,3 +53,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "irent.fullname" . }}-rental-cronjob
