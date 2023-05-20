@@ -1,4 +1,4 @@
-package cronjob
+package rental
 
 import (
 	"time"
@@ -12,7 +12,8 @@ import (
 	"go.uber.org/zap"
 )
 
-var RentalSet = wire.NewSet(NewOptions, NewImpl)
+// CronjobSet presents a cronjob set
+var CronjobSet = wire.NewSet(NewOptions, NewImpl)
 
 type Options struct {
 	Enabled  bool          `json:"enabled" yaml:"enabled"`

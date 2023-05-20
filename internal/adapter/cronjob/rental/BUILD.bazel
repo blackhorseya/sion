@@ -1,9 +1,9 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
-    name = "cronjob",
+    name = "rental",
     srcs = ["cronjob.go"],
-    importpath = "github.com/blackhorseya/irent/internal/adapter/rental/cronjob",
+    importpath = "github.com/blackhorseya/irent/internal/adapter/cronjob/rental",
     visibility = ["//:__subpackages__"],
     deps = [
         "//pkg/adapters",
