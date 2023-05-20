@@ -82,6 +82,10 @@ push-image: check-SVC_NAME check-SVC_ADAPTER check-VERSION ## push image to regi
 .PHONY: gen
 gen: gen-pb gen-wire gen-mocks gen-swagger ## generate all generate commands
 
+.PHONY: gen-go
+gen-go: ## generate go code
+	@go generate -tags="wireinject" ./...
+
 .PHONY: gen-wire
 gen-wire: ## generate wire code
 	@wire gen ./...

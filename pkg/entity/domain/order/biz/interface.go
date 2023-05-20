@@ -1,3 +1,5 @@
+//go:generate mockgen -destination=./mock_${GOFILE} -package=biz -source=${GOFILE}
+
 package biz
 
 import (
@@ -8,8 +10,6 @@ import (
 )
 
 // IBiz declare order biz functions
-//
-//go:generate mockery --all --inpackage
 type IBiz interface {
 	// Readiness probes to know when a container is ready to start accepting traffic. A Pod is considered ready when all of its containers are ready. One use of this signal is to control which Pods are used as backends for Services. When a Pod is not ready, it is removed from Service load balancers.
 	Readiness(ctx contextx.Contextx) error
