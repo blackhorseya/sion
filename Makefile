@@ -56,28 +56,14 @@ build-go: gazelle ## build go binary
 test-go: gazelle ## test go binary
 	@bazel test //...
 
-.PHONY: build-image
-build-image: check-SVC_NAME check-SVC_ADAPTER check-VERSION check-GITHUB_TOKEN ## build docker image with APP_NAME and VERSION
-	@docker build -t $(REGISTRY)/$(APP_NAME):$(VERSION) \
-	--label "app.name=$(APP_NAME)" \
-	--label "app.version=$(VERSION)" \
-	--build-arg MAIN_FOLDER=$(MAIN_FOLDER) \
-	--build-arg GITHUB_TOKEN=$(GITHUB_TOKEN) \
-	--platform linux/amd64 \
-	--pull --cache-from=$(REGISTRY)/$(APP_NAME) \
-	-f Dockerfile .
+## docker
+.PHONY: push-irent-app-restful-image
+push-irent-app-restful-image: ## push irent app restful image
+	@bazel run //:$@ --define=VERSION=$(VERSION)
 
-.PHONY: list-images
-list-images: check-SVC_NAME check-SVC_ADAPTER ## list all images
-	@docker images --filter=label=app.name=$(APP_NAME)
-
-.PHONY: prune-images
-prune-images: check-SVC_NAME check-SVC_ADAPTER ## remove all images
-	@docker rmi -f `docker images --filter=label=app.name=$(APP_NAME) -q`
-
-.PHONY: push-image
-push-image: check-SVC_NAME check-SVC_ADAPTER check-VERSION ## push image to registry
-	@docker push $(REGISTRY)/$(APP_NAME):$(VERSION)
+.PHONY: push-irent-rental-cronjob-image
+push-irent-rental-cronjob-image: ## push irent rental cronjob image
+	@bazel run //:$@ --define=VERSION=$(VERSION)
 
 .PHONY: gen
 gen: gen-pb gen-wire gen-go gen-swagger ## generate all generate commands
@@ -110,10 +96,6 @@ gen-pb: ## generate protobuf messages and services
 	## Starting inject tags
 	@protoc-go-inject-tag -input="./pkg/entity/domain/*/model/*.pb.go"
 	@echo Successfully injected tags
-
-.PHONY: gen-build
-gen-build: ## run gazelle using bazel
-	@bazel run //:gazelle
 
 .PHONY: deploy
 deploy: check-SVC_NAME check-SVC_ADAPTER check-VERSION check-DEPLOY_TO ## deploy the application via helm 3

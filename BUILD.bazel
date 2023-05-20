@@ -1,6 +1,43 @@
 load("@bazel_gazelle//:def.bzl", "gazelle")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
 
 # gazelle:prefix github.com/blackhorseya/irent
 # gazelle:proto disable_global
 
 gazelle(name = "gazelle")
+
+container_image(
+    name = "irent-app-restful-image",
+    base = "@alpine_linux_amd64//image",
+    directory = "/workspace",
+    entrypoint = ["./app"],
+    files = ["//cmd/restful/app"],
+    workdir = "/workspace",
+)
+
+container_push(
+    name = "push-irent-app-restful-image",
+    format = "Docker",
+    image = ":irent-app-restful-image",
+    registry = "gcr.io",
+    repository = "sean-side/irent-app-restful",
+    tag = "$(VERSION)",
+)
+
+container_image(
+    name = "irent-rental-cronjob-image",
+    base = "@alpine_linux_amd64//image",
+    directory = "/workspace",
+    entrypoint = ["./rental"],
+    files = ["//cmd/cronjob/rental"],
+    workdir = "/workspace",
+)
+
+container_push(
+    name = "push-irent-rental-cronjob-image",
+    format = "Docker",
+    image = ":irent-rental-cronjob-image",
+    registry = "gcr.io",
+    repository = "sean-side/irent-rental-cronjob",
+    tag = "$(VERSION)",
+)
