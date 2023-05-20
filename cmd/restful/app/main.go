@@ -1,8 +1,15 @@
 package main
 
 import (
-	"fmt"
+	"flag"
+	"log"
 )
+
+var path = flag.String("c", "./configs/restful/app/local.yaml", "set config file path")
+
+func init() {
+	flag.Parse()
+}
 
 // @title IRent API
 // @version 0.1.00
@@ -21,5 +28,18 @@ import (
 // @in header
 // @name Authorization
 func main() {
-	fmt.Println("I'm a restful api for app")
+	app, err := CreateApplication(*path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = app.Start()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = app.AwaitSignal()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
