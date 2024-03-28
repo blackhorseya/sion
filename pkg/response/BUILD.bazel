@@ -1,15 +1,12 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+load("@rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "response",
-    srcs = ["response.go"],
-    importpath = "github.com/blackhorseya/irent/pkg/response",
+    srcs = [
+        "middleware.go",
+        "response.go",
+    ],
+    importpath = "github.com/blackhorseya/sion/pkg/response",
     visibility = ["//visibility:public"],
-)
-
-go_test(
-    name = "response_test",
-    srcs = ["resonse_test.go"],
-    embed = [":response"],
-    deps = ["@com_github_stretchr_testify//suite"],
+    deps = ["@com_github_gin_gonic_gin//:gin"],
 )

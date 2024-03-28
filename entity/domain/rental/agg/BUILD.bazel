@@ -1,0 +1,13 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "agg",
+    srcs = ["asset.go"],
+    embedsrcs = ["asset.tmpl"],
+    importpath = "github.com/blackhorseya/sion/entity/domain/rental/agg",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//entity/domain/rental/model",
+        "@com_github_line_line_bot_sdk_go_v8//linebot/messaging_api",
+    ],
+)

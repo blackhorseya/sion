@@ -6,32 +6,36 @@ on:
       - main
     paths:
       - '**.go'
-      - '.github/workflows/go.yaml'
   pull_request:
     branches:
       - main
     paths:
       - '**.go'
-      - '.github/workflows/go.yaml'
+  workflow_dispatch: { }
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Setup go
+      - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: '^1.20'
           cache: true
 
-      - name: Run unit test
-        run: |
-          make test-unit
+      - uses: bazelbuild/setup-bazelisk@v2
 
-      - name: Send code coverage report
-        uses: codecov/codecov-action@v2
+      - name: Mount bazel cache
+        id: cache-bazel
+        uses: actions/cache@v3
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          path: "/home/runner/.cache/bazel"
+          key: bazel
+
+      - name: Build
+        run: bazel build //...
+
+      - name: Test
+        run: bazel test //...

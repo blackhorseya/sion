@@ -1,0 +1,19 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "cmd",
+    srcs = [
+        "info.go",
+        "root.go",
+        "start.go",
+    ],
+    importpath = "github.com/blackhorseya/sion/adapter/cmd",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//adapter/restful",
+        "//pkg/cmdx",
+        "//pkg/configx",
+        "//pkg/logging",
+        "@com_github_spf13_cobra//:cobra",
+    ],
+)

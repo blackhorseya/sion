@@ -4,32 +4,43 @@ import (
 	"net/http"
 )
 
-// Response declare unite adapters response format
+var (
+	// OK request is successful.
+	OK = &Response{
+		Code:    http.StatusOK,
+		Message: "ok",
+		Data:    nil,
+	}
+
+	// Err request is failed.
+	Err = &Response{
+		Code:    http.StatusInternalServerError,
+		Message: "unknown error",
+		Data:    nil,
+	}
+)
+
+// Response defines the response struct.
 type Response struct {
-	Code int         `json:"code"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data,omitempty"`
+	Code    int         `json:"code,omitempty"`
+	Message string      `json:"msg,omitempty"`
+	Data    interface{} `json:"data,omitempty"`
 }
 
-// WithMessage append message into response
+// WithMessage set response message.
 func (resp *Response) WithMessage(message string) *Response {
 	return &Response{
-		Code: resp.Code,
-		Msg:  message,
-		Data: resp.Data,
+		Code:    resp.Code,
+		Message: message,
+		Data:    resp.Data,
 	}
 }
 
-// WithData append data into response
-func (resp *Response) WithData(data interface{}) *Response {
+// WithData set response data.
+func (resp *Response) WithData(data any) *Response {
 	return &Response{
-		Code: resp.Code,
-		Msg:  resp.Msg,
-		Data: data,
+		Code:    resp.Code,
+		Message: resp.Message,
+		Data:    data,
 	}
 }
-
-var (
-	// OK request is success
-	OK = &Response{Code: http.StatusOK, Msg: "ok"}
-)

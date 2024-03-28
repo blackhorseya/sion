@@ -1,0 +1,17 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "biz",
+    srcs = [
+        "interface.go",
+        "mock_interface.go",
+    ],
+    importpath = "github.com/blackhorseya/sion/entity/domain/rental/biz",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//entity/domain/rental/agg",
+        "//entity/domain/rental/model",
+        "//pkg/contextx",
+        "@org_uber_go_mock//gomock",
+    ],
+)

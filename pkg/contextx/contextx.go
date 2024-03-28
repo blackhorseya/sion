@@ -2,118 +2,81 @@ package contextx
 
 import (
 	"context"
+	"errors"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 )
 
-// Key declare key string
-type Key string
-
-var (
-	// KeyCtx ctx key string
-	KeyCtx = Key("ctx")
-)
-
-// Contextx extends google's context to support logging methods
-type Contextx struct {
-	context.Context
-	logger *zap.Logger
+func init() {
+	zap.ReplaceGlobals(zap.NewExample())
 }
 
-// Background returns a non-nil, empty Context. It is never canceled, has no values, and
-// has no deadline. It is typically used by the main function, initialization, and tests,
-// and as the top-level Context for incoming requests
+// KeyCtx is the key of contextx.
+const KeyCtx = "contextx"
+
+// Contextx extends google's context to support logging methods.
+type Contextx struct {
+	context.Context
+	*zap.Logger
+}
+
+// Background returns a non-nil, empty Contextx. It is never canceled, has no values, and has no deadline.
 func Background() Contextx {
 	return Contextx{
 		Context: context.Background(),
-		logger:  nil,
+		Logger:  zap.L(),
 	}
 }
 
-// BackgroundWithLogger returns a non-nil, empty Context. It is never canceled, has no values, and
-// has no deadline. It is typically used by the main function, initialization, and tests,
-// and as the top-level Context for incoming requests
-func BackgroundWithLogger(logger *zap.Logger) Contextx {
+// WithLogger returns a copy of parent in which the value associated with key is val.
+func WithLogger(logger *zap.Logger) Contextx {
 	return Contextx{
 		Context: context.Background(),
-		logger:  logger,
+		Logger:  logger,
 	}
 }
 
 // WithValue returns a copy of parent in which the value associated with key is val.
-func WithValue(parent Contextx, key interface{}, val interface{}) Contextx {
+func WithValue(parent Contextx, key, val interface{}) Contextx {
 	return Contextx{
-		Context: context.WithValue(parent, key, val),
+		Context: context.WithValue(parent.Context, key, val),
+		Logger:  parent.Logger,
 	}
 }
 
-// WithCancel returns a copy of parent with added cancel function
-func WithCancel(parent Contextx) (Contextx, context.CancelFunc) {
-	ctx, cancel := context.WithCancel(parent)
-	return Contextx{
-		Context: ctx,
-	}, cancel
-}
-
-// WithTimeout returns a copy of parent with timeout condition and cancel function
+// WithTimeout returns a copy of the parent context with the timeout adjusted to be no later than d.
 func WithTimeout(parent Contextx, d time.Duration) (Contextx, context.CancelFunc) {
-	ctx, cancel := context.WithTimeout(parent, d)
+	ctx, cancel := context.WithTimeout(parent.Context, d)
+
 	return Contextx{
 		Context: ctx,
+		Logger:  parent.Logger,
 	}, cancel
 }
 
-// Debug logs a message at DebugLevel. The message includes any fields passed
-// at the log site, as well as any fields accumulated on the logger.
-func (c *Contextx) Debug(msg string, fields ...zapcore.Field) {
-	if c.logger == nil {
-		return
-	}
+// WithCancel returns a copy of the parent context with a new Done channel.
+func WithCancel(parent Contextx) (Contextx, context.CancelFunc) {
+	ctx, cancel := context.WithCancel(parent.Context)
 
-	c.logger.Debug(msg, fields...)
+	return Contextx{
+		Context: ctx,
+		Logger:  parent.Logger,
+	}, cancel
 }
 
-// Info logs a message at InfoLevel. The message includes any fields passed
-// at the log site, as well as any fields accumulated on the logger.
-func (c *Contextx) Info(msg string, fields ...zapcore.Field) {
-	if c.logger == nil {
-		return
+// FromGin returns a Contextx from gin.Context.
+func FromGin(c *gin.Context) (Contextx, error) {
+	value, exists := c.Get(KeyCtx)
+	if !exists {
+		return Contextx{}, errors.New("contextx not found in gin.Context")
 	}
 
-	c.logger.Info(msg, fields...)
-}
-
-// Warn logs a message at WarnLevel. The message includes any fields passed
-// at the log site, as well as any fields accumulated on the logger.
-func (c *Contextx) Warn(msg string, fields ...zapcore.Field) {
-	if c.logger == nil {
-		return
+	ctx, ok := value.(Contextx)
+	if !ok {
+		return Contextx{}, errors.New("contextx type error")
 	}
 
-	c.logger.Warn(msg, fields...)
-}
-
-// Error logs a message at ErrorLevel. The message includes any fields passed
-// at the log site, as well as any fields accumulated on the logger.
-func (c *Contextx) Error(msg string, fields ...zapcore.Field) {
-	if c.logger == nil {
-		return
-	}
-
-	c.logger.Error(msg, fields...)
-}
-
-// Elapsed calculate method execution time
-func (c *Contextx) Elapsed(msg string) func() {
-	start := time.Now()
-	return func() {
-		elapsed := time.Since(start)
-		if c.logger == nil {
-			return
-		}
-
-		c.logger.Debug(msg, zap.Duration("elapsed", elapsed))
-	}
+	return ctx, nil
 }

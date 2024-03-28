@@ -1,0 +1,18 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "irent",
+    srcs = [
+        "irent.go",
+        "model.go",
+    ],
+    importpath = "github.com/blackhorseya/sion/app/domain/rental/repo/asset/irent",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//entity/domain/rental/agg",
+        "//entity/domain/rental/model",
+        "//entity/domain/rental/repo",
+        "//pkg/configx",
+        "//pkg/contextx",
+    ],
+)

@@ -1,0 +1,28 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "biz",
+    srcs = [
+        "impl.go",
+        "wire.go",
+    ],
+    importpath = "github.com/blackhorseya/sion/app/domain/rental/biz",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//app/domain/rental/repo/asset/irent",
+        "//entity/domain/rental/agg",
+        "//entity/domain/rental/biz",
+        "//entity/domain/rental/model",
+        "//entity/domain/rental/repo",
+        "//pkg/contextx",
+        "@com_github_google_wire//:wire",
+        "@org_uber_go_zap//:zap",
+    ],
+)
+
+go_test(
+    name = "biz_test",
+    srcs = ["impl_test.go"],
+    embed = [":biz"],
+    deps = ["@com_github_stretchr_testify//suite"],
+)

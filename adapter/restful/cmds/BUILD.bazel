@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "cmds",
+    srcs = [
+        "cmds.go",
+        "ping.go",
+    ],
+    importpath = "github.com/blackhorseya/sion/adapter/restful/cmds",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/contextx",
+        "@com_github_line_line_bot_sdk_go_v8//linebot/messaging_api",
+    ],
+)

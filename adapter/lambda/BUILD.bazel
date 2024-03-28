@@ -1,0 +1,22 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "lambda_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/blackhorseya/sion/adapter/lambda",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//adapter/restful",
+        "//pkg/configx",
+        "//pkg/logging",
+        "@com_github_aws_aws_lambda_go//events",
+        "@com_github_aws_aws_lambda_go//lambda",
+        "@com_github_awslabs_aws_lambda_go_api_proxy//gin",
+    ],
+)
+
+go_binary(
+    name = "lambda",
+    embed = [":lambda_lib"],
+    visibility = ["//visibility:public"],
+)
