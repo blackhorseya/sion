@@ -1,0 +1,12 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "influxdb",
+    srcs = ["client.go"],
+    importpath = "github.com/blackhorseya/sion/pkg/storage/influxdb",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/configx",
+        "@com_github_influxcommunity_influxdb3_go//influxdb3",
+    ],
+)
