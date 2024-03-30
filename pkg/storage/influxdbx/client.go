@@ -1,4 +1,4 @@
-package influxdb
+package influxdbx
 
 import (
 	"github.com/InfluxCommunity/influxdb3-go/influxdb3"

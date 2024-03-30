@@ -10,3 +10,14 @@ go_library(
         "@com_github_influxcommunity_influxdb3_go//influxdb3",
     ],
 )
+
+go_library(
+    name = "influxdbx",
+    srcs = ["client.go"],
+    importpath = "github.com/blackhorseya/sion/pkg/storage/influxdbx",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/configx",
+        "@com_github_influxcommunity_influxdb3_go//influxdb3",
+    ],
+)

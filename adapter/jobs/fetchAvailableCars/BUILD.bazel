@@ -14,8 +14,10 @@ go_library(
         "//pkg/configx",
         "//pkg/contextx",
         "//pkg/logging",
+        "//pkg/storage/influxdbx",
         "@com_github_aws_aws_lambda_go//events",
         "@com_github_aws_aws_lambda_go//lambda",
+        "@com_github_influxcommunity_influxdb3_go//influxdb3",
         "@org_uber_go_zap//:zap",
     ],
 )
