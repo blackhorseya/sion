@@ -71,6 +71,16 @@ func bindEnv(v *viper.Viper) (err error) {
 		return err
 	}
 
+	err = v.BindEnv("storage.influxdb.url", "STORAGE_INFLUXDB_URL")
+	if err != nil {
+		return err
+	}
+
+	err = v.BindEnv("storage.influxdb.token", "STORAGE_INFLUXDB_TOKEN")
+	if err != nil {
+		return err
+	}
+
 	err = v.BindEnv("irent.version", "IRENT_VERSION")
 	if err != nil {
 		return err

@@ -21,6 +21,13 @@ type Config struct {
 		Token  string `json:"token" yaml:"token"`
 	} `json:"line_bot" yaml:"lineBot"`
 
+	Storage struct {
+		Influxdb struct {
+			URL   string `json:"url" yaml:"url"`
+			Token string `json:"token" yaml:"token"`
+		} `json:"influxdb" yaml:"influxdb"`
+	} `json:"storage" yaml:"storage"`
+
 	IRent struct {
 		HTTP    HTTP   `json:"http" yaml:"http"`
 		Version string `json:"version" yaml:"version"`
