@@ -33,3 +33,10 @@ functions:
       - http: ANY /{proxy+}
     environment: ${file(./deployments/${opt:stage, 'prod'}/.env.yaml)}
 
+  fetchAvailableCars:
+    handler: ./adapter/jobs/fetchAvailableCars/
+    name: ${sls:stage}-${self:service}-fetchAvailableCars
+    events:
+      - schedule: rate(1 minute)
+    environment: ${file(./deployments/${opt:stage, 'prod'}/.env.yaml)}
+

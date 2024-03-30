@@ -1,0 +1,18 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "fetchAvailableCars_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/blackhorseya/sion/adapter/jobs/fetchAvailableCars",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_aws_aws_lambda_go//events",
+        "@com_github_aws_aws_lambda_go//lambda",
+    ],
+)
+
+go_binary(
+    name = "fetchAvailableCars",
+    embed = [":fetchAvailableCars_lib"],
+    visibility = ["//visibility:public"],
+)
